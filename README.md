@@ -1,6 +1,7 @@
 # NewProject
 project flutter remake from old Sem4_FrontEnd Mobile
 
+view this lib in editor mode, don't change it:
 # lib
   |_pages
     |_login
