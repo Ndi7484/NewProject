@@ -1,16 +1,29 @@
-# project
+# NewProject
+project flutter remake from old Sem4_FrontEnd Mobile
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+view this lib in editor mode, don't change it:
+# lib
+  |_pages
+    |_login
+      |_logic
+        |_login_cubit.dart
+        |_login_state.dart
+      |_model
+        |_login_model.dart
+      |_view
+        |_login.dart
+        |_signup.dart
+        |_forget.dart
+        |_auth.dart
+        |_newpass.dart
+    |_mainpage
+      |_logics
+      |_model
+      |_view
+    |_menupage
+      |_logics
+      |_model
+      |_view
+  |_Main.dart
+  |_route.dart
+  
