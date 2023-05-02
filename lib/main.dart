@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'flutter_bloc/src/multi';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        // BlocProvider<CounterCubit>(create: (_) => CounterCubit()),
+        // BlocProvider<AuthenticationCubit>(create: (_) => AuthenticationCubit()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
