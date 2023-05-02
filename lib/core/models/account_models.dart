@@ -18,5 +18,5 @@ class Account {
   final String password;
   final String telephone;
   // <kategori,<Alamat,deskripsi>>
-  final Map<String, Map<String, String>>? address;
+  final List<Map<String, Map<String, String>>>? address;
 }

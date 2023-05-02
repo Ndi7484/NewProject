@@ -15,7 +15,12 @@ class AccountState extends Equatable {
         name: 'Ndimas',
         email: 'ndimas@gmail.com',
         password: 'Ndi123',
-        telephone: '081375726600'),
+        telephone: '081375726600',
+        address: [
+          {
+            "Rumah": {"Jl. Kediri Nuansa No.45A": "sebelah toko kado"}
+          }
+        ]),
     Account(
         name: 'Junior',
         email: 'junior@gmail.com',
@@ -35,6 +40,22 @@ class AccountState extends Equatable {
     return AccountState(
       status: status ?? this.status,
     );
+  }
+
+  bool checkAccount({
+    String? email,
+    String? password,
+  }) {
+    if (email != null && password != null) {
+      for (var el in listAccount) {
+        if (email == el.name || email == el.email) {
+          if (password == el.password) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   @override

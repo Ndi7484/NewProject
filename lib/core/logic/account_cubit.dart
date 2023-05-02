@@ -7,4 +7,10 @@ part 'account_state.dart';
 
 class AccountCubit extends Cubit<AccountState> {
   AccountCubit() : super(AccountState());
+
+  bool selectAccount(String email, String password) {
+    emit(state.copyWith(status: RequestLoading.loading));
+    emit(state.copyWith(status: RequestLoading.success));
+    return state.checkAccount(email: email, password: password);
+  }
 }
