@@ -1,17 +1,16 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/logic/account_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'flutter_bloc/src/multi';
+import 'package:flutter_application_1/features/login_page/login_page.dart';
+import 'package:provider/provider.dart';
+
+import 'core/logic/counter_proivider.dart';
 
 void main() {
   runApp(
-    MultiBlocProvider(
+    MultiProvider(
       providers: [
-        BlocProvider(create: (context) => AccountCubit()),
+        ChangeNotifierProvider( create: (context)=> CounterProvider()),
       ],
-      child: /*MyApp()*/ LoginPage(),
+      child: const LoginPage(),
     ),
   );
 }
