@@ -4,17 +4,28 @@ import 'package:provider/provider.dart';
 
 import 'core/logic/counter_proivider.dart';
 
+// multi provider is here
 void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider( create: (context)=> CounterProvider()),
+        ChangeNotifierProvider(create: (_) => CounterProvider()),
       ],
-      child: const LoginPage(),
+      child: MyApp(),
     ),
   );
 }
 
+// root of app is here
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My App',
+      home: LoginPage(),
+    );
+  }
+}
 
 // class MyApp extends StatelessWidget {
 //   const MyApp({super.key});
