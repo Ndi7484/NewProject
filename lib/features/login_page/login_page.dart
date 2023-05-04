@@ -12,10 +12,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    final counter = Provider.of<CounterProvider>(context);
+    final provCounter = Provider.of<CounterProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Home Page'),
+        title: const Text('Login Page'),
       ),
       body: Center(
         child: Column(
@@ -24,16 +24,21 @@ class _LoginPageState extends State<LoginPage> {
             const Text(
               'Count:',
             ),
-            Text(
-              '${counter.count}',
-              style: Theme.of(context).textTheme.headline4,
+            GestureDetector(
+              onTap: () {
+                provCounter.resetZero();
+              },
+              child: Text(
+                '${provCounter.count}',
+                style: Theme.of(context).textTheme.headline4,
+              ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          counter.incrementCount();
+          provCounter.incrementCount();
         },
         child: const Icon(Icons.add),
       ),
