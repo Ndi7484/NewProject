@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:provider/provider.dart';
 
@@ -10,20 +12,26 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CounterProvider()),
+        ChangeNotifierProvider(create: (_) => AccountProvider()..resetParam()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 // root of app is here
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My App',
-      home: LoginPage(),
+      title: 'Randumu App',
+      theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
+              .copyWith(secondary: Colors.grey[850])),
+      // home: const LoginPage(),
+      home: const BottomNavigationPage(),
     );
   }
 }
-
