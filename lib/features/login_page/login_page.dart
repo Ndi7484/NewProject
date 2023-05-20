@@ -63,7 +63,9 @@ class _LoginPageState extends State<LoginPage> {
                   Provider.of<AccountProvider>(context, listen: false)
                       .checkAccount(context);
                 },
-                child: const Text('Login'),
+                child: (provAccount.isAuthenticated == Auth.initial)
+                    ? const CircularProgressIndicator()
+                    : const Text('Login'),
               ),
             )
           ],

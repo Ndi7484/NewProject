@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:excel/excel.dart';
 import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
 
 class Account {
@@ -42,32 +44,31 @@ enum IsSignUp {
 }
 
 class AccountProvider extends ChangeNotifier {
-  final List<Account> _listAccount = [
-    Account(
-        firstName: 'Ndimas',
-        lastName: 'Eka',
-        email: '211110750@students.mikroskil.ac.id',
-        password: 'Ndi@#0750',
-        phone: '081375722601'),
-    Account(
-        firstName: 'Junior',
-        lastName: 'Chandra',
-        email: '211112630@students.mikroskil.ac.id',
-        password: 'Jun@#2630',
-        phone: '081375722602'),
-    Account(
-        firstName: 'Marco',
-        lastName: 'Kinno',
-        email: '211110676@students.mikroskil.ac.id',
-        password: 'Mar@#0676',
-        phone: '081375722603'),
-    Account(
-        firstName: 'Admin',
-        lastName: 'Admin',
-        email: 'admin',
-        password: 'admin',
-        phone: '081375722604'),
-  ];
+  // more info excel dev https://pub.dev/packages/excel
+  List<Account> _listAccount = [];
+  // load data from excel
+  void readAccount() async {
+    ByteData data = await rootBundle.load('assets/data/account.xlsx');
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+
+    var table = excel.tables[excel.tables.keys.first];
+    _listAccount = List.generate(
+      table!.maxRows,
+      (index) {
+        var row = table.row(index);
+        return Account(
+          firstName: row[0]!.value.toString(),
+          lastName: row[1]!.value.toString(),
+          email: row[2]!.value.toString(),
+          password: row[3]!.value.toString(),
+          phone: row[4]!.value.toString(),
+        );
+      },
+    );
+    notifyListeners();
+  }
+
   // Login purposes
   Account? _selectedAccount;
   Auth _isAuthenticated = Auth.unauthenticated;
@@ -88,7 +89,7 @@ class AccountProvider extends ChangeNotifier {
   IsSignUp get isSignUp => _isSignUp;
 
   // checkAccount() to login to main page
-  void checkAccount(context) {
+  void checkAccount(context) async {
     _isAuthenticated = Auth.initial;
     bool authSet = false;
     for (var el in _listAccount) {

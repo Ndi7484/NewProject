@@ -12,7 +12,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CounterProvider()),
-        ChangeNotifierProvider(create: (_) => AccountProvider()..resetParam()),
+        ChangeNotifierProvider(create: (_) => AccountProvider()..resetParam()..readAccount()),
       ],
       child: const MyApp(),
     ),
@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
               .copyWith(secondary: Colors.grey[850])),
-      // home: const LoginPage(),
-      home: const BottomNavigationPage(),
+      home: const LoginPage(),
+      // home: const BottomNavigationPage(),
     );
   }
 }

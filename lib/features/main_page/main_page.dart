@@ -33,8 +33,8 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ],
               ),
-              Spacer(),
-              Image.asset('logo.png'),
+              const Spacer(),
+              Image.asset('assets/etc/Logo.png'),
             ],
           ),
         )
