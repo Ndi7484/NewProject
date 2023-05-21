@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:flutter_application_1/features/main_page/main_page.dart';
 import 'package:flutter_application_1/features/menu_page/menu_page.dart';
@@ -14,11 +15,18 @@ class BottomNavigationPage extends StatefulWidget {
 
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
   int _selectedIndex = 0;
+  final List<String> _appBarTitle = [
+    'Main Home',
+    'Menu',
+    'Points',
+    'Promo',
+    'Orders'
+  ];
   final List<dynamic> _bodyFill = [
     const MainPage(),
     const MenuPage(),
     const MainPage(),
-    const MainPage(),
+    const PromoPage(),
     const MainPage(),
   ];
 
@@ -27,7 +35,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     final provAccount = Provider.of<AccountProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Main Page'),
+        title: Text(_appBarTitle[_selectedIndex]),
       ),
       drawer: (_selectedIndex == 0)
           ? Drawer(
