@@ -159,7 +159,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                         fontWeight: FontWeight.bold,
                         color: Colors.grey),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.2),
                   ListTile(
                     title: const Text(
                       'Log Out',

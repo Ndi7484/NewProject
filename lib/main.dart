@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => CounterProvider()),
         ChangeNotifierProvider(create: (_) => AccountProvider()..resetParam()..readAccount()),
+        ChangeNotifierProvider(create: (_) => AddressProvider()..resetParam()..readAddress()),
+
       ],
       child: const MyApp(),
     ),

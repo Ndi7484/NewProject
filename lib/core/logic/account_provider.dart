@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:excel/excel.dart';
 import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
+import 'package:provider/provider.dart';
+
+import 'address_provider.dart';
 
 class Account {
   Account({
@@ -17,18 +20,7 @@ class Account {
   final String email;
   final String password;
   final String phone;
-  List<Alamat>? alamat = [];
-}
-
-class Alamat {
-  Alamat({
-    required this.alamatTitle,
-    required this.alamatLengkap,
-    required this.alamatDesk,
-  });
-  String alamatTitle;
-  String alamatLengkap;
-  String alamatDesk;
+  List<Alamat>? alamat;
 }
 
 enum Auth {
@@ -96,11 +88,14 @@ class AccountProvider extends ChangeNotifier {
       if ((el.email == paramEmail || el.phone == paramPhone) &&
           el.password == paramPassword) {
         _selectedAccount = el;
-        resetParam();
         _isAuthenticated = Auth.authenticated;
         authSet = true;
         message = 'Succesful Login';
         notifyListeners();
+        // get account alamat if there is, if nothing then is []
+        _selectedAccount?.alamat =
+            Provider.of<AddressProvider>(context, listen: false)
+                .getAddress(paramEmail);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -151,6 +146,10 @@ class AccountProvider extends ChangeNotifier {
 
   // reset parameter to ''
   void resetParam() {
+    _isAuthenticated = Auth.unauthenticated;
+    _selectedAccount = null;
+    _listAccount = [];
+    _isSignUp = IsSignUp.initial;
     paramFirstName = '';
     paramLastName = '';
     paramEmail = '';

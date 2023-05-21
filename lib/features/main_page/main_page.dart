@@ -17,13 +17,16 @@ class _MainPageState extends State<MainPage> {
           child: Row(
             children: [
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Welcome to,',
                     style: TextStyle(
                         fontSize: 20,
                         color: Theme.of(context).colorScheme.primary),
+                  ),
+                  const SizedBox(
+                    height: 5,
                   ),
                   Text(
                     'Randumu Cafe',
