@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -10,6 +12,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
+    final provAccount = Provider.of<AccountProvider>(context);
     return Column(
       children: [
         Container(
@@ -20,7 +23,7 @@ class _MainPageState extends State<MainPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Welcome to,',
+                    '${provAccount.currentHour}, ${provAccount.selectedAccount!.firstName}',
                     style: TextStyle(
                         fontSize: 20,
                         color: Theme.of(context).colorScheme.primary),
@@ -28,16 +31,30 @@ class _MainPageState extends State<MainPage> {
                   const SizedBox(
                     height: 5,
                   ),
-                  Text(
-                    'Randumu Cafe',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Theme.of(context).colorScheme.primary),
+                  const Text(
+                    'Welcome to Randumu Cafe',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
               ),
               const Spacer(),
-              Image.asset('assets/etc/Logo.png'),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(width: 0.5, color: Colors.black),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(100))),
+                  child: ClipOval(
+                    child: Image.asset(
+                      'assets/etc/Profile.png',
+                      width: 50,
+                      height: 50,
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         )

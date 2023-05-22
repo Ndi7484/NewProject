@@ -75,6 +75,7 @@ class AccountProvider extends ChangeNotifier {
   String paramConfirmPass = '';
   // error message
   String message = '';
+  String currentHour = '';
 
   Account? get selectedAccount => _selectedAccount;
   Auth get isAuthenticated => _isAuthenticated;
@@ -96,6 +97,7 @@ class AccountProvider extends ChangeNotifier {
         _selectedAccount?.alamat =
             Provider.of<AddressProvider>(context, listen: false)
                 .getAddress(paramEmail);
+        currentTime();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -121,6 +123,21 @@ class AccountProvider extends ChangeNotifier {
     }
     // there is no duplicate
     return !toReturn;
+  }
+
+  // check current time
+  void currentTime() {
+    int currentTime = DateTime.now().hour;
+    // Determine if it's morning, noon, or night
+    if (currentTime >= 5 && currentTime < 11) {
+      currentHour = 'Morning';
+    } else if (currentTime >= 11 && currentTime < 14) {
+      currentHour = 'Afternoon';
+    } else if (currentTime >= 14 && currentTime < 18) {
+      currentHour = 'Evening';
+    } else {
+      currentHour = 'Night';
+    }
   }
 
   // add new Account in SignUp page
@@ -157,5 +174,6 @@ class AccountProvider extends ChangeNotifier {
     paramPassword = '';
     paramConfirmPass = '';
     message = '';
+    currentHour = '';
   }
 }

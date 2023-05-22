@@ -6,6 +6,7 @@ import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:provider/provider.dart';
 
 import 'core/logic/counter_proivider.dart';
+import 'core/logic/promo_provider.dart';
 
 // multi provider is here
 void main() {
@@ -15,7 +16,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => CounterProvider()),
         ChangeNotifierProvider(create: (_) => AccountProvider()..resetParam()..readAccount()),
         ChangeNotifierProvider(create: (_) => AddressProvider()..resetParam()..readAddress()),
-
+        ChangeNotifierProvider(create: (_) => PromoProvider()..readPromo()),
       ],
       child: const MyApp(),
     ),
