@@ -36,37 +36,40 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
       appBar: AppBar(
         title: Text(_appBarTitle[_selectedIndex]),
         actions: [
-          GestureDetector(
-              onTap: () {},
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 15,
-                ),
-                child: Stack(children: [
-                  const Icon(
-                    Icons.notifications,
-                    size: 25,
-                  ),
-                  Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Container(
-                        width: 13,
-                        height: 13,
-                        decoration: BoxDecoration(
-                            color: Colors.yellow,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Center(
-                          child: Text(
-                            '10',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 8),
-                          ),
-                        ),
-                      ))
-                ]),
-              )),
+          (_selectedIndex == 0)
+              ? GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 15,
+                    ),
+                    child: Stack(children: [
+                      const Icon(
+                        Icons.notifications,
+                        size: 25,
+                      ),
+                      Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            width: 13,
+                            height: 13,
+                            decoration: BoxDecoration(
+                                color: Colors.yellow,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Center(
+                              child: Text(
+                                '10',
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    fontSize: 8),
+                              ),
+                            ),
+                          ))
+                    ]),
+                  ))
+              : Container(),
           const SizedBox(
             width: 5,
           ),
