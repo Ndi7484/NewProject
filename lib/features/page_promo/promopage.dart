@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/promo_provider.dart';
+import 'package:provider/provider.dart';
 
 class PromoPage extends StatelessWidget {
   const PromoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provPromo = Provider.of<PromoProvider>(context);
     return Container(
       padding: const EdgeInsets.all(8.0),
       child: ListView.builder(
-        itemCount: 5,
+        itemCount: provPromo.listPromo.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -30,17 +33,18 @@ class PromoPage extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(15, 15, 8, 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            'Cashback Voucher 20%',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            provPromo.listPromo[index].promoName,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
-                            'Max. discount 200rb\nWithout Min Txn\nTakeaway Only\nValid until 15 May 2023',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                            provPromo.listPromo[index].promoShortDesc,
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 12),
                           ),
                         ],
                       ),

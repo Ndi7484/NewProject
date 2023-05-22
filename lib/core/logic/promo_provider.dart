@@ -39,9 +39,10 @@ class Promo {
 
 class PromoProvider extends ChangeNotifier {
   List<Promo> _listPromo = [];
+  List<Promo> get listPromo => _listPromo;
   // load data from excel
   void readPromo() async {
-    ByteData data = await rootBundle.load('assets/data/account.xlsx');
+    ByteData data = await rootBundle.load('assets/data/promo.xlsx');
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     var excel = Excel.decodeBytes(bytes);
 
@@ -55,16 +56,16 @@ class PromoProvider extends ChangeNotifier {
           promoName: row[1]!.value.toString(),
           promoShortDesc: row[2]!.value.toString(),
           promoLongDesc: row[3]!.value.toString(),
-          maxDisc: int.parse(row[4]!.value),
-          minTrans: int.parse(row[5]!.value),
+          maxDisc: int.parse(row[4]!.value.toString()),
+          minTrans: int.parse(row[5]!.value.toString()),
           typeOrder: row[6]!.value.toString(),
-          menuExc: row[7]!.value.split(','),
-          typeExc: row[8]!.value.split(','),
+          menuExc: row[7]!.value.toString().split(','),
+          typeExc: row[8]!.value.toString().split(','),
           freeDelivery: (row[9]!.value.toString() == 'TRUE') ? true : false,
           typeTrans: row[10]!.value.toString(),
-          dateExp: int.parse(row[11]!.value),
-          monthExp: int.parse(row[12]!.value),
-          yearExp: int.parse(row[13]!.value),
+          dateExp: int.parse(row[11]!.value.toString()),
+          monthExp: int.parse(row[12]!.value.toString()),
+          yearExp: int.parse(row[13]!.value.toString()),
         );
       },
     );
