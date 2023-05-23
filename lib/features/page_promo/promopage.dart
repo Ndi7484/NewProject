@@ -44,7 +44,7 @@ class PromoPage extends StatelessWidget {
                           Text(
                             provPromo.listPromo[index].promoShortDesc,
                             style: const TextStyle(
-                                color: Colors.grey, fontSize: 12),
+                                color: Colors.grey, fontSize: 10),
                           ),
                         ],
                       ),

@@ -13,6 +13,7 @@ class Account {
     required this.email,
     required this.password,
     required this.phone,
+    required this.points,
     this.alamat,
   });
   final String firstName;
@@ -20,6 +21,7 @@ class Account {
   final String email;
   final String password;
   final String phone;
+  final int points;
   List<Alamat>? alamat;
 }
 
@@ -55,6 +57,7 @@ class AccountProvider extends ChangeNotifier {
           email: row[2]!.value.toString(),
           password: row[3]!.value.toString(),
           phone: row[4]!.value.toString(),
+          points: int.parse(row[5]!.value.toString()),
         );
       },
     );
@@ -150,7 +153,8 @@ class AccountProvider extends ChangeNotifier {
           lastName: lastName,
           email: email,
           password: password,
-          phone: phone));
+          phone: phone, 
+          points: 0));
       message = 'Succesfully SignUp';
       _isSignUp = IsSignUp.success;
       notifyListeners();

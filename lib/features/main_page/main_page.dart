@@ -1,5 +1,7 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/core/logic/carousel_provider.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -13,10 +15,11 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
+    final provCarousel = Provider.of<CarouselProvider>(context);
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 5),
           child: Row(
             children: [
               Column(
@@ -57,7 +60,38 @@ class _MainPageState extends State<MainPage> {
               )
             ],
           ),
-        )
+        ),
+        const Divider(),
+        CarouselSlider(
+            items: List.generate(
+                provCarousel.listCarousel.length,
+                (index) => Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        provCarousel.listCarousel[index].carouselImage,
+                        fit: BoxFit.fill,
+                      ),
+                    ))),
+            options: CarouselOptions(
+              height: 180,
+              aspectRatio: 17 / 9,
+              viewportFraction: 0.9,
+              initialPage: 0,
+              enableInfiniteScroll: true,
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 3),
+              autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enlargeCenterPage: true,
+              enlargeFactor: 0.1,
+              scrollDirection: Axis.horizontal,
+            ))
       ],
     );
   }
