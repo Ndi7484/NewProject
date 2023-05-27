@@ -126,10 +126,10 @@ class _MainPageState extends State<MainPage> {
               child: Row(
                 children: [
                   const Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(5.0),
                     child: Icon(
                       Icons.campaign_rounded,
-                      size: 13,
+                      size: 20,
                       color: Color.fromARGB(255, 160, 157, 0),
                     ),
                   ),

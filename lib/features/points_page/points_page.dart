@@ -12,18 +12,42 @@ class PointsPage extends StatefulWidget {
 class _PointsPageState extends State<PointsPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Points'),
-      ),
-      body: Center(
-          child: Column(
-        children: [
-          Text('Your Points Balance is :'),
-          Text('17.000'),
-          Text('You can redeem it at our store'),
-        ],
-      )),
-    );
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Text(
+          'Your Points Balance is :',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Text(
+          '17.000',
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          '(1 points = Rp. 1)',
+          style: TextStyle(color: Colors.grey),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Text('Redeem your points at cashier'),
+        SizedBox(
+          height: 15,
+        ),
+        // qr code here
+        
+        SizedBox(
+          height: 15,
+        ),
+        Text('or by confirm payments checkouts'),
+        SizedBox(
+          height: 15,
+        ),
+      ],
+    ));
   }
 }
