@@ -91,7 +91,67 @@ class _MainPageState extends State<MainPage> {
               enlargeCenterPage: true,
               enlargeFactor: 0.1,
               scrollDirection: Axis.horizontal,
-            ))
+            )),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.width * 0.2,
+          decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.circular(5)),
+          child: const Center(
+            child: Text(
+              "Let's Order",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        // warning alert yellow sign
+        Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: 12 + 15 + 15 + 12,
+          decoration: BoxDecoration(
+              color: Colors.amber[100], borderRadius: BorderRadius.circular(5)),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.campaign_rounded,
+                      size: 13,
+                      color: Color.fromARGB(255, 160, 157, 0),
+                    ),
+                  ),
+                  Expanded(
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: const TextSpan(
+                        text:
+                            "This message is made a warning for all Randumu customers This message is made a warning for all Randumu customers",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 160, 157, 0),
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

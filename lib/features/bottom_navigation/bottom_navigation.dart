@@ -4,6 +4,7 @@ import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:flutter_application_1/features/main_page/main_page.dart';
 import 'package:flutter_application_1/features/menu_page/menu_page.dart';
+import 'package:flutter_application_1/features/points_page/points_page.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavigationPage extends StatefulWidget {
@@ -25,7 +26,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   final List<dynamic> _bodyFill = [
     const MainPage(),
     const MenuPage(),
-    const MainPage(),
+    const PointsPage(),
     const PromoPage(),
     const MainPage(),
   ];
