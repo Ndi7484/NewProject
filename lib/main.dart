@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import 'core/logic/counter_proivider.dart';
 import 'core/logic/promo_provider.dart';
+import 'core/logic/warning_provider.dart';
 
 // multi provider is here
 void main() {
@@ -19,6 +20,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => AddressProvider()..resetParam()..readAddress()),
         ChangeNotifierProvider(create: (_) => PromoProvider()..readPromo()),
         ChangeNotifierProvider(create: (_) => CarouselProvider()..readCarousel()),
+        ChangeNotifierProvider(create: (_) => WarningProvider()..readWarn()),
       ],
       child: const MyApp(),
     ),

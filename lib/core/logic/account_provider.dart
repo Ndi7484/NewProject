@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:excel/excel.dart';
 import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/number_symbols.dart';
 import 'package:provider/provider.dart';
 
 import 'address_provider.dart';
@@ -14,6 +16,7 @@ class Account {
     required this.password,
     required this.phone,
     required this.points,
+    required this.pointsString,
     this.alamat,
   });
   final String firstName;
@@ -22,6 +25,7 @@ class Account {
   final String password;
   final String phone;
   final int points;
+  final String pointsString;
   List<Alamat>? alamat;
 }
 
@@ -47,6 +51,8 @@ class AccountProvider extends ChangeNotifier {
     var excel = Excel.decodeBytes(bytes);
 
     var table = excel.tables[excel.tables.keys.first];
+
+    NumberFormat formatter = NumberFormat("#,###", "en_US");
     _listAccount = List.generate(
       table!.maxRows,
       (index) {
@@ -58,6 +64,10 @@ class AccountProvider extends ChangeNotifier {
           password: row[3]!.value.toString(),
           phone: row[4]!.value.toString(),
           points: int.parse(row[5]!.value.toString()),
+          pointsString: formatter
+              .format(int.parse(row[5]!.value.toString()))
+              .toString()
+              .replaceAll(',', '.'),
         );
       },
     );
@@ -153,8 +163,9 @@ class AccountProvider extends ChangeNotifier {
           lastName: lastName,
           email: email,
           password: password,
-          phone: phone, 
-          points: 0));
+          phone: phone,
+          points: 0,
+          pointsString: '0'));
       message = 'Succesfully SignUp';
       _isSignUp = IsSignUp.success;
       notifyListeners();

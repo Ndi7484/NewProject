@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/carousel_provider.dart';
+import 'package:flutter_application_1/core/logic/warning_provider.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
     final provCarousel = Provider.of<CarouselProvider>(context);
+    final provWarning = Provider.of<WarningProvider>(context);
     return Column(
       children: [
         Container(
@@ -115,43 +117,54 @@ class _MainPageState extends State<MainPage> {
           height: 10,
         ),
         // warning alert yellow sign
-        Container(
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: 12 + 15 + 15 + 12,
-          decoration: BoxDecoration(
-              color: Colors.amber[100], borderRadius: BorderRadius.circular(5)),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Icon(
-                      Icons.campaign_rounded,
-                      size: 20,
-                      color: Color.fromARGB(255, 160, 157, 0),
-                    ),
-                  ),
-                  Expanded(
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: const TextSpan(
-                        text:
-                            "This message is made a warning for all Randumu customers This message is made a warning for all Randumu customers",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 160, 157, 0),
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
+        (provWarning.getWarning != null)
+            ? Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: 12 +
+                    14 * ((provWarning.getWarning!.desc.length / 47).ceil()) +
+                    12,
+                decoration: BoxDecoration(
+                    color: Colors.amber[100],
+                    border: Border.all(
+                        width: 1,
+                        color: const Color.fromARGB(255, 160, 157, 0)),
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.campaign_rounded,
+                            size: ((provWarning.getWarning!.desc.length / 47)
+                                        .ceil() >=
+                                    2)
+                                ? 20
+                                : 15,
+                            color: const Color.fromARGB(255, 160, 157, 0),
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: provWarning.getWarning!.desc.toString(),
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 160, 157, 0),
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
+                ),
+              )
+            : Container(),
       ],
     );
   }
