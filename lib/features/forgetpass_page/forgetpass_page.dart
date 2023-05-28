@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
-import 'package:flutter_application_1/features/forgetpass_page/forgetpass_page.dart';
+import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:flutter_application_1/features/signup_page/signup_page.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class ForgetPassPage extends StatefulWidget {
+  const ForgetPassPage({Key? key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  _ForgetPassPageState createState() => _ForgetPassPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ForgetPassPageState extends State<ForgetPassPage> {
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
@@ -44,25 +44,21 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 30, bottom: 30),
-                            child: Image.asset('assets/etc/logo.png'),
-                          ),
-                          const Padding(
-                            padding: const EdgeInsets.only(bottom: 25),
-                            child: const Text(
-                              "Log In",
+                            padding: const EdgeInsets.only(top: 30, bottom: 150),
+                            child: Text(
+                              "Forget Password",
                               style: TextStyle(
                                 color: Color.fromARGB(255, 255, 128, 128),
                                 letterSpacing: 0.5,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 80,
+                                fontSize: 50,
                               ),
                             ),
                           ),
-                          const Padding(
+                          Padding(
                             padding: const EdgeInsets.only(bottom: 20),
-                            child: const Text(
-                              "Please Sign In to Continue",
+                            child: Text(
+                              "Enter your Email / Phone Number:",
                               style: TextStyle(
                                 color: Color.fromARGB(255, 255, 128, 128),
                                 letterSpacing: 0.5,
@@ -78,33 +74,17 @@ class _LoginPageState extends State<LoginPage> {
                               onChanged: (value) {
                                 setState(() {
                                   provAccount.paramEmail = value;
+                                  provAccount.paramPhone = value;
                                 });
                               },
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Email',
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: TextField(
-                              onChanged: (value) {
-                                setState(() {
-                                  provAccount.paramPassword = value;
-                                });
-                              },
-                              obscureText: true,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Password',
+                                labelText: 'Email / Phone Number',
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 80),
+                            padding: const EdgeInsets.only(top: 170),
                             child: Container(
                               padding: const EdgeInsets.all(8.0),
                               child: ElevatedButton(
@@ -121,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                                         Auth.initial)
                                     ? const CircularProgressIndicator()
                                     : const Text(
-                                        'Login',
+                                        'Continue',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           wordSpacing: 5,
@@ -131,45 +111,11 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          (provAccount.message != '')
-                              ? Container(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      provAccount.message,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                )
-                              : Container(),
                         ],
                       ),
                     ),
                   ),
                 ],
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => ForgetPassPage()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Text(
-                    "Forget you password?",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.yellow,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
@@ -177,9 +123,9 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
+                      padding: const EdgeInsets.only(right: 5.0),
                       child: Text(
-                        "Don't have an account?",
+                        "Back?",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
@@ -191,10 +137,10 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       onPressed: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => SignUpPage()));
+                            MaterialPageRoute(builder: (_) => LoginPage()));
                       },
                       child: Text(
-                        "Sign Up",
+                        "Login",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
