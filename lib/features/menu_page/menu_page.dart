@@ -13,7 +13,7 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return ListView(
         children: List.generate(
-      5,
+      15,
       (index) => Padding(
           padding: const EdgeInsets.all(8.0),
           child: MenuCard(
