@@ -16,6 +16,7 @@ class Promo {
     required this.menuExc,
     required this.typeExc,
     required this.freeDelivery,
+    required this.maxDelivery,
     required this.typeTrans,
     required this.dateExp,
     required this.monthExp,
@@ -31,6 +32,7 @@ class Promo {
   List<String> menuExc;
   List<String> typeExc;
   bool freeDelivery;
+  int maxDelivery;
   String typeTrans;
   int dateExp;
   int monthExp;
@@ -62,10 +64,11 @@ class PromoProvider extends ChangeNotifier {
           menuExc: row[7]!.value.toString().split(','),
           typeExc: row[8]!.value.toString().split(','),
           freeDelivery: (row[9]!.value.toString() == 'TRUE') ? true : false,
-          typeTrans: row[10]!.value.toString(),
-          dateExp: int.parse(row[11]!.value.toString()),
-          monthExp: int.parse(row[12]!.value.toString()),
-          yearExp: int.parse(row[13]!.value.toString()),
+          maxDelivery: int.parse(row[10]!.value.toString()),
+          typeTrans: row[11]!.value.toString(),
+          dateExp: int.parse(row[12]!.value.toString()),
+          monthExp: int.parse(row[13]!.value.toString()),
+          yearExp: int.parse(row[14]!.value.toString()),
         );
       },
     );

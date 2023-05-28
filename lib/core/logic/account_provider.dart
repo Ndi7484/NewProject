@@ -1,7 +1,14 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:excel/excel.dart';
 import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
+import 'package:flutter_application_1/features/login_page/login_page.dart';
+import 'package:flutter_application_1/features/newpass_page/newpass_page.dart';
+import 'package:flutter_application_1/features/verification_page/verification_page.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'address_provider.dart';
@@ -13,13 +20,17 @@ class Account {
     required this.email,
     required this.password,
     required this.phone,
+    required this.points,
+    required this.pointsString,
     this.alamat,
   });
   final String firstName;
   final String lastName;
   final String email;
-  final String password;
+  String password;
   final String phone;
+  final int points;
+  final String pointsString;
   List<Alamat>? alamat;
 }
 
@@ -35,6 +46,12 @@ enum IsSignUp {
   fail,
 }
 
+enum Forget {
+  initial,
+  success,
+  fail,
+}
+
 class AccountProvider extends ChangeNotifier {
   // more info excel dev https://pub.dev/packages/excel
   List<Account> _listAccount = [];
@@ -45,6 +62,8 @@ class AccountProvider extends ChangeNotifier {
     var excel = Excel.decodeBytes(bytes);
 
     var table = excel.tables[excel.tables.keys.first];
+
+    NumberFormat formatter = NumberFormat("#,###", "en_US");
     _listAccount = List.generate(
       table!.maxRows,
       (index) {
@@ -55,6 +74,11 @@ class AccountProvider extends ChangeNotifier {
           email: row[2]!.value.toString(),
           password: row[3]!.value.toString(),
           phone: row[4]!.value.toString(),
+          points: int.parse(row[5]!.value.toString()),
+          pointsString: formatter
+              .format(int.parse(row[5]!.value.toString()))
+              .toString()
+              .replaceAll(',', '.'),
         );
       },
     );
@@ -64,7 +88,8 @@ class AccountProvider extends ChangeNotifier {
   // Login purposes
   Account? _selectedAccount;
   Auth _isAuthenticated = Auth.unauthenticated;
-  IsSignUp _isSignUp = IsSignUp.initial;
+  IsSignUp _isSignUp = IsSignUp.success;
+  Forget _isForget = Forget.success;
 
   // parameter handle purposes
   String paramFirstName = '';
@@ -77,14 +102,36 @@ class AccountProvider extends ChangeNotifier {
   String message = '';
   String currentHour = '';
 
+  // verification digits 4
+  String _validateParam = '';
+  String paramV1 = '';
+  String paramV2 = '';
+  String paramV3 = '';
+  String paramV4 = '';
+  void resetValidation() {
+    _validateParam = '';
+    paramV1 = '';
+    paramV2 = '';
+    paramV3 = '';
+    paramV4 = '';
+    notifyListeners();
+  }
+
   Account? get selectedAccount => _selectedAccount;
   Auth get isAuthenticated => _isAuthenticated;
   IsSignUp get isSignUp => _isSignUp;
+  Forget get isForget => _isForget;
 
   // checkAccount() to login to main page
   void checkAccount(context) async {
     _isAuthenticated = Auth.initial;
     bool authSet = false;
+    if (paramEmail == '' && paramPhone == '' && paramPassword == '') {
+      message = 'Please input the required email/password';
+      _isAuthenticated = Auth.unauthenticated;
+      notifyListeners();
+      return;
+    }
     for (var el in _listAccount) {
       if ((el.email == paramEmail || el.phone == paramPhone) &&
           el.password == paramPassword) {
@@ -109,6 +156,7 @@ class AccountProvider extends ChangeNotifier {
     if (!authSet) {
       _isAuthenticated = Auth.unauthenticated;
       message = 'Login Fail, Incorrect Email/Password..';
+      notifyListeners();
     }
   }
 
@@ -141,23 +189,173 @@ class AccountProvider extends ChangeNotifier {
   }
 
   // add new Account in SignUp page
-  void addAccount(String firstName, String lastName, String email, String phone,
-      String password, String confirmPass) {
+  void addAccount(context) async {
     _isSignUp = IsSignUp.initial;
-    if (password == confirmPass && checkAdd(email, phone)) {
-      _listAccount.add(Account(
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: password,
-          phone: phone));
+    if (paramPassword == paramConfirmPass && checkAdd(paramEmail, paramPhone)) {
+      ByteData data = await rootBundle.load('assets/data/account.xlsx');
+      var bytes =
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      var excel = Excel.decodeBytes(bytes);
+      Sheet sheetObject = excel['Sheet1'];
+      var maxRows = excel.tables[excel.tables.keys]!.maxRows;
+      // start insert the parameters
+      var cell1 = sheetObject.cell(CellIndex.indexByString('A$maxRows'));
+      cell1.value = paramFirstName;
+      var cell2 = sheetObject.cell(CellIndex.indexByString('B$maxRows'));
+      cell2.value = paramLastName;
+      var cell3 = sheetObject.cell(CellIndex.indexByString('C$maxRows'));
+      cell3.value = paramEmail;
+      var cell4 = sheetObject.cell(CellIndex.indexByString('D$maxRows'));
+      cell4.value = paramPassword;
+      var cell5 = sheetObject.cell(CellIndex.indexByString('E$maxRows'));
+      cell5.value = paramPhone;
+      var cell6 = sheetObject.cell(CellIndex.indexByString('F$maxRows'));
+      cell6.value = 0;
+      var cell7 = sheetObject.cell(CellIndex.indexByString('G$maxRows'));
+      cell7.value = '0';
+      // stop insert
+      // update the excel
+      var updatedBytes = excel.encode();
+      // Overwrite the existing file
+      var file = File('assets/data/account.xlsx');
+      await file.writeAsBytes(updatedBytes!);
+      // _listAccount.add(Account(
+      //     firstName: paramFirstName,
+      //     lastName: paramLastName,
+      //     email: paramEmail,
+      //     password: paramPassword,
+      //     phone: paramPhone,
+      //     points: 0,
+      //     pointsString: '0'));
+      resetParam();
+      readAccount();
       message = 'Succesfully SignUp';
       _isSignUp = IsSignUp.success;
       notifyListeners();
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const LoginPage()));
     } else {
       message = 'Fail SignUp, Email/Phone already used..';
       _isSignUp = IsSignUp.fail;
       notifyListeners();
+    }
+  }
+
+  // check that user forget account
+  void checkForget(context) async {
+    _isForget = Forget.initial;
+    if (paramEmail != '' || paramPhone != '') {
+      readAccount();
+      bool isFind = false;
+      for (var el in _listAccount) {
+        if (el.email == paramEmail) {
+          // there is an account named:
+          paramEmail = el.email;
+          isFind = true;
+          _isForget = Forget.success;
+          // code validation
+          final random = Random();
+          const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+          const length = 4;
+          // do a code randomizer
+          String randomString = '';
+          for (int i = 0; i < length; i++) {
+            randomString += chars[random.nextInt(chars.length)];
+          }
+          _validateParam = randomString;
+          final snackBar = SnackBar(
+            content: Text('Your Code Validation : $randomString'),
+            duration: const Duration(seconds: 10),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            snackBar,
+          );
+          // push to next page validate?
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => const VerificationPage()));
+        }
+        if (el.phone == paramPhone) {
+          // there is an account named:
+          paramPhone = el.phone;
+          isFind = true;
+          _isForget = Forget.success;
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => const VerificationPage()));
+        }
+      }
+      if (!isFind) {
+        message = 'There is no such email/phone';
+        _isForget = Forget.fail;
+        notifyListeners();
+      }
+    } else {
+      message = 'Please input the email/phone';
+      _isForget = Forget.fail;
+      notifyListeners();
+    }
+  }
+
+  //check code validation
+  void checkValidation(context) {
+    _isForget = Forget.initial;
+    if ('$paramV1$paramV2$paramV3$paramV4' == _validateParam) {
+      // success validate
+      _isForget = Forget.success;
+      paramPassword = '';
+      paramConfirmPass = '';
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const NewPassPage()));
+    } else {
+      _isForget = Forget.fail;
+      message = 'wrong validation code..';
+      notifyListeners();
+    }
+  }
+
+  // change new password
+  void changeNewPass(context) async {
+    _isForget = Forget.initial;
+    if (paramConfirmPass == '' || paramPassword == '') {
+      message = 'please input your new password';
+      _isForget = Forget.fail;
+      return;
+    } else {
+      if (paramConfirmPass != paramPassword) {
+        message = 'please type the same confirm password';
+        _isForget = Forget.fail;
+        return;
+      }
+      for (var el in _listAccount) {
+        if (el.email == paramEmail || el.phone == paramPhone) {
+          ByteData data = await rootBundle.load('assets/data/account.xlsx');
+          var bytes =
+              data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          var excel = Excel.decodeBytes(bytes);
+          var table = excel.tables[excel.tables.keys.first];
+
+          for (var i = 0; i < table!.maxRows; i++) {
+            var row = table.row(i);
+            if (row[2]!.value.toString() == paramEmail ||
+                row[4]!.value.toString() == paramPhone) {
+              Sheet sheetObject = excel['Sheet1'];
+              var cell = sheetObject.cell(CellIndex.indexByString('D$i'));
+              cell.value = paramPassword;
+              // Save the updated Excel file
+              var updatedBytes = excel.encode();
+              // Overwrite the existing file
+              var file = File('assets/existing_excel_file.xlsx');
+              await file.writeAsBytes(updatedBytes!);
+            }
+          }
+          resetParam();
+          readAccount();
+          notifyListeners();
+          // el.password = paramPassword;
+          _isForget = Forget.success;
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => const LoginPage()));
+        }
+      }
     }
   }
 
@@ -166,7 +364,8 @@ class AccountProvider extends ChangeNotifier {
     _isAuthenticated = Auth.unauthenticated;
     _selectedAccount = null;
     _listAccount = [];
-    _isSignUp = IsSignUp.initial;
+    _isSignUp = IsSignUp.success;
+    _isForget = Forget.success;
     paramFirstName = '';
     paramLastName = '';
     paramEmail = '';
@@ -175,5 +374,10 @@ class AccountProvider extends ChangeNotifier {
     paramConfirmPass = '';
     message = '';
     currentHour = '';
+    paramV1 = '';
+    paramV2 = '';
+    paramV3 = '';
+    paramV4 = '';
+    _validateParam = '';
   }
 }

@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
-import 'package:flutter_application_1/features/forgetpass_page/forgetpass_page.dart';
-import 'package:flutter_application_1/features/signup_page/signup_page.dart';
+import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   bool _passwordInvisible = true;
+  bool _passwordInvisible2 = true;
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
     return Scaffold(
       body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
@@ -47,16 +45,10 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         children: [
                           const SizedBox(
-                            height: 15,
+                            height: 10,
                           ),
-                          // image logo
-                          Image.asset('assets/etc/Logo.png'),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          // Red Log In text
                           Text(
-                            "Log In",
+                            "Sign Up",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               letterSpacing: 0.5,
@@ -65,11 +57,10 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           const SizedBox(
-                            height: 15,
+                            height: 10,
                           ),
-                          // Red please sign in to continue
                           Text(
-                            "Please Sign In to Continue",
+                            "Create your account",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               letterSpacing: 0.5,
@@ -80,9 +71,52 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(
                             height: 15,
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            width: MediaQuery.of(context).size.width * 0.75,
+                          // start here is text field
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.325,
+                                child: TextField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      provAccount.paramFirstName = value;
+                                    });
+                                  },
+                                  decoration: const InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.fromLTRB(12, 12, 12, 12),
+                                    border: OutlineInputBorder(),
+                                    labelText: 'First Name',
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.325,
+                                child: TextField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      provAccount.paramLastName = value;
+                                    });
+                                  },
+                                  decoration: const InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.fromLTRB(12, 12, 12, 12),
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Last Name',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.68,
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
@@ -98,11 +132,27 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           const SizedBox(height: 10),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.68,
+                            child: TextField(
+                              onChanged: (value) {
+                                setState(() {
+                                  provAccount.paramPhone = value;
+                                });
+                              },
+                              decoration: const InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.fromLTRB(12, 12, 12, 12),
+                                border: OutlineInputBorder(),
+                                labelText: 'Phone Number',
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
                           Stack(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                width: MediaQuery.of(context).size.width * 0.75,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.68,
                                 child: TextField(
                                   onChanged: (value) {
                                     setState(() {
@@ -112,15 +162,15 @@ class _LoginPageState extends State<LoginPage> {
                                   obscureText: _passwordInvisible,
                                   decoration: const InputDecoration(
                                     contentPadding:
-                                        EdgeInsets.fromLTRB(12, 12, 42, 12),
+                                        EdgeInsets.fromLTRB(12, 12, 43, 12),
                                     border: OutlineInputBorder(),
                                     labelText: 'Password',
                                   ),
                                 ),
                               ),
                               Positioned(
-                                top: 11.5,
-                                right: 10,
+                                top: 2.5,
+                                right: 3,
                                 child: GestureDetector(
                                   onTap: () {
                                     setState(() {
@@ -147,8 +197,60 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
 
+                          const SizedBox(height: 10),
+
+                          Stack(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.68,
+                                child: TextField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      provAccount.paramConfirmPass = value;
+                                    });
+                                  },
+                                  obscureText: _passwordInvisible2,
+                                  decoration: const InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.fromLTRB(12, 12, 43, 12),
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Confirm Password',
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 2.5,
+                                right: 3,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _passwordInvisible2 =
+                                          !_passwordInvisible2;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    color: Colors.white,
+                                    child: Icon(
+                                      (_passwordInvisible2)
+                                          ? Icons.visibility
+                                          : Icons.visibility_off_outlined,
+                                      color:
+                                          (provAccount.paramConfirmPass != '')
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
                           const SizedBox(
-                            height: 30,
+                            height: 18,
                           ),
                           Container(
                             padding: const EdgeInsets.all(8.0),
@@ -160,19 +262,17 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(16.0),
-                                minimumSize: const Size(150, 50),
+                                minimumSize: const Size(150, 25),
                               ),
                               child:
                                   (provAccount.isAuthenticated == Auth.initial)
-                                      ? const CircularProgressIndicator(
-                                          color: Colors.white,
-                                        )
+                                      ? const CircularProgressIndicator()
                                       : const Text(
-                                          'Login',
+                                          'Sign Up',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             wordSpacing: 5,
-                                            fontSize: 20,
+                                            fontSize: 18,
                                           ),
                                         ),
                             ),
@@ -199,36 +299,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-              TextButton(
-                onPressed: () {
-                  provAccount.resetParam();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const ForgetPassPage()));
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 15),
-                  child: Text(
-                    "Forget your password?",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 255, 242, 121),
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
-              ),
               Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Padding(
                       padding: EdgeInsets.only(right: 8.0),
                       child: Text(
-                        "Don't have an account?",
+                        "Already have an account?",
                         style: TextStyle(
                           fontSize: 18.0,
                           color: Colors.white,
@@ -238,14 +317,13 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        provAccount.resetParam();
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const SignUpPage()));
+                                builder: (_) => const LoginPage()));
                       },
                       child: const Text(
-                        "Sign Up",
+                        "Login",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
