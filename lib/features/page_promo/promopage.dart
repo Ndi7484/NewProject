@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
+import 'package:flutter_application_1/features/S&K/SK.dart';
 import 'package:provider/provider.dart';
 
 class PromoPage extends StatelessWidget {
@@ -81,7 +82,10 @@ class PromoPage extends StatelessWidget {
                 bottom: 10,
                 left: MediaQuery.of(context).size.width * 0.41,
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, 
+                    MaterialPageRoute(builder: (context) => SyaratKetentuan(),));
+                  },
                   child: const Text(
                     'S & K',
                     style: TextStyle(
