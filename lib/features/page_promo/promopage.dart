@@ -51,13 +51,13 @@ class PromoPage extends StatelessWidget {
                     ),
                     const Spacer(),
                     SizedBox(
-                      width: MediaQuery.of(context).size.height * 0.2,
+                      width: MediaQuery.of(context).size.height * 0.19,
                       height: MediaQuery.of(context).size.height * 0.2,
                       child: ClipRect(
                         child: Align(
                           alignment: Alignment(
                               -1.0 +
-                                  (150 /
+                                  (220 /
                                       (MediaQuery.of(context).size.height *
                                           0.2)),
                               -1.0 +
@@ -65,7 +65,7 @@ class PromoPage extends StatelessWidget {
                                       (MediaQuery.of(context).size.height *
                                           0.2))),
                           child: Transform.scale(
-                            scale: 2.25,
+                            scale: 2.5,
                             child: Image.asset(
                               'assets/etc/Voucher.png',
                               height: 100,
@@ -78,13 +78,14 @@ class PromoPage extends StatelessWidget {
                 ),
               ),
               Positioned(
-                bottom: 5,
-                left: MediaQuery.of(context).size.width * 0.43,
+                bottom: 10,
+                left: MediaQuery.of(context).size.width * 0.41,
                 child: GestureDetector(
                   onTap: () {},
                   child: const Text(
                     'S & K',
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
                   ),
                 ),
               )

@@ -17,8 +17,8 @@ class _ForgetPassPageState extends State<ForgetPassPage> {
     final provAccount = Provider.of<AccountProvider>(context);
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          image: const DecorationImage(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
             fit: BoxFit.cover,
             image: AssetImage('assets/etc/Background.png'),
           ),
@@ -31,8 +31,8 @@ class _ForgetPassPageState extends State<ForgetPassPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 500,
-                    height: 640,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.height * 0.7,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
@@ -43,74 +43,97 @@ class _ForgetPassPageState extends State<ForgetPassPage> {
                     child: Center(
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 30, bottom: 150),
-                            child: Text(
-                              "Forget Password",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 255, 128, 128),
-                                letterSpacing: 0.5,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 50,
-                              ),
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          Text(
+                            "Forget Password",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              letterSpacing: 0.5,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 40,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Text(
-                              "Enter your Email / Phone Number:",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 255, 128, 128),
-                                letterSpacing: 0.5,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          Text(
+                            "Enter your Email / Phone Number:",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              // letterSpacing: 0.5,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
                             ),
+                          ),
+                          const SizedBox(
+                            height: 20,
                           ),
                           Container(
                             padding: const EdgeInsets.all(8.0),
-                            width: MediaQuery.of(context).size.width * 0.5,
+                            width: MediaQuery.of(context).size.width * 0.75,
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
-                                  provAccount.paramEmail = value;
-                                  provAccount.paramPhone = value;
+                                  if (value.contains('@')) {
+                                    provAccount.paramEmail = value;
+                                  } else {
+                                    provAccount.paramPhone = value;
+                                  }
                                 });
                               },
                               decoration: const InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.fromLTRB(12, 12, 12, 12),
                                 border: OutlineInputBorder(),
                                 labelText: 'Email / Phone Number',
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 170),
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Provider.of<AccountProvider>(context,
-                                          listen: false)
-                                      .checkAccount(context);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(16.0),
-                                  minimumSize: Size(200, 50),
-                                ),
-                                child: (provAccount.isAuthenticated ==
-                                        Auth.initial)
-                                    ? const CircularProgressIndicator()
-                                    : const Text(
-                                        'Continue',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          wordSpacing: 5,
-                                          fontSize: 20,
-                                        ),
-                                      ),
+                          const SizedBox(
+                            height: 100,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                provAccount.checkForget(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.all(16.0),
+                                minimumSize: const Size(150, 50),
                               ),
+                              child: (provAccount.isForget == Forget.initial)
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : const Text(
+                                      'Continue',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        wordSpacing: 5,
+                                        fontSize: 20,
+                                      ),
+                                    ),
                             ),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          (provAccount.message != '')
+                              ? Container(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      provAccount.message,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),
@@ -122,13 +145,12 @@ class _ForgetPassPageState extends State<ForgetPassPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5.0),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 5.0),
                       child: Text(
-                        "Back?",
+                        "Already have an account?",
                         style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
                           color: Colors.white,
                           letterSpacing: 1,
                         ),
@@ -136,15 +158,18 @@ class _ForgetPassPageState extends State<ForgetPassPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => LoginPage()));
+                        provAccount.resetParam();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const LoginPage()));
                       },
-                      child: Text(
+                      child: const Text(
                         "Login",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
-                          color: Colors.yellow,
+                          color: Color.fromARGB(255, 255, 242, 121),
                           letterSpacing: 1,
                         ),
                       ),

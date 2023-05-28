@@ -11,6 +11,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  bool _passwordInvisible = true;
+  bool _passwordInvisible2 = true;
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
@@ -147,41 +149,106 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.68,
-                            child: TextField(
-                              onChanged: (value) {
-                                setState(() {
-                                  provAccount.paramPassword = value;
-                                });
-                              },
-                              obscureText: true,
-                              decoration: const InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(12, 12, 12, 12),
-                                border: OutlineInputBorder(),
-                                labelText: 'Password',
+                          Stack(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.68,
+                                child: TextField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      provAccount.paramPassword = value;
+                                    });
+                                  },
+                                  obscureText: _passwordInvisible,
+                                  decoration: const InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.fromLTRB(12, 12, 43, 12),
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Password',
+                                  ),
+                                ),
                               ),
-                            ),
+                              Positioned(
+                                top: 2.5,
+                                right: 3,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _passwordInvisible = !_passwordInvisible;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    color: Colors.white,
+                                    child: Icon(
+                                      (_passwordInvisible)
+                                          ? Icons.visibility
+                                          : Icons.visibility_off_outlined,
+                                      color: (provAccount.paramPassword != '')
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+
                           const SizedBox(height: 10),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.68,
-                            child: TextField(
-                              onChanged: (value) {
-                                setState(() {
-                                  provAccount.paramConfirmPass = value;
-                                });
-                              },
-                              obscureText: true,
-                              decoration: const InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(12, 12, 12, 12),
-                                border: OutlineInputBorder(),
-                                labelText: 'Confirm Password',
+
+                          Stack(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.68,
+                                child: TextField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      provAccount.paramConfirmPass = value;
+                                    });
+                                  },
+                                  obscureText: _passwordInvisible2,
+                                  decoration: const InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.fromLTRB(12, 12, 43, 12),
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Confirm Password',
+                                  ),
+                                ),
                               ),
-                            ),
+                              Positioned(
+                                top: 2.5,
+                                right: 3,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _passwordInvisible2 =
+                                          !_passwordInvisible2;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    color: Colors.white,
+                                    child: Icon(
+                                      (_passwordInvisible2)
+                                          ? Icons.visibility
+                                          : Icons.visibility_off_outlined,
+                                      color:
+                                          (provAccount.paramConfirmPass != '')
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+
                           const SizedBox(
                             height: 18,
                           ),
@@ -250,7 +317,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const LoginPage()));
                       },
                       child: const Text(
                         "Login",

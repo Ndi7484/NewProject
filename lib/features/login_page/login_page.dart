@@ -201,7 +201,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.push(
+                  provAccount.resetParam();
+                  Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (_) => const ForgetPassPage()));
@@ -238,7 +239,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       onPressed: () {
                         provAccount.resetParam();
-                        Navigator.push(
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (_) => const SignUpPage()));
