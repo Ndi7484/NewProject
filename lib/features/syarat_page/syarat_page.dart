@@ -9,42 +9,6 @@ class SyaratKetentuan extends StatefulWidget {
   State<SyaratKetentuan> createState() => _SyaratKetentuanState();
 }
 
-// class _SKState extends State<SK> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Syarat dan Ketentuan'),
-//       ),
-//       body: Container(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             RichText(
-//               text: TextSpan(
-//                 text: '- Promo makanan hingga xxx%',
-//                 style: TextStyle(color: Colors.black, fontSize: 16.0),
-//               ),
-//             ),
-//             RichText(
-//               text: TextSpan(
-//                 text: '- Voucher hanya berlaku untuk layanan TakeAway dan Delivery, tidak untuk Dine In',
-//                 style: TextStyle(color: Colors.black, fontSize: 16.0),
-//               ),
-//             ),
-//             RichText(
-//               text: TextSpan(
-//                 text: '- Voucher hanya bisa digunakan untuk memesan menu Dessert',
-//                 style: TextStyle(color: Colors.black, fontSize: 16.0),
-//               ),
-//             ),
-//           ],
-//       ),
-//     ));
-//   }
-// }
-
 class _SyaratKetentuanState extends State<SyaratKetentuan> {
   void _showDialog() {
     showDialog(
