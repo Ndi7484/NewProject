@@ -3,7 +3,6 @@ import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:excel/excel.dart';
 import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/number_symbols.dart';
 import 'package:provider/provider.dart';
 
 import 'address_provider.dart';
