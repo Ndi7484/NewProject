@@ -21,7 +21,7 @@ class _MenuCardState extends State<MenuCard> {
         children: [
           Stack(children: [
             Image.asset(
-              'assets/food/Beefsteak.png',
+              'assets/food/Beef_stew.png',
               height: 120,
             ),
             Positioned(

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
-import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:flutter_application_1/features/main_page/main_page.dart';
 import 'package:flutter_application_1/features/menu_page/menu_page.dart';
 import 'package:flutter_application_1/features/points_page/points_page.dart';
-import 'package:provider/provider.dart';
 
 class BottomNavigationPage extends StatefulWidget {
   const BottomNavigationPage({super.key});
@@ -87,15 +84,15 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
       body: Container(
         child: _bodyFill[_selectedIndex],
       ),
-      floatingActionButton: (_selectedIndex == 1)
-          ? FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: const Icon(
-                Icons.shopping_basket,
-                color: Colors.white,
-              ))
-          : null,
+      // floatingActionButton: (_selectedIndex == 1)
+      //     ? FloatingActionButton(
+      //         onPressed: () {},
+      //         backgroundColor: Theme.of(context).colorScheme.primary,
+      //         child: const Icon(
+      //           Icons.shopping_basket,
+      //           color: Colors.white,
+      //         ))
+      //     : null,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
