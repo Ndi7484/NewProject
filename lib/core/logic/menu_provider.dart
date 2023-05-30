@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,8 +25,9 @@ class FoodMenu {
 }
 
 class MenuProvider extends ChangeNotifier {
-  late List<FoodMenu> _listFoodMenu;
+  List<FoodMenu> _listFoodMenu = [];
   List<FoodMenu> get listFoodMenu => _listFoodMenu;
+  // load data from excel
   void readMenu() async {
     ByteData data = await rootBundle.load('assets/data/menu.xlsx');
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
@@ -38,25 +37,27 @@ class MenuProvider extends ChangeNotifier {
 
     NumberFormat formatter = NumberFormat("#,###", "en_US");
 
-    _listFoodMenu = List.generate(
-      table!.maxRows,
-      (index) {
-        var row = table.row(index);
-        return FoodMenu(
-          menuID: row[0]!.value.toString(),
-          menuCategory: row[1]!.value.toString(),
-          menuName: row[2]!.value.toString(),
-          menuShortDesc: row[3]!.value.toString(),
-          menuLongDesc: row[4]!.value.toString(),
-          menuImage: row[5]!.value.toString(),
-          menuPrice: int.parse(row[6]!.value.toString()),
-          menuPriceString: formatter
-              .format(int.parse(row[6]!.value.toString()))
-              .toString()
-              .replaceAll(',', '.'),
-        );
-      },
-    );
+    _listFoodMenu = [
+      ...List.generate(
+        table!.maxRows,
+        (index) {
+          var row = table.row(index);
+          return FoodMenu(
+            menuID: row[0]!.value.toString(),
+            menuCategory: row[1]!.value.toString(),
+            menuName: row[2]!.value.toString(),
+            menuShortDesc: row[3]!.value.toString(),
+            menuLongDesc: row[4]!.value.toString(),
+            menuImage: row[5]!.value.toString(),
+            menuPrice: int.parse(row[6]!.value.toString()),
+            menuPriceString: formatter
+                .format(int.parse(row[6]!.value.toString()))
+                .toString()
+                .replaceAll(',', '.'),
+          );
+        },
+      )
+    ];
     notifyListeners();
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter_application_1/features/menu_page/menu_page.dart';
 import 'package:flutter_application_1/features/points_page/points_page.dart';
 
 class BottomNavigationPage extends StatefulWidget {
-  const BottomNavigationPage({super.key});
+  const BottomNavigationPage({Key? key}) : super(key: key);
 
   @override
   State<BottomNavigationPage> createState() => _BottomNavigationPageState();
@@ -81,18 +81,16 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           ),
         ],
       ),
-      body: Container(
-        child: _bodyFill[_selectedIndex],
-      ),
-      // floatingActionButton: (_selectedIndex == 1)
-      //     ? FloatingActionButton(
-      //         onPressed: () {},
-      //         backgroundColor: Theme.of(context).colorScheme.primary,
-      //         child: const Icon(
-      //           Icons.shopping_basket,
-      //           color: Colors.white,
-      //         ))
-      //     : null,
+      body: _bodyFill[_selectedIndex],
+      floatingActionButton: (_selectedIndex == 1)
+          ? FloatingActionButton(
+              onPressed: () {},
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: const Icon(
+                Icons.shopping_basket,
+                color: Colors.white,
+              ))
+          : null,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
