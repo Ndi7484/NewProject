@@ -202,6 +202,7 @@ class _LoginPageState extends State<LoginPage> {
               TextButton(
                 onPressed: () {
                   provAccount.resetParam();
+                  provAccount.readAccount();
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

@@ -1,14 +1,19 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
+import 'package:path/path.dart' as path;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:excel/excel.dart';
+import 'package:flutter_application_1/core/widgets/notif_banner.dart';
 import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:flutter_application_1/features/newpass_page/newpass_page.dart';
 import 'package:flutter_application_1/features/verification_page/verification_page.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'address_provider.dart';
@@ -191,13 +196,14 @@ class AccountProvider extends ChangeNotifier {
   // add new Account in SignUp page
   void addAccount(context) async {
     _isSignUp = IsSignUp.initial;
+    notifyListeners();
     if (paramPassword == paramConfirmPass && checkAdd(paramEmail, paramPhone)) {
       ByteData data = await rootBundle.load('assets/data/account.xlsx');
       var bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       var excel = Excel.decodeBytes(bytes);
-      Sheet sheetObject = excel['Sheet1'];
-      var maxRows = excel.tables[excel.tables.keys]!.maxRows;
+      Sheet sheetObject = excel.tables[excel.tables.keys.first]!;
+      var maxRows = sheetObject.maxRows;
       // start insert the parameters
       var cell1 = sheetObject.cell(CellIndex.indexByString('A$maxRows'));
       cell1.value = paramFirstName;
@@ -214,11 +220,50 @@ class AccountProvider extends ChangeNotifier {
       var cell7 = sheetObject.cell(CellIndex.indexByString('G$maxRows'));
       cell7.value = '0';
       // stop insert
-      // update the excel
-      var updatedBytes = excel.encode();
-      // Overwrite the existing file
-      var file = File('assets/data/account.xlsx');
-      await file.writeAsBytes(updatedBytes!);
+      // Get the documents directory for saving the modified file
+      Directory documentsDirectory = await getApplicationDocumentsDirectory();
+      String folderPath = '${documentsDirectory.path}/data';
+      String filePath = path.join(folderPath, 'account.xlsx');
+
+      // Create the folder if it doesn't exist
+      Directory(folderPath).createSync(recursive: true);
+
+      // Save the modified Excel file to the documents directory
+      File modifiedFile = File(filePath);
+      await modifiedFile.writeAsBytes(excel.encode()!);
+
+      // Get the documents directory for saving the modified file
+      // String documentsPath = Directory.current.path;
+      // String filePath = path.join(documentsPath, 'assets/data/account.xlsx');
+      // // Directory documentsDirectory = await getApplicationDocumentsDirectory();
+      // // String filePath = '${documentsDirectory.path}/account.xlsx';
+
+      // // Check if the modified file already exists and delete it
+      // File existingFile = File(filePath);
+      // if (existingFile.existsSync()) {
+      //   await existingFile.delete();
+      // }
+
+      // // Save the modified Excel file to the documents directory
+      // File modifiedFile = File(filePath);
+      // await modifiedFile.writeAsBytes(excel.encode()!);
+
+      // Save the modified Excel file to a writable location
+      // String documentsPath = Directory.current.path;
+      // String filePath = path.join(documentsPath, 'assets/data/account.xlsx');
+      // File file = File(filePath);
+      // await file.writeAsBytes(excel.encode()!);
+
+      // Save the modified Excel file to a writable location
+      // Directory directory = await getApplicationDocumentsDirectory();
+      // String filePath = '${directory.path}/account.xlsx';
+      // File file = File(filePath);
+      // await file.writeAsBytes(excel.encode()!);
+
+      // var updatedBytes = excel.encode();
+      // // Overwrite the existing file
+      // var file = File('assets/data/account.xlsx');
+      // await file.writeAsBytes(updatedBytes!);
       // _listAccount.add(Account(
       //     firstName: paramFirstName,
       //     lastName: paramLastName,
@@ -245,7 +290,6 @@ class AccountProvider extends ChangeNotifier {
   void checkForget(context) async {
     _isForget = Forget.initial;
     if (paramEmail != '' || paramPhone != '') {
-      readAccount();
       bool isFind = false;
       for (var el in _listAccount) {
         if (el.email == paramEmail) {
@@ -253,23 +297,30 @@ class AccountProvider extends ChangeNotifier {
           paramEmail = el.email;
           isFind = true;
           _isForget = Forget.success;
+
           // code validation
           final random = Random();
           const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
           const length = 4;
+
           // do a code randomizer
           String randomString = '';
           for (int i = 0; i < length; i++) {
             randomString += chars[random.nextInt(chars.length)];
           }
           _validateParam = randomString;
-          final snackBar = SnackBar(
-            content: Text('Your Code Validation : $randomString'),
-            duration: const Duration(seconds: 10),
+
+          // show notif banner
+          var bannerNotif = NotifBanner();
+          ScaffoldMessenger.of(context).showMaterialBanner(
+            bannerNotif.getBanner(context, randomString),
           );
-          ScaffoldMessenger.of(context).showSnackBar(
-            snackBar,
-          );
+
+          // set timer
+          Timer(const Duration(seconds: 7), () {
+            bannerNotif.changeView(context);
+          });
+
           // push to next page validate?
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => const VerificationPage()));
@@ -279,6 +330,31 @@ class AccountProvider extends ChangeNotifier {
           paramPhone = el.phone;
           isFind = true;
           _isForget = Forget.success;
+
+          // code validation
+          final random = Random();
+          const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+          const length = 4;
+
+          // do a code randomizer
+          String randomString = '';
+          for (int i = 0; i < length; i++) {
+            randomString += chars[random.nextInt(chars.length)];
+          }
+          _validateParam = randomString;
+
+          // show notif banner
+          var bannerNotif = NotifBanner();
+          ScaffoldMessenger.of(context).showMaterialBanner(
+            bannerNotif.getBanner(context, randomString),
+          );
+
+          // set timer
+          Timer(const Duration(seconds: 7), () {
+            bannerNotif.changeView(context);
+          });
+
+          // push to next page validate?
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => const VerificationPage()));
         }

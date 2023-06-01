@@ -258,7 +258,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               onPressed: () {
                                 Provider.of<AccountProvider>(context,
                                         listen: false)
-                                    .checkAccount(context);
+                                    .addAccount(context);
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(16.0),

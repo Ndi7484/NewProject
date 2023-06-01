@@ -18,52 +18,33 @@ class _PromoPageState extends State<PromoPage> {
         return AlertDialog(
           title: Text('Syarat dan Ketentuan'),
           content: Container(
-              padding: EdgeInsets.all(16.0),
-              child: RichText(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
                   text: TextSpan(
-                      text:
-                          '- Voucher hanya berlaku untuk layanan TakeAway dan Delivery, tidak untuk Dine In',
-                      children: [
-                    TextSpan(
-                        text:
-                            '- Voucher hanya berlaku untuk layanan TakeAway dan Delivery, tidak untuk Dine In'),
-                    TextSpan(
-                        text:
-                            '- Voucher hanya berlaku untuk layanan TakeAway dan Delivery, tidak untuk Dine In'),
-                    TextSpan(
-                        text:
-                            '- Voucher hanya berlaku untuk layanan TakeAway dan Delivery, tidak untuk Dine In'),
-                    TextSpan(
-                        text:
-                            '- Voucher hanya berlaku untuk layanan TakeAway dan Delivery, tidak untuk Dine In'),
-                  ]))
-
-              // Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     RichText(
-              //       text: TextSpan(
-              //         text: '- Promo makanan hingga xxx%',
-              //         style: TextStyle(color: Colors.black, fontSize: 16.0),
-              //       ),
-              //     ),
-              //     RichText(
-              //       text: TextSpan(
-              //         text:
-              //             '- Voucher hanya berlaku untuk layanan TakeAway dan Delivery, tidak untuk Dine In',
-              //         style: TextStyle(color: Colors.black, fontSize: 16.0),
-              //       ),
-              //     ),
-              //     RichText(
-              //       text: TextSpan(
-              //         text:
-              //             '- Voucher hanya bisa digunakan untuk memesan menu Dessert',
-              //         style: TextStyle(color: Colors.black, fontSize: 16.0),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              ),
+                    text: '- Promo makanan hingga xxx%',
+                    style: TextStyle(color: Colors.black, fontSize: 16.0),
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    text:
+                        '- Voucher hanya berlaku untuk layanan TakeAway dan Delivery, tidak untuk Dine In',
+                    style: TextStyle(color: Colors.black, fontSize: 16.0),
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    text:
+                        '- Voucher hanya bisa digunakan untuk memesan menu Dessert',
+                    style: TextStyle(color: Colors.black, fontSize: 16.0),
+                  ),
+                ),
+              ],
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -99,54 +80,55 @@ class _PromoPageState extends State<PromoPage> {
                           offset: Offset(2.0, 3.0),
                           blurRadius: 4.0)
                     ]),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 15, 8, 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            provPromo.listPromo[index].promoName,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            provPromo.listPromo[index].promoShortDesc,
-                            style: const TextStyle(
-                                color: Colors.grey, fontSize: 10),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.height * 0.19,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: ClipRect(
-                        child: Align(
-                          alignment: Alignment(
-                              -1.0 +
-                                  (220 /
-                                      (MediaQuery.of(context).size.height *
-                                          0.2)),
-                              -1.0 +
-                                  (160 /
-                                      (MediaQuery.of(context).size.height *
-                                          0.2))),
-                          child: Transform.scale(
-                            scale: 2.5,
-                            child: Image.asset(
-                              'assets/etc/Voucher.png',
-                              height: 100,
-                            ),
-                          ),
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.height * 0.19,
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  child: ClipRect(
+                    child: Align(
+                      alignment: Alignment(
+                          -1.0 +
+                              (220 /
+                                  (MediaQuery.of(context).size.height * 0.2)),
+                          -1.0 +
+                              (160 /
+                                  (MediaQuery.of(context).size.height * 0.2))),
+                      child: Transform.scale(
+                        scale: 2.5,
+                        child: Image.asset(
+                          'assets/etc/Voucher.png',
+                          height: 100,
                         ),
                       ),
                     ),
-                  ],
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 8, 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        provPromo.listPromo[index].promoName,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        provPromo.listPromo[index].promoShortDesc,
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Positioned(
