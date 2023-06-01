@@ -205,28 +205,28 @@ class AccountProvider extends ChangeNotifier {
       Sheet sheetObject = excel.tables[excel.tables.keys.first]!;
       var maxRows = sheetObject.maxRows;
       // start insert the parameters
-      var cell1 = sheetObject.cell(CellIndex.indexByString('A$maxRows'));
+      var cell1 = sheetObject.cell(CellIndex.indexByString('A${maxRows - 1}'));
       cell1.value = paramFirstName;
-      var cell2 = sheetObject.cell(CellIndex.indexByString('B$maxRows'));
+      var cell2 = sheetObject.cell(CellIndex.indexByString('B${maxRows - 1}'));
       cell2.value = paramLastName;
-      var cell3 = sheetObject.cell(CellIndex.indexByString('C$maxRows'));
+      var cell3 = sheetObject.cell(CellIndex.indexByString('C${maxRows - 1}'));
       cell3.value = paramEmail;
-      var cell4 = sheetObject.cell(CellIndex.indexByString('D$maxRows'));
+      var cell4 = sheetObject.cell(CellIndex.indexByString('D${maxRows - 1}'));
       cell4.value = paramPassword;
-      var cell5 = sheetObject.cell(CellIndex.indexByString('E$maxRows'));
+      var cell5 = sheetObject.cell(CellIndex.indexByString('E${maxRows - 1}'));
       cell5.value = paramPhone;
-      var cell6 = sheetObject.cell(CellIndex.indexByString('F$maxRows'));
+      var cell6 = sheetObject.cell(CellIndex.indexByString('F${maxRows - 1}'));
       cell6.value = 0;
-      var cell7 = sheetObject.cell(CellIndex.indexByString('G$maxRows'));
+      var cell7 = sheetObject.cell(CellIndex.indexByString('G${maxRows - 1}'));
       cell7.value = '0';
       // stop insert
       // Get the documents directory for saving the modified file
       Directory documentsDirectory = await getApplicationDocumentsDirectory();
-      String folderPath = '${documentsDirectory.path}/data';
+      String folderPath = '${documentsDirectory.path}/assets/data';
       String filePath = path.join(folderPath, 'account.xlsx');
 
-      // Create the folder if it doesn't exist
-      Directory(folderPath).createSync(recursive: true);
+      // // Create the folder if it doesn't exist
+      // Directory(folderPath).createSync(recursive: true);
 
       // Save the modified Excel file to the documents directory
       File modifiedFile = File(filePath);
@@ -391,6 +391,7 @@ class AccountProvider extends ChangeNotifier {
   // change new password
   void changeNewPass(context) async {
     _isForget = Forget.initial;
+    notifyListeners();
     if (paramConfirmPass == '' || paramPassword == '') {
       message = 'please input your new password';
       _isForget = Forget.fail;
@@ -401,6 +402,7 @@ class AccountProvider extends ChangeNotifier {
         _isForget = Forget.fail;
         return;
       }
+      bool isFind = false;
       for (var el in _listAccount) {
         if (el.email == paramEmail || el.phone == paramPhone) {
           ByteData data = await rootBundle.load('assets/data/account.xlsx');
@@ -416,13 +418,21 @@ class AccountProvider extends ChangeNotifier {
               Sheet sheetObject = excel['Sheet1'];
               var cell = sheetObject.cell(CellIndex.indexByString('D$i'));
               cell.value = paramPassword;
-              // Save the updated Excel file
-              var updatedBytes = excel.encode();
-              // Overwrite the existing file
-              var file = File('assets/existing_excel_file.xlsx');
-              await file.writeAsBytes(updatedBytes!);
+              // Get the documents directory for saving the modified file
+              Directory documentsDirectory =
+                  await getApplicationDocumentsDirectory();
+              String folderPath = '${documentsDirectory.path}/assets/data';
+              String filePath = path.join(folderPath, 'account.xlsx');
+
+              // Create the folder if it doesn't exist
+              Directory(folderPath).createSync(recursive: true);
+
+              // Save the modified Excel file to the documents directory
+              File modifiedFile = File(filePath);
+              await modifiedFile.writeAsBytes(excel.encode()!);
             }
           }
+          isFind = true;
           resetParam();
           readAccount();
           notifyListeners();
@@ -431,6 +441,11 @@ class AccountProvider extends ChangeNotifier {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (_) => const LoginPage()));
         }
+      }
+      if (!isFind) {
+        message = 'there is an error system';
+        _isForget = Forget.fail;
+        return;
       }
     }
   }
