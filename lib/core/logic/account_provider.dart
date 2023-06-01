@@ -198,82 +198,50 @@ class AccountProvider extends ChangeNotifier {
     _isSignUp = IsSignUp.initial;
     notifyListeners();
     if (paramPassword == paramConfirmPass && checkAdd(paramEmail, paramPhone)) {
-      ByteData data = await rootBundle.load('assets/data/account.xlsx');
-      var bytes =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-      var excel = Excel.decodeBytes(bytes);
-      Sheet sheetObject = excel.tables[excel.tables.keys.first]!;
-      var maxRows = sheetObject.maxRows;
-      // start insert the parameters
-      var cell1 = sheetObject.cell(CellIndex.indexByString('A${maxRows - 1}'));
-      cell1.value = paramFirstName;
-      var cell2 = sheetObject.cell(CellIndex.indexByString('B${maxRows - 1}'));
-      cell2.value = paramLastName;
-      var cell3 = sheetObject.cell(CellIndex.indexByString('C${maxRows - 1}'));
-      cell3.value = paramEmail;
-      var cell4 = sheetObject.cell(CellIndex.indexByString('D${maxRows - 1}'));
-      cell4.value = paramPassword;
-      var cell5 = sheetObject.cell(CellIndex.indexByString('E${maxRows - 1}'));
-      cell5.value = paramPhone;
-      var cell6 = sheetObject.cell(CellIndex.indexByString('F${maxRows - 1}'));
-      cell6.value = 0;
-      var cell7 = sheetObject.cell(CellIndex.indexByString('G${maxRows - 1}'));
-      cell7.value = '0';
-      // stop insert
-      // Get the documents directory for saving the modified file
-      Directory documentsDirectory = await getApplicationDocumentsDirectory();
-      String folderPath = '${documentsDirectory.path}/assets/data';
-      String filePath = path.join(folderPath, 'account.xlsx');
+      // ByteData data = await rootBundle.load('assets/data/account.xlsx');
+      // var bytes =
+      //     data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      // var excel = Excel.decodeBytes(bytes);
+      // Sheet sheetObject = excel.tables[excel.tables.keys.first]!;
+      // var maxRows = sheetObject.maxRows;
+      // // start insert the parameters
+      // var cell1 = sheetObject.cell(CellIndex.indexByString('A${maxRows}'));
+      // cell1.value = paramFirstName;
+      // var cell2 = sheetObject.cell(CellIndex.indexByString('B${maxRows}'));
+      // cell2.value = paramLastName;
+      // var cell3 = sheetObject.cell(CellIndex.indexByString('C${maxRows}'));
+      // cell3.value = paramEmail;
+      // var cell4 = sheetObject.cell(CellIndex.indexByString('D${maxRows}'));
+      // cell4.value = paramPassword;
+      // var cell5 = sheetObject.cell(CellIndex.indexByString('E${maxRows}'));
+      // cell5.value = paramPhone;
+      // var cell6 = sheetObject.cell(CellIndex.indexByString('F${maxRows}'));
+      // cell6.value = 0;
+      // var cell7 = sheetObject.cell(CellIndex.indexByString('G${maxRows}'));
+      // cell7.value = '0';
+      // // stop insert
+      // // Get the documents directory for saving the modified file
+      // Directory documentsDirectory = await getApplicationDocumentsDirectory();
+      // String folderPath = '${documentsDirectory.path}/assets/data';
+      // String filePath = path.join(folderPath, 'account.xlsx');
 
       // // Create the folder if it doesn't exist
       // Directory(folderPath).createSync(recursive: true);
-
-      // Save the modified Excel file to the documents directory
-      File modifiedFile = File(filePath);
-      await modifiedFile.writeAsBytes(excel.encode()!);
-
-      // Get the documents directory for saving the modified file
-      // String documentsPath = Directory.current.path;
-      // String filePath = path.join(documentsPath, 'assets/data/account.xlsx');
-      // // Directory documentsDirectory = await getApplicationDocumentsDirectory();
-      // // String filePath = '${documentsDirectory.path}/account.xlsx';
-
-      // // Check if the modified file already exists and delete it
-      // File existingFile = File(filePath);
-      // if (existingFile.existsSync()) {
-      //   await existingFile.delete();
-      // }
 
       // // Save the modified Excel file to the documents directory
       // File modifiedFile = File(filePath);
       // await modifiedFile.writeAsBytes(excel.encode()!);
 
-      // Save the modified Excel file to a writable location
-      // String documentsPath = Directory.current.path;
-      // String filePath = path.join(documentsPath, 'assets/data/account.xlsx');
-      // File file = File(filePath);
-      // await file.writeAsBytes(excel.encode()!);
-
-      // Save the modified Excel file to a writable location
-      // Directory directory = await getApplicationDocumentsDirectory();
-      // String filePath = '${directory.path}/account.xlsx';
-      // File file = File(filePath);
-      // await file.writeAsBytes(excel.encode()!);
-
-      // var updatedBytes = excel.encode();
-      // // Overwrite the existing file
-      // var file = File('assets/data/account.xlsx');
-      // await file.writeAsBytes(updatedBytes!);
-      // _listAccount.add(Account(
-      //     firstName: paramFirstName,
-      //     lastName: paramLastName,
-      //     email: paramEmail,
-      //     password: paramPassword,
-      //     phone: paramPhone,
-      //     points: 0,
-      //     pointsString: '0'));
+      _listAccount.add(Account(
+          firstName: paramFirstName,
+          lastName: paramLastName,
+          email: paramEmail,
+          password: paramPassword,
+          phone: paramPhone,
+          points: 0,
+          pointsString: '0'));
       resetParam();
-      readAccount();
+      // readAccount();
       message = 'Succesfully SignUp';
       _isSignUp = IsSignUp.success;
       notifyListeners();
@@ -391,7 +359,6 @@ class AccountProvider extends ChangeNotifier {
   // change new password
   void changeNewPass(context) async {
     _isForget = Forget.initial;
-    notifyListeners();
     if (paramConfirmPass == '' || paramPassword == '') {
       message = 'please input your new password';
       _isForget = Forget.fail;
@@ -405,46 +372,41 @@ class AccountProvider extends ChangeNotifier {
       bool isFind = false;
       for (var el in _listAccount) {
         if (el.email == paramEmail || el.phone == paramPhone) {
-          ByteData data = await rootBundle.load('assets/data/account.xlsx');
-          var bytes =
-              data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-          var excel = Excel.decodeBytes(bytes);
-          var table = excel.tables[excel.tables.keys.first];
+          // ByteData data = await rootBundle.load('assets/data/account.xlsx');
+          // var bytes =
+          //     data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          // var excel = Excel.decodeBytes(bytes);
+          // var table = excel.tables[excel.tables.keys.first];
 
-          for (var i = 0; i < table!.maxRows; i++) {
-            var row = table.row(i);
-            if (row[2]!.value.toString() == paramEmail ||
-                row[4]!.value.toString() == paramPhone) {
-              Sheet sheetObject = excel['Sheet1'];
-              var cell = sheetObject.cell(CellIndex.indexByString('D$i'));
-              cell.value = paramPassword;
-              // Get the documents directory for saving the modified file
-              Directory documentsDirectory =
-                  await getApplicationDocumentsDirectory();
-              String folderPath = '${documentsDirectory.path}/assets/data';
-              String filePath = path.join(folderPath, 'account.xlsx');
+          // for (var i = 0; i < table!.maxRows; i++) {
+          //   var row = table.row(i);
+          //   if (row[2]!.value.toString() == paramEmail ||
+          //       row[4]!.value.toString() == paramPhone) {
+          //     Sheet sheetObject = excel['Sheet1'];
+          //     var cell = sheetObject.cell(CellIndex.indexByString('D$i'));
+          //     cell.value = paramPassword;
+          //     // Save the updated Excel file
+          //     var updatedBytes = excel.encode();
+          //     // Overwrite the existing file
+          //     var file = File('assets/data/account.xlsx');
+          //     await file.writeAsBytes(updatedBytes!);
+          //   }
+          // }
 
-              // Create the folder if it doesn't exist
-              Directory(folderPath).createSync(recursive: true);
-
-              // Save the modified Excel file to the documents directory
-              File modifiedFile = File(filePath);
-              await modifiedFile.writeAsBytes(excel.encode()!);
-            }
-          }
-          isFind = true;
+          // readAccount();
+          el.password = paramPassword;
           resetParam();
-          readAccount();
+          isFind = true;
+          message = 'password successfuly changed';
           notifyListeners();
-          // el.password = paramPassword;
           _isForget = Forget.success;
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (_) => const LoginPage()));
         }
       }
       if (!isFind) {
-        message = 'there is an error system';
-        _isForget = Forget.fail;
+        message = 'error system to confirm';
+        notifyListeners();
         return;
       }
     }
@@ -454,7 +416,7 @@ class AccountProvider extends ChangeNotifier {
   void resetParam() {
     _isAuthenticated = Auth.unauthenticated;
     _selectedAccount = null;
-    _listAccount = [];
+    // _listAccount = [];
     _isSignUp = IsSignUp.success;
     _isForget = Forget.success;
     paramFirstName = '';
