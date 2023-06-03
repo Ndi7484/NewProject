@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/carousel_provider.dart';
 import 'package:flutter_application_1/core/logic/warning_provider.dart';
+import 'package:flutter_application_1/features/profile_page/profile_page.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -44,7 +45,10 @@ class _MainPageState extends State<MainPage> {
               ),
               const Spacer(),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const ProfilePage()));
+                },
                 child: Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -165,8 +169,7 @@ class _MainPageState extends State<MainPage> {
                 ),
               )
             : Container(),
-          // other promotion and news of in the app
-          
+        // other promotion and news of in the app
       ],
     );
   }

@@ -3,13 +3,14 @@ import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/logic/carousel_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
-import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
-import 'package:flutter_application_1/features/add_address_page/add_address_page.dart';
-import 'package:flutter_application_1/features/address_page/address.dart';
-import 'package:flutter_application_1/features/cart_page/cart_page.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
+// import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
+// import 'package:flutter_application_1/features/add_address_page/add_address_page.dart';
+// import 'package:flutter_application_1/features/address_page/address.dart';
+// import 'package:flutter_application_1/features/cart_page/cart_page.dart';
+// import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:flutter_application_1/features/payment_method_page/payment_method_page.dart';
-import 'package:flutter_application_1/features/profile_page/profile_page.dart';
+// import 'package:flutter_application_1/features/profile_page/profile_page.dart';
 import 'package:provider/provider.dart';
 
 // import 'core/logic/counter_proivider.dart';
@@ -52,7 +53,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
               .copyWith(secondary: Colors.grey[850])),
-      home: const PaymentMethodPage(),
+      home: const LoginPage(),
+      // const PaymentMethodPage(),
       // debugShowCheckedModeBanner: false,
       // home: const BottomNavigationPage(),
     );

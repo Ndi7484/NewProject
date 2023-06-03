@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,31 +12,36 @@ class ProfilePage extends StatefulWidget {
 class ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final provAccount = Provider.of<AccountProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(Icons.arrow_back_ios_new_outlined),
-        ),
-          title: Text("Profile",
-          style: TextStyle(
-            fontWeight: FontWeight.bold
-          ),),
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(Icons.arrow_back_ios_new_outlined),
+          ),
+          title: const Text(
+            "Profile",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           backgroundColor: Colors.red),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: CircleAvatar(
-              radius: 70,
-              backgroundColor: Colors.grey[200],
-              child: Icon(
-                Icons.person,
-                size: 100,
-                color: Colors.grey,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(width: 0.5, color: Colors.black),
+                  borderRadius: const BorderRadius.all(Radius.circular(100))),
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/etc/Profile.png',
+                  width: 100,
+                  height: 100,
+                ),
               ),
             ),
           ),
@@ -46,22 +51,22 @@ class ProfilePageState extends State<ProfilePage> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  "Guest1",
+                  '${provAccount.selectedAccount!.firstName.toString()} ${provAccount.selectedAccount!.lastName.toString()}',
                   style: TextStyle(
-                      color: Color.fromARGB(255, 255, 128, 128),
+                      color: Theme.of(context).colorScheme.primary,
                       letterSpacing: 0.5,
-                      fontSize: 35,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  "Guestemail@gmail.com",
-                  style: TextStyle(
+                  provAccount.selectedAccount!.email.toString(),
+                  style: const TextStyle(
                       color: Colors.grey,
                       letterSpacing: 0.5,
-                      fontSize: 20,
+                      fontSize: 17,
                       decoration: TextDecoration.underline),
                 ),
               )
@@ -73,18 +78,18 @@ class ProfilePageState extends State<ProfilePage> {
               children: [
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       "Name :  ",
                       style: TextStyle(
-                          color: Colors.grey, letterSpacing: 0.5, fontSize: 20),
+                          color: Colors.grey, letterSpacing: 0.5, fontSize: 15),
                     ),
                     Text(
-                      "Guest 1",
-                      style: TextStyle(
-                          color: Colors.black,
-                          letterSpacing: 0.5,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                      "${provAccount.selectedAccount!.firstName.toString()} ${provAccount.selectedAccount!.lastName.toString()}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        letterSpacing: 0.5,
+                        fontSize: 15,
+                      ),
                     )
                   ],
                 )
@@ -97,18 +102,18 @@ class ProfilePageState extends State<ProfilePage> {
               children: [
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       "Phone :  ",
                       style: TextStyle(
-                          color: Colors.grey, letterSpacing: 0.5, fontSize: 20),
+                          color: Colors.grey, letterSpacing: 0.5, fontSize: 15),
                     ),
                     Text(
-                      "0812-4578-9632",
-                      style: TextStyle(
-                          color: Colors.black,
-                          letterSpacing: 0.5,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                      provAccount.selectedAccount!.phone.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        letterSpacing: 0.5,
+                        fontSize: 15,
+                      ),
                     )
                   ],
                 )
@@ -117,11 +122,11 @@ class ProfilePageState extends State<ProfilePage> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
-            child: Row(children: [
+            child: Row(children: const [
               Text(
                 "Address: ",
                 style: TextStyle(
-                    color: Colors.grey, letterSpacing: 0.5, fontSize: 20),
+                    color: Colors.grey, letterSpacing: 0.5, fontSize: 15),
               ),
             ]),
           ),
@@ -145,8 +150,9 @@ class ProfilePageState extends State<ProfilePage> {
               ),
               child: ListTile(
                 leading: Icon(
-                  Icons.home,
+                  Icons.home_rounded,
                   color: Colors.red,
+                  size: 40,
                 ),
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,7 +175,10 @@ class ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Text("Detail address"),
                 ),
-                trailing: Icon(Icons.arrow_right_outlined),
+                trailing: Icon(
+                  Icons.arrow_right_outlined,
+                  size: 40,
+                ),
               ),
             ),
           ),
