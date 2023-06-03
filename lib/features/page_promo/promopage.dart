@@ -1,3 +1,4 @@
+import 'package:custom_bottom_sheet/custom_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
 import 'package:flutter_application_1/features/syarat_page/syarat_page.dart';
@@ -11,51 +12,92 @@ class PromoPage extends StatefulWidget {
 }
 
 class _PromoPageState extends State<PromoPage> {
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Syarat dan Ketentuan'),
-          content: Container(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+  _showBottomSheet(Promo isiDialog) {
+    SlideDialog.showSlideDialog(
+        context: context,
+        backgroundColor: Colors.white,
+        pillColor: Theme.of(context).colorScheme.primary,
+        child: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: ListView(
               children: [
-                RichText(
-                  text: TextSpan(
-                    text: '- Promo makanan hingga xxx%',
-                    style: TextStyle(color: Colors.black, fontSize: 16.0),
-                  ),
+                const Text(
+                  'Terms & Condition',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
                 ),
-                RichText(
-                  text: TextSpan(
-                    text:
-                        '- Voucher hanya berlaku untuk layanan TakeAway dan Delivery, tidak untuk Dine In',
-                    style: TextStyle(color: Colors.black, fontSize: 16.0),
-                  ),
+                const SizedBox(
+                  height: 10,
                 ),
-                RichText(
-                  text: TextSpan(
-                    text:
-                        '- Voucher hanya bisa digunakan untuk memesan menu Dessert',
-                    style: TextStyle(color: Colors.black, fontSize: 16.0),
-                  ),
-                ),
+                ...List.generate(
+                    isiDialog.promoLongDesc.split('\n').length,
+                    (index) => (isiDialog.promoLongDesc
+                            .split('\n')[index]
+                            .contains('•'))
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text('•'),
+                              Text(isiDialog.promoLongDesc.split('\n')[index])
+                            ],
+                          )
+                        : Container()),
+                // Text(
+                //   isiDialog.promoLongDesc,
+                //   style: TextStyle(color: Colors.grey[700]),
+                // ),
               ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Tutup'),
-            ),
-          ],
-        );
-      },
-    );
+        ));
+    // showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return AlertDialog(
+    //       title: const Text('Syarat dan Ketentuan'),
+    //       content: Container(
+    //         padding: EdgeInsets.all(16.0),
+    //         child: Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             RichText(
+    //               text: TextSpan(
+    //                 text: '- Promo makanan hingga xxx%',
+    //                 style: TextStyle(color: Colors.black, fontSize: 16.0),
+    //               ),
+    //             ),
+    //             RichText(
+    //               text: TextSpan(
+    //                 text:
+    //                     '- Voucher hanya berlaku untuk layanan TakeAway dan Delivery, tidak untuk Dine In',
+    //                 style: TextStyle(color: Colors.black, fontSize: 16.0),
+    //               ),
+    //             ),
+    //             RichText(
+    //               text: TextSpan(
+    //                 text:
+    //                     '- Voucher hanya bisa digunakan untuk memesan menu Dessert',
+    //                 style: TextStyle(color: Colors.black, fontSize: 16.0),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //       actions: [
+    //         TextButton(
+    //           onPressed: () {
+    //             Navigator.of(context).pop();
+    //           },
+    //           child: Text('Tutup'),
+    //         ),
+    //       ],
+    //     );
+    //   },
+    // );
   }
 
   @override
@@ -136,7 +178,7 @@ class _PromoPageState extends State<PromoPage> {
                 left: MediaQuery.of(context).size.width * 0.41,
                 child: GestureDetector(
                   onTap: () {
-                    _showDialog();
+                    _showBottomSheet(provPromo.listPromo[index]);
                     // Navigator.push(
                     //     context,
                     //     MaterialPageRoute(
