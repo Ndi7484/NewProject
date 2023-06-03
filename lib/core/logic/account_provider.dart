@@ -416,7 +416,6 @@ class AccountProvider extends ChangeNotifier {
   void resetParam() {
     _isAuthenticated = Auth.unauthenticated;
     _selectedAccount = null;
-    // _listAccount = [];
     _isSignUp = IsSignUp.success;
     _isForget = Forget.success;
     paramFirstName = '';

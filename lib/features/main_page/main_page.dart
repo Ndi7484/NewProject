@@ -120,9 +120,9 @@ class _MainPageState extends State<MainPage> {
         (provWarning.getWarning != null)
             ? Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                height: 12 +
+                height: 11 +
                     14 * ((provWarning.getWarning!.desc.length / 47).ceil()) +
-                    12,
+                    11,
                 decoration: BoxDecoration(
                     color: Colors.amber[100],
                     border: Border.all(
@@ -131,7 +131,7 @@ class _MainPageState extends State<MainPage> {
                     borderRadius: BorderRadius.circular(5)),
                 child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Row(
                       children: [
                         Padding(
@@ -153,7 +153,7 @@ class _MainPageState extends State<MainPage> {
                               text: provWarning.getWarning!.desc.toString(),
                               style: const TextStyle(
                                 color: Color.fromARGB(255, 160, 157, 0),
-                                fontSize: 11,
+                                fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -165,6 +165,8 @@ class _MainPageState extends State<MainPage> {
                 ),
               )
             : Container(),
+          // other promotion and news of in the app
+          
       ],
     );
   }
