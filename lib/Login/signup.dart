@@ -33,9 +33,6 @@ class LoginpageState extends State<Loginpage> {
                     Column(
             children: [Text("Login"), Text("Register here")],
           ),
-          Column(
-            children: [Text("Username"), Text("Pass"), Text("Email")],
-          ),
         ],
       ),
     );
