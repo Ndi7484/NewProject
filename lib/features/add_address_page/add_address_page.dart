@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_application_1/core/logic/address_provider.dart';
+import 'package:provider/provider.dart';
 
 class AddAddressPage extends StatefulWidget {
   const AddAddressPage({super.key});
@@ -12,19 +12,24 @@ class AddAddressPage extends StatefulWidget {
 class _AddAddressPageState extends State<AddAddressPage> {
   @override
   Widget build(BuildContext context) {
+    final provAddress = Provider.of<AddressProvider>(context);
     return Scaffold(
       appBar: AppBar(
-          leading: Icon(Icons.arrow_back_ios_new_outlined),
-          title: Text(
-            "Address",
+          leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.close)),
+          title: const Text(
+            "New Address",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.red),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
+          const Padding(
+            padding: EdgeInsets.only(right: 10, left: 10, top: 15),
             child: Text(
               "Category",
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -32,17 +37,19 @@ class _AddAddressPageState extends State<AddAddressPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10, left: 10),
-            child: Container(
-              margin: EdgeInsets.all(10),
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: 'Home, Office',
-                ),
-              ),
+            child: TextField(
+              onChanged: (value) {
+                provAddress.paramCategory = value;
+              },
+              decoration: const InputDecoration(
+                  hintText: 'Home, Office, etc..',
+                  contentPadding: EdgeInsets.all(6),
+                  labelStyle: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold)),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
+          const Padding(
+            padding: EdgeInsets.only(right: 10, left: 10, top: 15),
             child: Text(
               "Address",
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -50,13 +57,19 @@ class _AddAddressPageState extends State<AddAddressPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10, left: 10),
-            child: Container(
-              margin: EdgeInsets.all(10),
-              child: TextField(),
+            child: TextField(
+              onChanged: (value) {
+                provAddress.paramAddress = value;
+              },
+              decoration: const InputDecoration(
+                  hintText: 'Jl. ABC No. 45D',
+                  contentPadding: EdgeInsets.all(6),
+                  labelStyle: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold)),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
+          const Padding(
+            padding: EdgeInsets.only(right: 10, left: 10, top: 15),
             child: Text(
               "Note",
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -64,13 +77,19 @@ class _AddAddressPageState extends State<AddAddressPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10, left: 10),
-            child: Container(
-              margin: EdgeInsets.all(10),
-              child: TextField(),
+            child: TextField(
+              onChanged: (value) {
+                provAddress.paramNote = value;
+              },
+              decoration: const InputDecoration(
+                  hintText: 'sebelah toko bunga',
+                  contentPadding: EdgeInsets.all(6),
+                  labelStyle: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold)),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
+          const Padding(
+            padding: EdgeInsets.only(right: 10, left: 10, top: 15),
             child: Text(
               "Map:",
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -93,8 +112,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
             padding: const EdgeInsets.only(top: 20),
             child: Center(
               child: Container(
-              width: MediaQuery.of(context).size.width * 0.15,
-              height: MediaQuery.of(context).size.height * 0.08,
+                width: MediaQuery.of(context).size.width * 0.15,
+                height: MediaQuery.of(context).size.height * 0.08,
                 decoration: BoxDecoration(
                   color: Colors.red,
                   border: Border.all(

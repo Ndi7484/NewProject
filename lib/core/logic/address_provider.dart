@@ -18,7 +18,12 @@ class Alamat {
 class AddressProvider extends ChangeNotifier {
   // list alamat from excel
   List<Alamat> _listAlamat = [];
-  Alamat? _selectedAlamat = null;
+
+  List<Alamat> _listSelectedAlamat = [];
+  List<Alamat> get listSelectedAlamat => _listSelectedAlamat;
+  Alamat? _selectedAlamat;
+  Alamat? get selectedAlamat => _selectedAlamat;
+
   // load data from excel
   void readAddress() async {
     ByteData data = await rootBundle.load('assets/data/address.xlsx');
@@ -37,11 +42,12 @@ class AddressProvider extends ChangeNotifier {
             alamatDesk: row[3]!.value.toString());
       },
     );
+    // print(_listAlamat);
     notifyListeners();
   }
 
-  List<Alamat>? getAddress(String paramEmail) {
-    List<Alamat>? accountAlamat = [];
+  void getAddress(String paramEmail) {
+    List<Alamat> accountAlamat = [];
     for (var el in _listAlamat) {
       if (el.alamatID == paramEmail) {
         accountAlamat.add(Alamat(
@@ -51,11 +57,25 @@ class AddressProvider extends ChangeNotifier {
             alamatDesk: el.alamatDesk));
       }
     }
-    return accountAlamat;
+    _listSelectedAlamat = accountAlamat;
+    if (_listSelectedAlamat.isNotEmpty && _selectedAlamat == null) {
+      _selectedAlamat = _listSelectedAlamat[0];
+    }
   }
+
+  void changeSelected(Alamat alamat) {
+    _selectedAlamat = alamat;
+    notifyListeners();
+  }
+
+  // for add new address purpose
+  String paramCategory = '';
+  String paramAddress = '';
+  String paramNote = '';
 
   void resetParam() {
     _listAlamat = [];
+    _listSelectedAlamat = [];
     _selectedAlamat = null;
   }
 }

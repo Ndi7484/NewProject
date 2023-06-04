@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:io';
+// import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
-import 'package:path/path.dart' as path;
+// import 'dart:typed_data';
+// import 'package:path/path.dart' as path;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
@@ -13,8 +13,9 @@ import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:flutter_application_1/features/newpass_page/newpass_page.dart';
 import 'package:flutter_application_1/features/verification_page/verification_page.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:provider/provider.dart';
 
 import 'address_provider.dart';
 
@@ -27,7 +28,7 @@ class Account {
     required this.phone,
     required this.points,
     required this.pointsString,
-    this.alamat,
+    // this.alamat,
   });
   final String firstName;
   final String lastName;
@@ -36,7 +37,7 @@ class Account {
   final String phone;
   final int points;
   final String pointsString;
-  List<Alamat>? alamat;
+  // List<Alamat>? alamat;
 }
 
 enum Auth {
@@ -144,12 +145,10 @@ class AccountProvider extends ChangeNotifier {
         _isAuthenticated = Auth.authenticated;
         authSet = true;
         message = 'Succesful Login';
-        notifyListeners();
-        // get account alamat if there is, if nothing then is []
-        _selectedAccount?.alamat =
-            Provider.of<AddressProvider>(context, listen: false)
-                .getAddress(paramEmail);
+        // get account alamat if there is, if nothing then is [] or null
+        // only works outside of this provider
         currentTime();
+        notifyListeners();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
