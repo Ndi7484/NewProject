@@ -17,7 +17,7 @@ class ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
     final provAddress = Provider.of<AddressProvider>(context);
-    // // set address here
+    // set address here
     provAddress.getAddress(provAccount.selectedAccount!.email);
 
     return Scaffold(

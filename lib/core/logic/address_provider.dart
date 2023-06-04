@@ -72,10 +72,62 @@ class AddressProvider extends ChangeNotifier {
   String paramCategory = '';
   String paramAddress = '';
   String paramNote = '';
+  double? paramLang;
+  double? paramLong;
+  String paramDisplayName = '';
+
+  void setMap() {
+    notifyListeners();
+  }
+
+  void saveAddress(BuildContext context, String paramEmail) {
+    if (paramCategory != '' &&
+        paramAddress != '' &&
+        paramNote != '' &&
+        paramLang != null &&
+        paramLong != null &&
+        paramDisplayName != '') {
+      _listAlamat.add(Alamat(
+          alamatID: paramEmail,
+          alamatTitle: paramCategory,
+          alamatLengkap: paramAddress,
+          alamatDesk: paramNote));
+      notifyListeners();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Address saved'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      paramCategory = '';
+      paramAddress = '';
+      paramNote = '';
+      paramLang = null;
+      paramLong = null;
+      paramDisplayName = '';
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Please input all the required data'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      // message = 'please fill all the required data';
+      notifyListeners();
+    }
+  }
 
   void resetParam() {
     _listAlamat = [];
     _listSelectedAlamat = [];
     _selectedAlamat = null;
+    paramCategory = '';
+    paramAddress = '';
+    paramNote = '';
+    paramLang = null;
+    paramLong = null;
+    paramDisplayName = '';
   }
 }

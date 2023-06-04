@@ -40,6 +40,8 @@ class Promo {
 class PromoProvider extends ChangeNotifier {
   List<Promo> _listPromo = [];
   List<Promo> get listPromo => _listPromo;
+  List<Promo> _validPromo = [];
+  List<Promo> get validPromo => _validPromo;
   // load data from excel
   void readPromo() async {
     ByteData data = await rootBundle.load('assets/data/promo.xlsx');
@@ -70,6 +72,12 @@ class PromoProvider extends ChangeNotifier {
         );
       },
     );
+    for (var el in _listPromo) {
+      if (DateTime(el.yearExp, el.monthExp, el.dateExp)
+          .isAfter(DateTime.now())) {
+        _validPromo.add(el);
+      }
+    }
     notifyListeners();
   }
 }

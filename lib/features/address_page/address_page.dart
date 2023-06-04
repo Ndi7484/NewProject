@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/widgets/address_listtile.dart';
 import 'package:flutter_application_1/features/add_address_page/add_address_page.dart';
@@ -14,7 +15,10 @@ class AddressPage extends StatefulWidget {
 class _AddressPageState extends State<AddressPage> {
   @override
   Widget build(BuildContext context) {
+    final provAccount = Provider.of<AccountProvider>(context);
     final provAddress = Provider.of<AddressProvider>(context);
+    // set address here
+    provAddress.getAddress(provAccount.selectedAccount!.email);
 
     return Scaffold(
         appBar: AppBar(

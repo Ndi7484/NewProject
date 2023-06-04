@@ -3,6 +3,7 @@ import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/logic/carousel_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
+import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 // import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
 // import 'package:flutter_application_1/features/add_address_page/add_address_page.dart';
@@ -36,6 +37,7 @@ void main() {
             create: (_) => CarouselProvider()..readCarousel()),
         ChangeNotifierProvider(create: (_) => WarningProvider()..readWarn()),
         ChangeNotifierProvider(create: (_) => MenuProvider()..readMenu()),
+        ChangeNotifierProvider(create: (_) => PageProvider()),
       ],
       child: const MyApp(),
     ),

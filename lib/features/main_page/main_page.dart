@@ -2,7 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/carousel_provider.dart';
+import 'package:flutter_application_1/core/logic/page_provider.dart';
+import 'package:flutter_application_1/core/logic/promo_provider.dart';
 import 'package:flutter_application_1/core/logic/warning_provider.dart';
+import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
 import 'package:flutter_application_1/features/profile_page/profile_page.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +22,9 @@ class _MainPageState extends State<MainPage> {
     final provAccount = Provider.of<AccountProvider>(context);
     final provCarousel = Provider.of<CarouselProvider>(context);
     final provWarning = Provider.of<WarningProvider>(context);
+    final provPromo = Provider.of<PromoProvider>(context);
+    final provPage = Provider.of<PageProvider>(context);
+
     return Column(
       children: [
         Container(
@@ -98,28 +104,73 @@ class _MainPageState extends State<MainPage> {
               enlargeFactor: 0.1,
               scrollDirection: Axis.horizontal,
             )),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.width * 0.2,
-          decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(5)),
-          child: const Center(
-            child: Text(
-              "Let's Order",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
+        // green special padding
+        (provPromo.validPromo.isEmpty)
+            ? Container()
+            : const SizedBox(
+                height: 10,
+              ),
+        // green special voucher anouncement
+        (provPromo.validPromo.isEmpty)
+            ? Container()
+            : Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.green[700],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    const Icon(
+                      Icons.discount_rounded,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      'You have ${provPromo.validPromo.length} special voucher${(provPromo.validPromo.length > 1) ? 's' : ''}',
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        provPage.selectedIndex = 3;
+                      },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                            color: Colors.green[900],
+                            borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(8),
+                                bottomRight: Radius.circular(8))),
+                        child: const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'View',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+        // warning padding
+        (provWarning.getWarning != null)
+            ? const SizedBox(
+                height: 10,
+              )
+            : Container(),
         // warning alert yellow sign
         (provWarning.getWarning != null)
             ? Container(

@@ -36,6 +36,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
+  flutter_google_location_picker: ^0.0.3
   intl: ^0.18.1
   path_provider: ^2.0.15
   provider: ^6.0.1

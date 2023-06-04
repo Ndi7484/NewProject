@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
 import 'package:flutter_application_1/features/main_page/main_page.dart';
 import 'package:flutter_application_1/features/menu_page/menu_page.dart';
 import 'package:flutter_application_1/features/points_page/points_page.dart';
+import 'package:provider/provider.dart';
 
 class BottomNavigationPage extends StatefulWidget {
   const BottomNavigationPage({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class BottomNavigationPage extends StatefulWidget {
 
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
   int _selectedIndex = 0;
+
   final List<String> _appBarTitle = [
     'Main Home',
     'Menu',
@@ -30,6 +33,9 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
 
   @override
   Widget build(BuildContext context) {
+    var provPage = Provider.of<PageProvider>(context);
+    _selectedIndex = provPage.selectedIndex;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_appBarTitle[_selectedIndex]),
@@ -108,7 +114,8 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         unselectedItemColor: Theme.of(context).colorScheme.secondary,
         onTap: (index) {
           setState(() {
-            _selectedIndex = index;
+            provPage.selectedIndex = index;
+            // _selectedIndex = index;
           });
         },
       ),
