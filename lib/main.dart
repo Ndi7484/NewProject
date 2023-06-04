@@ -3,6 +3,7 @@ import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/logic/carousel_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
+import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 // import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_application_1/features/login_page/login_page.dart';
 // import 'package:flutter_application_1/features/address_page/address.dart';
 // import 'package:flutter_application_1/features/cart_page/cart_page.dart';
 // import 'package:flutter_application_1/features/login_page/login_page.dart';
-import 'package:flutter_application_1/features/payment_method_page/payment_method_page.dart';
+// import 'package:flutter_application_1/features/payment_method_page/payment_method_page.dart';
 // import 'package:flutter_application_1/features/profile_page/profile_page.dart';
 import 'package:provider/provider.dart';
 
@@ -38,6 +39,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => WarningProvider()..readWarn()),
         ChangeNotifierProvider(create: (_) => MenuProvider()..readMenu()),
         ChangeNotifierProvider(create: (_) => PageProvider()),
+        ChangeNotifierProvider(create: (_) => OrdersProvider()),
       ],
       child: const MyApp(),
     ),

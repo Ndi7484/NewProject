@@ -113,10 +113,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Theme.of(context).colorScheme.secondary,
         onTap: (index) {
-          setState(() {
-            provPage.selectedIndex = index;
-            // _selectedIndex = index;
-          });
+          provPage.selectedIndex = index;
         },
       ),
     );

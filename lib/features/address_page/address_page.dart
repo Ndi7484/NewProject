@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
@@ -13,6 +15,9 @@ class AddressPage extends StatefulWidget {
 }
 
 class _AddressPageState extends State<AddressPage> {
+  bool _ishold = false;
+  bool _isTriggred = false;
+
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);

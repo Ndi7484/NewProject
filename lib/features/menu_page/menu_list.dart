@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
+import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/widgets/menu_card.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,7 @@ class _ListMenuState extends State<ListMenu>
     super.build(context); // Ensure the super.build is called
 
     final provMenu = Provider.of<MenuProvider>(context);
+    final provOrders = Provider.of<OrdersProvider>(context);
 
     return ListView(children: [
       ...List.generate(
