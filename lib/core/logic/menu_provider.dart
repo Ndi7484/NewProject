@@ -60,4 +60,13 @@ class MenuProvider extends ChangeNotifier {
     ];
     notifyListeners();
   }
+
+  FoodMenu? returnMenu(String menuID) {
+    for (var el in _listFoodMenu) {
+      if (el.menuID == menuID) {
+        return el;
+      }
+    }
+    return null;
+  }
 }

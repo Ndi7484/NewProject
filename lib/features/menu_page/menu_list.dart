@@ -23,16 +23,15 @@ class _ListMenuState extends State<ListMenu>
     super.build(context); // Ensure the super.build is called
 
     final provMenu = Provider.of<MenuProvider>(context);
-    final provOrders = Provider.of<OrdersProvider>(context);
 
     return ListView(children: [
-      ...List.generate(
-        provMenu.listFoodMenu.length,
-        (index) => MenuCard(
+      ...List.generate(provMenu.listFoodMenu.length, (index) {
+        return MenuCard(
             type: widget.type,
             isMenu: true,
-            food: provMenu.listFoodMenu[index]),
-      ),
+            food: provMenu.listFoodMenu[index],
+            indexing: index);
+      }),
       SizedBox(
         height: MediaQuery.of(context).size.height * 0.1,
         child: ClipRect(

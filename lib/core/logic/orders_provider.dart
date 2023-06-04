@@ -37,11 +37,21 @@ class OrdersProvider extends ChangeNotifier {
   // helper parameters
 
   // main parameters
-  List _listOrders = [];
-  List get listOrders => _listOrders;
+  Map<String, int> _listOrders = {};
+  Map<String, int> get listOrders => _listOrders;
 
-  void addOrders() {}
-  void deleteOrders() {}
+  void addOrders(key) {
+    _listOrders[key] = (_listOrders[key] ?? 0) + 1;
+    notifyListeners();
+  }
+
+  void deleteOrders(key) {
+    _listOrders[key] = (_listOrders[key] ?? 0) - 1;
+    if (_listOrders[key]! < 0) {
+      _listOrders[key] = 0;
+    }
+    notifyListeners();
+  }
 
   void resetParam() {
     paramTypeOrder = null;
