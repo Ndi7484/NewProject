@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class PaymentMethodPage extends StatefulWidget {
   const PaymentMethodPage({super.key});
@@ -14,14 +12,14 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back_ios_new_outlined),
-        title: Text("Payment Method"),
+        leading: const Icon(Icons.arrow_back_ios_new_outlined),
+        title: const Text("Payment Method"),
       ),
       body: Column(
         children: [
           Row(
             children: [
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width * 0.93,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
@@ -44,20 +42,20 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                     ),
                     child: ListTile(
                       leading: Image.asset("assets/etc/BCA.png"),
-                      title: Text(
+                      title: const Text(
                         "Bank Transfer",
                         style: TextStyle(color: Colors.red),
                       ),
-                      trailing: Icon(Icons.arrow_right),
+                      trailing: const Icon(Icons.arrow_right),
                     ),
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                   width: MediaQuery.of(context).size.width * 0.07,
-                  child: Center(
+                  child: const Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
+                      padding: EdgeInsets.only(top: 10),
                       child: CircleAvatar(
                         foregroundColor: Colors.red,
                         child: Icon(

@@ -5,7 +5,6 @@ import 'package:flutter_application_1/core/logic/carousel_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
 import 'package:flutter_application_1/core/logic/warning_provider.dart';
-import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
 import 'package:flutter_application_1/features/profile_page/profile_page.dart';
 import 'package:provider/provider.dart';
 

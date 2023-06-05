@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -14,8 +12,8 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back_ios_new_outlined),
-        title: Text("Address"),
+        leading: const Icon(Icons.arrow_back_ios_new_outlined),
+        title: const Text("Address"),
       ),
       body: Column(
         children: [
@@ -50,8 +48,8 @@ class _CartPageState extends State<CartPage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
+          const Padding(
+            padding: EdgeInsets.only(right: 10, left: 10, top: 15),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -70,7 +68,7 @@ class _CartPageState extends State<CartPage> {
                   color: Colors.white,
                   width: 1.0,
                 ),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.grey, // Shadow color
                     spreadRadius: 2.0, // Spread radius
@@ -80,15 +78,15 @@ class _CartPageState extends State<CartPage> {
                 ],
               ),
               child: ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.home,
                   color: Colors.red,
                 ),
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
+                      padding: EdgeInsets.only(bottom: 5),
                       child: Text(
                         "Home",
                         style: TextStyle(
@@ -96,21 +94,21 @@ class _CartPageState extends State<CartPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
+                      padding: EdgeInsets.only(bottom: 5),
                       child: Text("Address"),
                     ),
                   ],
                 ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
+                subtitle: const Padding(
+                  padding: EdgeInsets.only(bottom: 5),
                   child: Text("Detail address"),
                 ),
-                trailing: Icon(Icons.arrow_right_outlined),
+                trailing: const Icon(Icons.arrow_right_outlined),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
+          const Padding(
+            padding: EdgeInsets.only(right: 10, left: 10, top: 15),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(

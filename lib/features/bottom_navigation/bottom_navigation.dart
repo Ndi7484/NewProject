@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
+import 'package:flutter_application_1/core/widgets/typemenu_dialog.dart';
 import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
 import 'package:flutter_application_1/features/main_page/main_page.dart';
 import 'package:flutter_application_1/features/menu_page/menu_page.dart';
@@ -34,7 +36,9 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
 
   @override
   Widget build(BuildContext context) {
+    var _typeMenuDialog = TypeOrderDialog();
     var provPage = Provider.of<PageProvider>(context);
+    var provOrders = Provider.of<OrdersProvider>(context);
     _selectedIndex = provPage.selectedIndex;
 
     return Scaffold(
@@ -88,10 +92,28 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           ),
         ],
       ),
-      body: _bodyFill[_selectedIndex],
+      body: Builder(builder: (context) {
+        if (_selectedIndex == 1 && provOrders.typeOrders == null) {
+          WidgetsBinding.instance?.addPostFrameCallback((_) {
+            showDialog(
+              context: context,
+              builder: (_) => _typeMenuDialog.getDialog(context),
+            );
+          });
+        }
+        return _bodyFill[_selectedIndex];
+      }),
       floatingActionButton: (_selectedIndex == 1)
           ? FloatingActionButton(
               onPressed: () {
+                if (provOrders.typeOrders == null) {
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => _typeMenuDialog.getDialog(context),
+                    );
+                  });
+                }
                 Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const ZZZTesting()));
               },
@@ -103,11 +125,16 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           : null,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.local_dining_outlined), label: 'Menu'),
+              icon: Icon(Icons.home_rounded), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.star_rate_rounded), label: 'Points'),
+              icon: Icon(Icons.local_dining_rounded), label: 'Menu'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.star_rate_rounded,
+                size: 27,
+              ),
+              label: 'Points'),
           BottomNavigationBarItem(
               icon: Icon(Icons.discount_rounded), label: 'Promo'),
           BottomNavigationBarItem(

@@ -26,19 +26,31 @@ class OrdersCart {
 
 class OrdersProvider extends ChangeNotifier {
   // list of orders that must be filled
-  TypeOrder? paramTypeOrder;
-  String? paramTakeawayCode;
-  String? paramDineInCode;
+  // TypeOrder? paramTypeOrder;
+  // String? paramTakeawayCode;
+  // String? paramDineInCode;
   Account? paramAccountInformation;
   List<FoodMenu>? paramListOrder;
   Promo? paramVoucherCode;
-  bool pointsUse = false;
   // end
   // helper parameters
 
   // main parameters
   Map<String, int> _listOrders = {};
   Map<String, int> get listOrders => _listOrders;
+  bool _pointsUse = false;
+  bool get pointsUse => _pointsUse;
+  set pointsUse(value) {
+    _pointsUse = value;
+    notifyListeners();
+  }
+
+  TypeOrder? _typeOrders;
+  TypeOrder? get typeOrders => _typeOrders;
+  set typeOrders(TypeOrder? value) {
+    _typeOrders = value;
+    notifyListeners();
+  }
 
   void addOrders(key) {
     _listOrders[key] = (_listOrders[key] ?? 0) + 1;
@@ -54,9 +66,7 @@ class OrdersProvider extends ChangeNotifier {
   }
 
   void resetParam() {
-    paramTypeOrder = null;
-    paramTakeawayCode = null;
-    paramDineInCode = null;
+    _listOrders = {};
     paramAccountInformation = null;
     paramListOrder = null;
     paramVoucherCode = null;

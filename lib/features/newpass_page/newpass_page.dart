@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
-import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:provider/provider.dart';
 
 class NewPassPage extends StatefulWidget {
