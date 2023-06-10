@@ -63,6 +63,10 @@ class AddressProvider extends ChangeNotifier {
     }
   }
 
+  void alamatDelete(String paramEmail, Alamat alamat){
+    
+  }
+
   void changeSelected(Alamat alamat) {
     _selectedAlamat = alamat;
     notifyListeners();
