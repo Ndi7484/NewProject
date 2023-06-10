@@ -5,6 +5,7 @@ import 'package:flutter_application_1/core/logic/carousel_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
+import 'package:flutter_application_1/features/cart_page/cart_page.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 // import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
 // import 'package:flutter_application_1/features/add_address_page/add_address_page.dart';
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
               .copyWith(secondary: Colors.grey[850])),
-      home: const LoginPage(),
+      home: const CartPage(),
       // const PaymentMethodPage(),
       // debugShowCheckedModeBanner: false,
       // home: const BottomNavigationPage(),
