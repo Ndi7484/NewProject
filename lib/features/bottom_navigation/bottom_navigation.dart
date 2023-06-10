@@ -94,7 +94,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
       ),
       body: Builder(builder: (context) {
         if (_selectedIndex == 1 && provOrders.typeOrders == null) {
-          WidgetsBinding.instance?.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             showDialog(
               context: context,
               builder: (_) => _typeMenuDialog.getDialog(context),
@@ -107,7 +107,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           ? FloatingActionButton(
               onPressed: () {
                 if (provOrders.typeOrders == null) {
-                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
                     showDialog(
                       context: context,
                       builder: (_) => _typeMenuDialog.getDialog(context),
