@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 
 class AddressListTile extends StatelessWidget {
-  AddressListTile({super.key, required this.alamat, required this.selection});
+  AddressListTile(
+      {super.key,
+      required this.alamat,
+      required this.selection,
+      required this.slider});
   Alamat? alamat;
   bool selection;
+  bool slider;
 
   @override
   Widget build(BuildContext context) {
@@ -79,20 +84,22 @@ class AddressListTile extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(
-                top: 5,
-                right: 5,
-                child: Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: const Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                  ),
-                ))
+            (slider)
+                ? Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                    ))
+                : Container()
           ])
         : Padding(
             padding: const EdgeInsets.only(right: 10, left: 10, top: 15),

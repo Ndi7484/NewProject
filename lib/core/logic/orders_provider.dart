@@ -3,7 +3,7 @@ import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
 
-enum TypeOrder { delivery, takeaway, dinein }
+enum TypeOrder { delivery, takeaway, dinein, fail }
 
 class OrdersCart {
   OrdersCart({

@@ -23,19 +23,6 @@ class MenuCard extends StatefulWidget {
 }
 
 class _MenuCardState extends State<MenuCard> {
-  // int _counter = 0;
-
-  // void increment() {
-  //   _counter = _counter + 1;
-  // }
-
-  // void decrement() {
-  //   _counter = _counter - 1;
-  //   if (_counter < 0) {
-  //     _counter = 0;
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     var bottomSheet = MenuBottomSheet();
@@ -79,19 +66,6 @@ class _MenuCardState extends State<MenuCard> {
                                 ),
                               ),
                             ),
-                            Positioned(
-                                left: 0,
-                                bottom: 0,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    bottomSheet.getBottomSheet(
-                                        context, widget.food);
-                                  },
-                                  child: const Icon(
-                                    Icons.info_outline,
-                                    color: Colors.white,
-                                  ),
-                                ))
                           ]),
                           Expanded(
                             child: Padding(
@@ -163,6 +137,29 @@ class _MenuCardState extends State<MenuCard> {
                                           color: Colors.red,
                                         ),
                                       ),
+                                      const Spacer(),
+                                      GestureDetector(
+                                        onTap: () {
+                                          bottomSheet.getBottomSheet(
+                                              context, widget.food);
+                                        },
+                                        child: Row(
+                                          children: const [
+                                            Text(
+                                              'details',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 9,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.info_outline,
+                                              color: Colors.grey,
+                                              size: 18,
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   )
                                 ],
@@ -268,43 +265,6 @@ class _MenuCardState extends State<MenuCard> {
                                   ),
                                 ],
                               ),
-                              // const Spacer(),
-                              // Row(
-                              //   children: [
-                              //     GestureDetector(
-                              //       onTap: () => provOrders
-                              //           .deleteOrders(widget.food.menuID),
-                              //       child: Icon(
-                              //         Icons.remove_circle_outline_rounded,
-                              //         color: ((provOrders.listOrders[
-                              //                         widget.food.menuID] ??
-                              //                     0) <=
-                              //                 0)
-                              //             ? Colors.red[100]
-                              //             : Colors.red,
-                              //       ),
-                              //     ),
-                              //     Padding(
-                              //       padding:
-                              //           const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              //       child: Text(
-                              //         (provOrders.listOrders[
-                              //                     widget.food.menuID] ??
-                              //                 0)
-                              //             .toString(),
-                              //         style: const TextStyle(fontSize: 18),
-                              //       ),
-                              //     ),
-                              //     GestureDetector(
-                              //       onTap: () => provOrders
-                              //           .addOrders(widget.food.menuID),
-                              //       child: const Icon(
-                              //         Icons.add_circle_outline_rounded,
-                              //         color: Colors.red,
-                              //       ),
-                              //     ),
-                              //   ],
-                              // )
                             ],
                           ),
                         ),

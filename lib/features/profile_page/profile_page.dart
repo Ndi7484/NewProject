@@ -144,6 +144,7 @@ class ProfilePageState extends State<ProfilePage> {
           child: AddressListTile(
             alamat: provAddress.selectedAlamat,
             selection: false,
+            slider: false,
           ),
         ),
       ]),

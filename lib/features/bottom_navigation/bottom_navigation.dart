@@ -3,6 +3,7 @@ import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/widgets/typemenu_dialog.dart';
 import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
+import 'package:flutter_application_1/features/cart_page/cart_page.dart';
 import 'package:flutter_application_1/features/main_page/main_page.dart';
 import 'package:flutter_application_1/features/menu_page/menu_page.dart';
 import 'package:flutter_application_1/features/points_page/points_page.dart';
@@ -36,7 +37,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    var _typeMenuDialog = TypeOrderDialog();
+    var typeMenuDialog = TypeOrderDialog();
     var provPage = Provider.of<PageProvider>(context);
     var provOrders = Provider.of<OrdersProvider>(context);
     _selectedIndex = provPage.selectedIndex;
@@ -97,7 +98,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             showDialog(
               context: context,
-              builder: (_) => _typeMenuDialog.getDialog(context),
+              builder: (_) => typeMenuDialog.getDialog(context),
             );
           });
         }
@@ -106,16 +107,18 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
       floatingActionButton: (_selectedIndex == 1)
           ? FloatingActionButton(
               onPressed: () {
-                if (provOrders.typeOrders == null) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    showDialog(
-                      context: context,
-                      builder: (_) => _typeMenuDialog.getDialog(context),
-                    );
-                  });
-                }
+                // if (provOrders.typeOrders == null) {
+                //   WidgetsBinding.instance.addPostFrameCallback((_) {
+                //     showDialog(
+                //       context: context,
+                //       builder: (_) => typeMenuDialog.getDialog(context),
+                //     );
+                //   });
+                // }
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (_) => const ZZZTesting()));
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const ZZZTesting()));
+                    MaterialPageRoute(builder: (_) => const CartPage()));
               },
               backgroundColor: Theme.of(context).colorScheme.primary,
               child: const Icon(
