@@ -130,8 +130,7 @@ class _CartPageState extends State<CartPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      right: 10, left: 10, top: 3, bottom: 10),
+                  padding: const EdgeInsets.only(right: 8, left: 8, bottom: 24),
                   child: GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -148,7 +147,7 @@ class _CartPageState extends State<CartPage> {
                 ),
                 const Divider(),
                 const Padding(
-                  padding: EdgeInsets.only(left: 4),
+                  padding: EdgeInsets.only(left: 8),
                   child: Text(
                     "Order details : ",
                     style: TextStyle(fontSize: 14),
@@ -172,19 +171,28 @@ class _CartPageState extends State<CartPage> {
                         ),
                       );
                     }
-
-                    return Column(
-                      children: widgets,
-                    );
+                    if (widgets.isNotEmpty) {
+                      return Column(
+                        children: widgets,
+                      );
+                    } else {
+                      return Center(
+                        child: Column(children: [
+                          Image.asset('assets/etc/Empty_Orders.png'),
+                          const Text('There is no orders yet..'),
+                        ]),
+                      );
+                    }
                   },
                 ),
+                const Divider(),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
+                  padding: const EdgeInsets.only(top: 32),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(
-                        color: Colors.red,
+                        color: Colors.grey,
                         width: 1.0,
                       ),
                       boxShadow: const [
@@ -211,55 +219,246 @@ class _CartPageState extends State<CartPage> {
                   ),
                 ),
                 Container(
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.only(bottom: 2),
+                  decoration: const BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
                         color: Colors.red,
-                        width: 1.0,
+                        width: 2.0,
                       ),
                     ),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 10, left: 10, top: 15),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Payment Details : ",
-                        style: TextStyle(color: Colors.red, fontSize: 18),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.red,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 8, top: 24),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Payment Details : ",
+                          style: TextStyle(fontSize: 14),
+                        ),
                       ),
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(right: 10, left: 10, top: 15),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Sub-total",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        flex: 7,
+                        child: Text(
+                          "Sub-total",
+                          style: TextStyle(fontSize: 16),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(right: 10, left: 10, top: 15),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "Rp 95.000",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
+                      Expanded(
+                        flex: 3,
+                        child: Row(
+                          children: [
+                            const Text(
+                              "Rp",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            const Spacer(),
+                            Text(
+                              provOrders.paramTotals,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+                // DELIVERY FEE
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 7,
+                        child: Text(
+                          "Delivery Fee",
+                          style:
+                              TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Row(
+                          children: [
+                            Text(
+                              "Rp",
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.grey[600]),
+                            ),
+                            const Spacer(),
+                            Text(
+                              provOrders.paramTotals,
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.grey[600]),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // VOUCHER
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 7,
+                        child: Text(
+                          "Voucher ABCD",
+                          style:
+                              TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Row(
+                          children: [
+                            Text(
+                              "Rp",
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.grey[600]),
+                            ),
+                            const Spacer(),
+                            Text(
+                              provOrders.paramTotals,
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.grey[600]),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // POINTS
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 7,
+                        child: Text(
+                          "Points used",
+                          style:
+                              TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Row(
+                          children: [
+                            Text(
+                              "Rp",
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.grey[600]),
+                            ),
+                            const Spacer(),
+                            Text(
+                              provOrders.paramTotals,
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.grey[600]),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // line red
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                                width: 1.5,
+                                color: Theme.of(context).colorScheme.primary))),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        flex: 7,
+                        child: Text(
+                          "Total",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Row(
+                          children: [
+                            const Text(
+                              "Rp",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            Text(
+                              provOrders.paramTotals,
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // add little pad in bottom
+                const SizedBox(
+                  height: 24,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+                color: Colors.lightGreenAccent,
+                border: Border.all(width: 1, color: Colors.green)),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.wallet_giftcard_rounded,
+                  color: Colors.green.shade900,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  'You will get 9000 points after the transaction..',
+                  style: TextStyle(fontSize: 11, color: Colors.green.shade900),
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {},
+                  child: Icon(
+                    Icons.help_outline_rounded,
+                    color: Colors.green.shade900,
+                  ),
+                )
               ],
             ),
           ),

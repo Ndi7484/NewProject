@@ -63,8 +63,15 @@ class AddressProvider extends ChangeNotifier {
     }
   }
 
-  void alamatDelete(String paramEmail, Alamat alamat){
-    
+  void alamatDelete(String paramEmail, Alamat alamat) {
+    _listAlamat.removeWhere((el) =>
+        el.alamatID == paramEmail &&
+        el.alamatTitle == alamat.alamatTitle &&
+        el.alamatTitle == alamat.alamatTitle &&
+        el.alamatLengkap == alamat.alamatLengkap &&
+        el.alamatDesk == alamat.alamatDesk);
+    getAddress(paramEmail);
+    notifyListeners();
   }
 
   void changeSelected(Alamat alamat) {

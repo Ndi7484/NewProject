@@ -105,26 +105,75 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         return _bodyFill[_selectedIndex];
       }),
       floatingActionButton: (_selectedIndex == 1)
-          ? FloatingActionButton(
+          ? FloatingActionButton.extended(
+              backgroundColor: Theme.of(context).colorScheme.primary,
               onPressed: () {
-                // if (provOrders.typeOrders == null) {
-                //   WidgetsBinding.instance.addPostFrameCallback((_) {
-                //     showDialog(
-                //       context: context,
-                //       builder: (_) => typeMenuDialog.getDialog(context),
-                //     );
-                //   });
-                // }
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (_) => const ZZZTesting()));
+                if (provOrders.typeOrders == null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => typeMenuDialog.getDialog(context),
+                    );
+                  });
+                }
                 Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const CartPage()));
               },
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: const Icon(
-                Icons.shopping_basket,
-                color: Colors.white,
+              label: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                transitionBuilder:
+                    (Widget child, Animation<double> animation) =>
+                        FadeTransition(
+                  opacity: animation,
+                  child: SizeTransition(
+                    sizeFactor: animation,
+                    axis: Axis.horizontal,
+                    child: child,
+                  ),
+                ),
+                child: (provOrders.listOrders.values
+                            .fold(0, (prevEl, el) => prevEl + el) ==
+                        0)
+                    ? const Icon(Icons.shopping_basket)
+                    : Row(
+                        children: [
+                          // const Padding(
+                          //   padding: EdgeInsets.only(right: 8.0),
+                          //   child: Icon(Icons.shopping_basket),
+                          // ),
+                          Text(
+                            "${provOrders.listOrders.values.fold(0, (prevEl, el) => prevEl + el)}",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 16.0),
+                            child: Text(
+                              ' in cart',
+                              style: TextStyle(color: Colors.white60),
+                            ),
+                          ),
+                          Text('Rp. ${provOrders.paramTotals},-'),
+                        ],
+                      ),
               ))
+          // FloatingActionButton(
+          //     onPressed: () {
+          // if (provOrders.typeOrders == null) {
+          //   WidgetsBinding.instance.addPostFrameCallback((_) {
+          //     showDialog(
+          //       context: context,
+          //       builder: (_) => typeMenuDialog.getDialog(context),
+          //     );
+          //   });
+          // }
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (_) => const CartPage()));
+          //     },
+          //     backgroundColor: Theme.of(context).colorScheme.primary,
+          //     child: const Icon(
+          //       Icons.shopping_basket,
+          //       color: Colors.white,
+          //     ))
           : null,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

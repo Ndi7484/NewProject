@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/orders_provider.dart';
+import 'package:provider/provider.dart';
 
 class BottomOrders extends StatefulWidget {
   const BottomOrders({super.key});
@@ -8,9 +10,10 @@ class BottomOrders extends StatefulWidget {
 }
 
 class _BottomOrdersState extends State<BottomOrders> {
-  bool switchPoints = true;
+  bool switchPoints = false;
   @override
   Widget build(BuildContext context) {
+    final provOrders = Provider.of<OrdersProvider>(context);
     return Container(
       decoration: const BoxDecoration(
           color: Colors.white,
@@ -36,6 +39,7 @@ class _BottomOrdersState extends State<BottomOrders> {
                   onChanged: (bool value) {
                     setState(() {
                       switchPoints = !switchPoints;
+                      provOrders.pointsUse = switchPoints;
                     });
                   },
                 ),

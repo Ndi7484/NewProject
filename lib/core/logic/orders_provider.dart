@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 enum TypeOrder { delivery, takeaway, dinein, fail }
 
@@ -25,6 +27,9 @@ class OrdersCart {
 }
 
 class OrdersProvider extends ChangeNotifier {
+  // format helper
+  NumberFormat formatter = NumberFormat("#,###", "en_US");
+
   // list of orders that must be filled
   // TypeOrder? paramTypeOrder;
   // String? paramTakeawayCode;
@@ -45,6 +50,9 @@ class OrdersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  int paramTotalsInt = 0;
+  String paramTotals = '0';
+
   TypeOrder? _typeOrders;
   TypeOrder? get typeOrders => _typeOrders;
   set typeOrders(TypeOrder? value) {
@@ -52,16 +60,41 @@ class OrdersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addOrders(key) {
+  void addOrders(key, context) {
     _listOrders[key] = (_listOrders[key] ?? 0) + 1;
+    calculateTotals(context);
     notifyListeners();
   }
 
-  void deleteOrders(key) {
+  void deleteOrders(key, context) {
     _listOrders[key] = (_listOrders[key] ?? 0) - 1;
     if (_listOrders[key]! < 0) {
       _listOrders[key] = 0;
     }
+    calculateTotals(context);
+    notifyListeners();
+  }
+
+  void calculateTotals(context) {
+    MenuProvider provMenu = Provider.of<MenuProvider>(context, listen: false);
+    int totals = 0;
+    var arrKey = listOrders.keys.toList();
+    for (var el in arrKey) {
+      FoodMenu? found = provMenu.listFoodMenu.firstWhere(
+          (menu) => menu.menuID == el,
+          orElse: () => FoodMenu(
+              menuID: 'XXX',
+              menuCategory: 'xxx',
+              menuName: 'xxx',
+              menuShortDesc: 'xxx',
+              menuLongDesc: 'xxx',
+              menuImage: 'xxx',
+              menuPrice: 0,
+              menuPriceString: '0'));
+      totals = totals + found.menuPrice * int.parse(listOrders[el].toString());
+    }
+    paramTotals = formatter.format(totals).toString().replaceAll(',', '.');
+    paramTotalsInt = totals;
     notifyListeners();
   }
 
@@ -70,6 +103,8 @@ class OrdersProvider extends ChangeNotifier {
     paramAccountInformation = null;
     paramListOrder = null;
     paramVoucherCode = null;
+    paramTotals = '0';
+    paramTotalsInt = 0;
     pointsUse = false;
   }
 }

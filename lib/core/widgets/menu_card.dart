@@ -107,7 +107,7 @@ class _MenuCardState extends State<MenuCard> {
                                     children: [
                                       GestureDetector(
                                         onTap: () => provOrders
-                                            .deleteOrders(widget.food.menuID),
+                                            .deleteOrders(widget.food.menuID, context),
                                         child: Icon(
                                           Icons.remove_circle_outline_rounded,
                                           color: ((provOrders.listOrders[
@@ -131,7 +131,7 @@ class _MenuCardState extends State<MenuCard> {
                                       ),
                                       GestureDetector(
                                         onTap: () => provOrders
-                                            .addOrders(widget.food.menuID),
+                                            .addOrders(widget.food.menuID, context),
                                         child: const Icon(
                                           Icons.add_circle_outline_rounded,
                                           color: Colors.red,

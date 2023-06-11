@@ -24,16 +24,18 @@ class AddressListTile extends StatelessWidget {
               padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
               child: (slider)
                   ? Slidable(
+                      key: const ValueKey(0),
                       endActionPane: ActionPane(
                         motion: const ScrollMotion(),
                         dismissible: DismissiblePane(onDismissed: () {}),
                         children: [
                           SlidableAction(
-                            // An action can be bigger than the others.
                             flex: 2,
                             onPressed: (context) {
                               provAddress.alamatDelete(
                                   provAccount.selectedAccount!.email, alamat!);
+                              // TODO : Dialog warning delete
+                              // TODO : ScaffoldMessenger
                             },
                             backgroundColor: Colors.red,
                             foregroundColor: Colors.white,

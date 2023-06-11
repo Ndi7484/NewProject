@@ -69,4 +69,20 @@ class MenuProvider extends ChangeNotifier {
     }
     return null;
   }
+
+  // int processCalculation(Map<String, int> map) {
+  //   int totals = 0;
+  //   var arrKey = map.keys.toList();
+  //   for (var el in arrKey) {
+  //     FoodMenu? found = _listFoodMenu.firstWhere((menu) => menu.menuID == el,
+  //         // ignore: cast_from_null_always_fails
+  //         orElse: () => null as FoodMenu);
+  //         try {
+  //           totals = totals + found.menuPrice;
+  //         } catch (e) {
+  //           totals = totals + 0;
+  //         }  
+  //   }
+  //   return totals;
+  // }
 }
