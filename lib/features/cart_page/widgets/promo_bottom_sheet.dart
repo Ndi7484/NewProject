@@ -1,0 +1,74 @@
+import 'package:custom_bottom_sheet/custom_bottom_sheet.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/orders_provider.dart';
+import 'package:flutter_application_1/core/logic/promo_provider.dart';
+
+class PromoBottomSheet {
+  getBottomSheet(BuildContext context, List<Promo> listPromo,
+      OrdersProvider provOrders, PromoProvider provPromo) {
+    SlideDialog.showSlideDialog(
+        context: context,
+        backgroundColor: Colors.white,
+        pillColor: Theme.of(context).colorScheme.primary,
+        transitionDuration: const Duration(milliseconds: 500),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: ListView(children: [
+            (provOrders.paramVoucherValid)
+                ? Container(
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Text(
+                      'Voucher ${provOrders.tmpVoucherName} is not Valid',
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                      softWrap: true,
+                    ),
+                  )
+                : Container(),
+            ...List.generate(
+                listPromo.length,
+                (index) => Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            var result = provPromo.validatePromo(
+                                listPromo[index], provOrders.paramTotalsInt);
+                            provOrders.changeVoucherValid(
+                                result, listPromo[index]);
+                            if (result) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: (provOrders.paramVoucherCode?.promoID ==
+                                        listPromo[index].promoID)
+                                    ? Colors.lightGreenAccent
+                                    : null,
+                                border:
+                                    Border.all(width: 1, color: Colors.black)),
+                            child: ListTile(
+                              leading: Image.asset('assets/etc/Voucher.png'),
+                              title: Text(listPromo[index].promoName),
+                              subtitle: Text(
+                                listPromo[index].promoShortDesc,
+                                style: const TextStyle(fontSize: 10),
+                              ),
+                              trailing: (provOrders.paramVoucherCode?.promoID ==
+                                      listPromo[index].promoID)
+                                  ? const Icon(Icons.check_circle_outlined)
+                                  : const Icon(Icons.circle_outlined),
+                            ),
+                          ),
+                        ),
+                        const Divider(
+                          indent: 65,
+                        )
+                      ],
+                    )),
+          ]),
+        ));
+  }
+}

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
-import 'package:flutter_application_1/core/widgets/menu_card.dart';
 import 'package:provider/provider.dart';
+
+import 'widgets/menu_card.dart';
 
 class ListMenu extends StatefulWidget {
   const ListMenu({Key? key, required this.type}) : super(key: key);

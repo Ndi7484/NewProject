@@ -37,6 +37,15 @@ class OrdersProvider extends ChangeNotifier {
   Account? paramAccountInformation;
   List<FoodMenu>? paramListOrder;
   Promo? paramVoucherCode;
+  bool paramVoucherValid = false;
+  String tmpVoucherName = '';
+  void changeVoucherValid(value, Promo vochCode) {
+    paramVoucherValid = value;
+    if (!value) {
+      paramVoucherCode = vochCode;
+    }
+    notifyListeners();
+  }
   // end
   // helper parameters
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
-import 'package:flutter_application_1/core/widgets/menu_bottom_sheet.dart';
+import 'package:flutter_application_1/features/menu_page/widgets/menu_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class MenuCard extends StatefulWidget {

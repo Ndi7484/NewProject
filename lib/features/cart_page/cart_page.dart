@@ -3,11 +3,15 @@ import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
+import 'package:flutter_application_1/core/logic/promo_provider.dart';
 import 'package:flutter_application_1/core/widgets/address_listtile.dart';
-import 'package:flutter_application_1/core/widgets/menu_card.dart';
 import 'package:flutter_application_1/features/address_page/address_page.dart';
 import 'package:flutter_application_1/features/cart_page/widgets/bottom_orders.dart';
+import 'package:flutter_application_1/features/cart_page/widgets/promo_bottom_sheet.dart';
+import 'package:flutter_application_1/features/menu_page/widgets/menu_card.dart';
 import 'package:provider/provider.dart';
+
+import 'widgets/transaction_label.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -25,6 +29,11 @@ class _CartPageState extends State<CartPage> {
     final provMenu = Provider.of<MenuProvider>(context);
     final provAddress = Provider.of<AddressProvider>(context);
     final provAccount = Provider.of<AccountProvider>(context);
+    final provPromo = Provider.of<PromoProvider>(context);
+
+    // bottom sheet
+    var bottomSheet = PromoBottomSheet();
+
     // get address
     provAddress.getAddress(provAccount.selectedAccount!.email);
     switch (provOrders.typeOrders) {
@@ -196,38 +205,46 @@ class _CartPageState extends State<CartPage> {
                   },
                 ),
                 const Divider(),
+                // USE Voucher bar
                 Padding(
                   padding: const EdgeInsets.only(top: 32),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.grey, // Shadow color
-                          spreadRadius: 2.0, // Spread radius
-                          blurRadius: 5.0, // Blur radius
-                          offset:
-                              Offset(0, 3), // Offset in the x and y direction
+                  child: GestureDetector(
+                    onTap: () {
+                      bottomSheet.getBottomSheet(
+                        context, provPromo.listPromo, provOrders, provPromo);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1.0,
                         ),
-                      ],
-                    ),
-                    child: const ListTile(
-                      leading: Icon(
-                        Icons.discount,
-                        color: Colors.red,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.grey, // Shadow color
+                            spreadRadius: 2.0, // Spread radius
+                            blurRadius: 5.0, // Blur radius
+                            offset:
+                                Offset(0, 3), // Offset in the x and y direction
+                          ),
+                        ],
                       ),
-                      title: Text(
-                        "Use Coupon",
-                        style: TextStyle(color: Colors.black),
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.discount,
+                          color: Colors.red,
+                        ),
+                        title: Text(
+                          "Use Voucher",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        trailing: Icon(Icons.arrow_right),
                       ),
-                      trailing: Icon(Icons.arrow_right),
                     ),
                   ),
                 ),
+                
                 Container(
                   padding: const EdgeInsets.only(bottom: 2),
                   decoration: const BoxDecoration(
@@ -259,138 +276,31 @@ class _CartPageState extends State<CartPage> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        flex: 7,
-                        child: Text(
-                          "Sub-total",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Row(
-                          children: [
-                            const Text(
-                              "Rp",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            const Spacer(),
-                            Text(
-                              provOrders.paramTotals,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+
+                // SUB TOTAL
+                TransactionLabel(
+                  label: 'Sub-total',
+                  price: provOrders.paramTotals,
                 ),
+
                 // DELIVERY FEE
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 7,
-                        child: Text(
-                          "Delivery Fee",
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Row(
-                          children: [
-                            Text(
-                              "Rp",
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.grey[600]),
-                            ),
-                            const Spacer(),
-                            Text(
-                              provOrders.paramTotals,
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.grey[600]),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                TransactionLabel(
+                  label: 'Delivery Fee',
+                  price: provOrders.paramTotals,
                 ),
+
                 // VOUCHER
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 7,
-                        child: Text(
-                          "Voucher ABCD",
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Row(
-                          children: [
-                            Text(
-                              "Rp",
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.grey[600]),
-                            ),
-                            const Spacer(),
-                            Text(
-                              provOrders.paramTotals,
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.grey[600]),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                TransactionLabel(
+                  label: 'Voucher ABCD',
+                  price: provOrders.paramTotals,
                 ),
+
                 // POINTS
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 7,
-                        child: Text(
-                          "Points used",
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Row(
-                          children: [
-                            Text(
-                              "Rp",
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.grey[600]),
-                            ),
-                            const Spacer(),
-                            Text(
-                              provOrders.paramTotals,
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.grey[600]),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                TransactionLabel(
+                  label: 'Points used',
+                  price: provOrders.paramTotals,
                 ),
+
                 // line red
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -403,6 +313,8 @@ class _CartPageState extends State<CartPage> {
                                 color: Theme.of(context).colorScheme.primary))),
                   ),
                 ),
+
+                // TOTAL
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
                   child: Row(
@@ -436,6 +348,7 @@ class _CartPageState extends State<CartPage> {
                     ],
                   ),
                 ),
+
                 // add little pad in bottom
                 const SizedBox(
                   height: 24,

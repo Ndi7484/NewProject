@@ -80,4 +80,11 @@ class PromoProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  bool validatePromo(Promo namePromo, int cartTotals) {
+    if (namePromo.minTrans < cartTotals) {
+      return true;
+    }
+    return false;
+  }
 }
