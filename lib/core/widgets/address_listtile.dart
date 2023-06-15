@@ -187,6 +187,7 @@ class AddressListTile extends StatelessWidget {
                     ),
             ),
           ])
+          // alamat is null there is nothing to set
         : Padding(
             padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
             child: Container(

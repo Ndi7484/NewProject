@@ -63,6 +63,7 @@ class _CartPageState extends State<CartPage> {
               children: [
                 Padding(
                     padding: const EdgeInsets.all(8.0),
+                    // dropdown re-type orders type
                     child: DropdownButton(
                         value: dropdownValue,
                         itemHeight: MediaQuery.of(context).size.height * 0.1,
@@ -122,13 +123,19 @@ class _CartPageState extends State<CartPage> {
                                     ],
                                   ),
                                 )))),
-                const Padding(
-                  padding: EdgeInsets.only(left: 8),
+                // address state
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    "Address : ",
-                    style: TextStyle(fontSize: 14),
+                    (provOrders.typeOrders == TypeOrder.delivery)
+                        ? "Deliver to :"
+                        : (provOrders.typeOrders == TypeOrder.takeaway)
+                            ? "TakeAway from :"
+                            : "Dine In Table :",
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
+                // address state
                 Padding(
                   padding: const EdgeInsets.only(right: 8, left: 8, bottom: 24),
                   child: GestureDetector(
@@ -176,11 +183,14 @@ class _CartPageState extends State<CartPage> {
                         children: widgets,
                       );
                     } else {
-                      return Center(
-                        child: Column(children: [
-                          Image.asset('assets/etc/Empty_Orders.png'),
-                          const Text('There is no orders yet..'),
-                        ]),
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Center(
+                          child: Column(children: [
+                            Image.asset('assets/etc/Empty_Orders.png'),
+                            const Text('There is no orders yet..'),
+                          ]),
+                        ),
                       );
                     }
                   },

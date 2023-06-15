@@ -8,11 +8,17 @@ class Alamat {
     required this.alamatTitle,
     required this.alamatLengkap,
     required this.alamatDesk,
+    required this.alamatLang,
+    required this.alamatLong,
+    required this.alamatMapsDesc,
   });
   String alamatID;
   String alamatTitle;
   String alamatLengkap;
   String alamatDesk;
+  double alamatLang;
+  double alamatLong;
+  String alamatMapsDesc;
 }
 
 class AddressProvider extends ChangeNotifier {
@@ -36,10 +42,14 @@ class AddressProvider extends ChangeNotifier {
       (index) {
         var row = table.row(index);
         return Alamat(
-            alamatID: row[0]!.value.toString(),
-            alamatTitle: row[1]!.value.toString(),
-            alamatLengkap: row[2]!.value.toString(),
-            alamatDesk: row[3]!.value.toString());
+          alamatID: row[0]!.value.toString(),
+          alamatTitle: row[1]!.value.toString(),
+          alamatLengkap: row[2]!.value.toString(),
+          alamatDesk: row[3]!.value.toString(),
+          alamatLang: double.parse(row[4]!.value.toString()),
+          alamatLong: double.parse(row[5]!.value.toString()),
+          alamatMapsDesc: row[6]!.value.toString(),
+        );
       },
     );
     // print(_listAlamat);
@@ -51,10 +61,14 @@ class AddressProvider extends ChangeNotifier {
     for (var el in _listAlamat) {
       if (el.alamatID == paramEmail) {
         accountAlamat.add(Alamat(
-            alamatID: el.alamatID,
-            alamatTitle: el.alamatTitle,
-            alamatLengkap: el.alamatLengkap,
-            alamatDesk: el.alamatDesk));
+          alamatID: el.alamatID,
+          alamatTitle: el.alamatTitle,
+          alamatLengkap: el.alamatLengkap,
+          alamatDesk: el.alamatDesk,
+          alamatLang: el.alamatLang,
+          alamatLong: el.alamatLong,
+          alamatMapsDesc: el.alamatMapsDesc,
+        ));
       }
     }
     _listSelectedAlamat = accountAlamat;
@@ -71,6 +85,9 @@ class AddressProvider extends ChangeNotifier {
         el.alamatLengkap == alamat.alamatLengkap &&
         el.alamatDesk == alamat.alamatDesk);
     getAddress(paramEmail);
+    if (_listSelectedAlamat.isEmpty) {
+      _selectedAlamat = null;
+    }
     notifyListeners();
   }
 
@@ -99,10 +116,14 @@ class AddressProvider extends ChangeNotifier {
         paramLong != null &&
         paramDisplayName != '') {
       _listAlamat.add(Alamat(
-          alamatID: paramEmail,
-          alamatTitle: paramCategory,
-          alamatLengkap: paramAddress,
-          alamatDesk: paramNote));
+        alamatID: paramEmail,
+        alamatTitle: paramCategory,
+        alamatLengkap: paramAddress,
+        alamatDesk: paramNote,
+        alamatLang: paramLang!,
+        alamatLong: paramLong!,
+        alamatMapsDesc: paramDisplayName,
+      ));
       notifyListeners();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

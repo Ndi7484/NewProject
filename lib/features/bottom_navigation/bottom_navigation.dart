@@ -94,17 +94,21 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         ],
       ),
       body: Builder(builder: (context) {
-        if (_selectedIndex == 1 && provOrders.typeOrders == null) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            showDialog(
-              context: context,
-              builder: (_) => typeMenuDialog.getDialog(context),
-            );
-          });
-        }
-        return _bodyFill[_selectedIndex];
+        // if (_selectedIndex == 1 && provOrders.typeOrders == null) {
+        //   WidgetsBinding.instance.addPostFrameCallback((_) {
+        //     showDialog(
+        //       context: context,
+        //       builder: (_) => typeMenuDialog.getDialog(context),
+        //     );
+        //   });
+        // }
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: _bodyFill[_selectedIndex],
+        );
       }),
-      floatingActionButton: (_selectedIndex == 1)
+      floatingActionButton: (_selectedIndex == 0 || _selectedIndex == 1)
           ? FloatingActionButton.extended(
               backgroundColor: Theme.of(context).colorScheme.primary,
               onPressed: () {
