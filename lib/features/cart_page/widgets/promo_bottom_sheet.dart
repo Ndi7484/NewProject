@@ -14,19 +14,6 @@ class PromoBottomSheet {
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.6,
           child: ListView(children: [
-            (provOrders.paramVoucherValid)
-                ? Container(
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Text(
-                      'Voucher ${provOrders.tmpVoucherName} is not Valid',
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                      softWrap: true,
-                    ),
-                  )
-                : Container(),
             ...List.generate(
                 listPromo.length,
                 (index) => Column(
@@ -36,9 +23,10 @@ class PromoBottomSheet {
                             var result = provPromo.validatePromo(
                                 listPromo[index], provOrders.paramTotalsInt);
                             provOrders.changeVoucherValid(
-                                result, listPromo[index]);
+                                result, listPromo[index], context);
                             if (result) {
                               Navigator.pop(context);
+                            } else {
                             }
                           },
                           child: Container(

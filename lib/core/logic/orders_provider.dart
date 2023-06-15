@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
+import 'package:flutter_flushbar/flutter_flushbar.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -38,11 +39,20 @@ class OrdersProvider extends ChangeNotifier {
   List<FoodMenu>? paramListOrder;
   Promo? paramVoucherCode;
   bool paramVoucherValid = false;
-  String tmpVoucherName = '';
-  void changeVoucherValid(value, Promo vochCode) {
+  void changeVoucherValid(bool value, Promo vochCode, context) {
     paramVoucherValid = value;
-    if (!value) {
+    if (value) {
       paramVoucherCode = vochCode;
+    } else {
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        messageText: Text(
+          'Voucher ${vochCode.promoID} is not valid',
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 2),
+      ).show(context);
     }
     notifyListeners();
   }

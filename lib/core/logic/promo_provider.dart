@@ -82,6 +82,7 @@ class PromoProvider extends ChangeNotifier {
   }
 
   bool validatePromo(Promo namePromo, int cartTotals) {
+    print('${namePromo.minTrans}--${cartTotals}');
     if (namePromo.minTrans < cartTotals) {
       return true;
     }
