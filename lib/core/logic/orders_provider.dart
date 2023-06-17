@@ -73,6 +73,16 @@ class OrdersProvider extends ChangeNotifier {
   // sub totals parameter
   int paramSubTotalsInt = 0;
   String paramSubTotals = '0';
+  double paramDeliveryInt = 0;
+  String paramDelivery = '0';
+  double paramVoucherValInt = 0;
+  String paramVoucherVal = '0';
+  double paramPointsValInt = 0;
+  String paramPointsVal = '0';
+  // totals
+  double paramTotalPayInt = 0;
+  String paramTotalPay = '0';
+
 
   TypeOrder? _typeOrders;
   TypeOrder? get typeOrders => _typeOrders;
