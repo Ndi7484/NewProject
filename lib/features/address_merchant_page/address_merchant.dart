@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/logic/,erchant_provider.dart';
+import 'package:flutter_application_1/core/logic/merchant_provider.dart';
 // import 'package:flutter_application_1/core/logic/account_provider.dart';
 // import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';

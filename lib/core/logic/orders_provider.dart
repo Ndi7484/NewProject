@@ -75,6 +75,11 @@ class OrdersProvider extends ChangeNotifier {
   // points calculation
   bool _pointsUse = false;
   bool get pointsUse => _pointsUse;
+  set pointsUse(value) {
+    _pointsUse = value;
+    notifyListeners();
+  }
+
   int paramMuchPoints = 0;
   String paramMuchPointsStr = '';
   setPointsUse(value, Account account) {
@@ -90,6 +95,9 @@ class OrdersProvider extends ChangeNotifier {
       paramMuchPoints = tmp;
       paramMuchPointsStr =
           formatter.format(tmp).toString().replaceAll(',', '.');
+    }else{
+      paramMuchPoints = 0;
+      paramMuchPointsStr = '';
     }
     countTotals();
     // notifyListeners();
@@ -145,7 +153,6 @@ class OrdersProvider extends ChangeNotifier {
   int paramPointsGetInt = 0;
   String paramPointsGet = '0';
 
-
   // calculate sub total of menu
   void calculateSubTotals(context) {
     MenuProvider provMenu = Provider.of<MenuProvider>(context, listen: false);
@@ -178,7 +185,8 @@ class OrdersProvider extends ChangeNotifier {
     paramTotalPay =
         formatter.format(paramTotalPayInt).toString().replaceAll(',', '.');
     paramPointsGetInt = (paramTotalPayInt * 0.03).floor();
-    paramPointsGet = formatter.format(paramPointsGetInt).toString().replaceAll(',', '.');
+    paramPointsGet =
+        formatter.format(paramPointsGetInt).toString().replaceAll(',', '.');
     notifyListeners();
   }
 
@@ -210,5 +218,6 @@ class OrdersProvider extends ChangeNotifier {
     paramMuchPointsStr = '';
     // paramTotalPay = '';
     // paramTotalPayInt = 0;
+    notifyListeners();
   }
 }

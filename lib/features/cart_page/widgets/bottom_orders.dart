@@ -11,7 +11,7 @@ class BottomOrders extends StatefulWidget {
 }
 
 class _BottomOrdersState extends State<BottomOrders> {
-  bool switchPoints = false;
+  // bool switchPoints = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +43,11 @@ class _BottomOrdersState extends State<BottomOrders> {
                 (provAccount.selectedAccount!.points > 0)
                     ? Switch(
                         // points is not 0 or less
-                        value: switchPoints,
+                        value: provOrders.pointsUse,
                         onChanged: (bool value) {
                           setState(() {
-                            switchPoints = !switchPoints;
                             provOrders.setPointsUse(
-                                switchPoints, provAccount.selectedAccount!);
+                                value, provAccount.selectedAccount!);
                           });
                         },
                       )

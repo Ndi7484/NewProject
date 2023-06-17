@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/logic/,erchant_provider.dart';
+import 'package:flutter_application_1/core/logic/merchant_provider.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
@@ -82,71 +82,67 @@ class _CartPageState extends State<CartPage> {
               child: ListView(
                 children: [
                   Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      // dropdown re-type orders type
-                      child: DropdownButton(
-                          value: dropdownValue,
-                          itemHeight: MediaQuery.of(context).size.height * 0.1,
-                          icon: const Icon(
-                            Icons.arrow_drop_down_sharp,
-                            color: Colors.red,
+                    padding: const EdgeInsets.all(8.0),
+                    // dropdown re-type orders type
+                    child: DropdownButton(
+                      value: dropdownValue,
+                      itemHeight: MediaQuery.of(context).size.height * 0.1,
+                      icon: const Icon(
+                        Icons.arrow_drop_down_sharp,
+                        color: Colors.red,
+                      ),
+                      style: const TextStyle(color: Colors.black),
+                      underline: Container(
+                        height: 2,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          dropdownValue = value!;
+                          switch (dropdownValue) {
+                            case 'Delivery':
+                              provOrders.typeOrders = TypeOrder.delivery;
+                              break;
+                            case 'Takeaway':
+                              provOrders.typeOrders = TypeOrder.takeaway;
+                              break;
+                            case 'DineIn':
+                              provOrders.typeOrders = TypeOrder.dinein;
+                              break;
+                            default:
+                              provOrders.typeOrders = TypeOrder.fail;
+                          }
+                          provOrders.softReset();
+                          provOrders.calculateSubTotals(context);
+                        });
+                      },
+                      items: List.generate(
+                        list.length,
+                        (index) => DropdownMenuItem(
+                          value: list[index],
+                          child: Row(
+                            children: [
+                              // const Icon(Icons.abc),
+                              Image.asset(
+                                'assets/etc/${list[index]}.png',
+                                width: MediaQuery.of(context).size.width * 0.15,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.08,
+                                fit: BoxFit.contain,
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(list[index]),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                              ),
+                            ],
                           ),
-                          style: const TextStyle(color: Colors.black),
-                          underline: Container(
-                            height: 2,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          onChanged: (String? value) {
-                            setState(() {
-                              dropdownValue = value!;
-                              switch (dropdownValue) {
-                                case 'Delivery':
-                                  provOrders.typeOrders = TypeOrder.delivery;
-                                  break;
-                                case 'Takeaway':
-                                  provOrders.typeOrders = TypeOrder.takeaway;
-                                  break;
-                                case 'DineIn':
-                                  provOrders.typeOrders = TypeOrder.dinein;
-                                  break;
-                                default:
-                                  provOrders.typeOrders = TypeOrder.fail;
-                              }
-                              provOrders.softReset();
-                            });
-                          },
-                          items: List.generate(
-                              list.length,
-                              (index) => DropdownMenuItem(
-                                    value: list[index],
-                                    child: Row(
-                                      children: [
-                                        // const Icon(Icons.abc),
-                                        Image.asset(
-                                          'assets/etc/${list[index]}.png',
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.15,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.08,
-                                          fit: BoxFit.contain,
-                                        ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        Text(list[index]),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5,
-                                        ),
-                                      ],
-                                    ),
-                                  )))),
+                        ),
+                      ),
+                    ),
+                  ),
                   // address state
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
@@ -438,9 +434,7 @@ class _CartPageState extends State<CartPage> {
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: () {
-                      
-                    },
+                    onTap: () {},
                     child: Icon(
                       Icons.help_outline_rounded,
                       color: Colors.green.shade900,
