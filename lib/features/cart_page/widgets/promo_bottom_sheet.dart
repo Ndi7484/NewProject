@@ -21,12 +21,11 @@ class PromoBottomSheet {
                         GestureDetector(
                           onTap: () {
                             var result = provPromo.validatePromo(
-                                listPromo[index], provOrders.paramTotalsInt);
+                                listPromo[index], provOrders.paramSubTotalsInt, provOrders.typeOrders);
                             provOrders.changeVoucherValid(
                                 result, listPromo[index], context);
                             if (result) {
                               Navigator.pop(context);
-                            } else {
                             }
                           },
                           child: Container(

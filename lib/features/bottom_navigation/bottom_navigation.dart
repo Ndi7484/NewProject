@@ -7,7 +7,6 @@ import 'package:flutter_application_1/features/cart_page/cart_page.dart';
 import 'package:flutter_application_1/features/main_page/main_page.dart';
 import 'package:flutter_application_1/features/menu_page/menu_page.dart';
 import 'package:flutter_application_1/features/points_page/points_page.dart';
-import 'package:flutter_application_1/features/zzz_testing_ndimas.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavigationPage extends StatefulWidget {
@@ -156,7 +155,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                               style: TextStyle(color: Colors.white60),
                             ),
                           ),
-                          Text('Rp. ${provOrders.paramTotals},-'),
+                          Text('Rp. ${provOrders.paramSubTotals},-'),
                         ],
                       ),
               ))

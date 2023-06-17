@@ -1,6 +1,7 @@
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/core/logic/orders_provider.dart';
 
 class Promo {
   Promo({
@@ -81,9 +82,19 @@ class PromoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool validatePromo(Promo namePromo, int cartTotals) {
-    print('${namePromo.minTrans}--${cartTotals}');
-    if (namePromo.minTrans < cartTotals) {
+  bool validatePromo(Promo namePromo, int cartTotals, TypeOrder? typeOrders) {
+    // print('${namePromo.minTrans}--${cartTotals}');
+    List<TypeOrder> tmp = [];
+    if (namePromo.typeOrder == 'Delivery' || namePromo.typeOrder == 'All'){
+      tmp.add(TypeOrder.delivery);
+    }
+    if (namePromo.typeOrder == 'Takeaway' || namePromo.typeOrder == 'All'){
+      tmp.add(TypeOrder.takeaway);
+    }
+    if (namePromo.typeOrder == 'Dine-In' || namePromo.typeOrder == 'All'){
+      tmp.add(TypeOrder.dinein);
+    }
+    if (namePromo.minTrans < cartTotals && tmp.contains(typeOrders ?? TypeOrder.fail)) {
       return true;
     }
     return false;

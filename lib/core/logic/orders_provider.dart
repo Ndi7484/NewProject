@@ -69,8 +69,10 @@ class OrdersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int paramTotalsInt = 0;
-  String paramTotals = '0';
+  // calculation parameter
+  // sub totals parameter
+  int paramSubTotalsInt = 0;
+  String paramSubTotals = '0';
 
   TypeOrder? _typeOrders;
   TypeOrder? get typeOrders => _typeOrders;
@@ -81,7 +83,7 @@ class OrdersProvider extends ChangeNotifier {
 
   void addOrders(key, context) {
     _listOrders[key] = (_listOrders[key] ?? 0) + 1;
-    calculateTotals(context);
+    calculateSubTotals(context);
     notifyListeners();
   }
 
@@ -90,11 +92,11 @@ class OrdersProvider extends ChangeNotifier {
     if (_listOrders[key]! < 0) {
       _listOrders[key] = 0;
     }
-    calculateTotals(context);
+    calculateSubTotals(context);
     notifyListeners();
   }
 
-  void calculateTotals(context) {
+  void calculateSubTotals(context) {
     MenuProvider provMenu = Provider.of<MenuProvider>(context, listen: false);
     int totals = 0;
     var arrKey = listOrders.keys.toList();
@@ -112,8 +114,8 @@ class OrdersProvider extends ChangeNotifier {
               menuPriceString: '0'));
       totals = totals + found.menuPrice * int.parse(listOrders[el].toString());
     }
-    paramTotals = formatter.format(totals).toString().replaceAll(',', '.');
-    paramTotalsInt = totals;
+    paramSubTotals = formatter.format(totals).toString().replaceAll(',', '.');
+    paramSubTotalsInt = totals;
     notifyListeners();
   }
 
@@ -122,8 +124,8 @@ class OrdersProvider extends ChangeNotifier {
     paramAccountInformation = null;
     paramListOrder = null;
     paramVoucherCode = null;
-    paramTotals = '0';
-    paramTotalsInt = 0;
+    paramSubTotals = '0';
+    paramSubTotalsInt = 0;
     pointsUse = false;
   }
 }

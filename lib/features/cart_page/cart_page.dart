@@ -101,6 +101,7 @@ class _CartPageState extends State<CartPage> {
                               default:
                                 provOrders.typeOrders = TypeOrder.fail;
                             }
+                            provOrders.paramVoucherCode = null;
                           });
                         },
                         items: List.generate(
@@ -197,6 +198,9 @@ class _CartPageState extends State<CartPage> {
                         child: Center(
                           child: Column(children: [
                             Image.asset('assets/etc/Empty_Orders.png'),
+                            const SizedBox(
+                              height: 5,
+                            ),
                             const Text('There is no orders yet..'),
                           ]),
                         ),
@@ -211,13 +215,17 @@ class _CartPageState extends State<CartPage> {
                   child: GestureDetector(
                     onTap: () {
                       bottomSheet.getBottomSheet(
-                        context, provPromo.listPromo, provOrders, provPromo);
+                          context, provPromo.listPromo, provOrders, provPromo);
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: (provOrders.paramVoucherCode == null)
+                            ? Colors.grey[200]
+                            : Colors.lightGreen,
                         border: Border.all(
-                          color: Colors.grey,
+                          color: (provOrders.paramVoucherCode == null)
+                              ? Colors.grey
+                              : Colors.green,
                           width: 1.0,
                         ),
                         boxShadow: const [
@@ -230,21 +238,25 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ],
                       ),
-                      child: const ListTile(
+                      child: ListTile(
                         leading: Icon(
                           Icons.discount,
-                          color: Colors.red,
+                          color: (provOrders.paramVoucherCode == null)
+                              ? Colors.red
+                              : const Color.fromARGB(255, 47, 110, 49),
                         ),
                         title: Text(
-                          "Use Voucher",
-                          style: TextStyle(color: Colors.black),
+                          (provOrders.paramVoucherCode == null)
+                              ? "Use Voucher"
+                              : "Voucher ${provOrders.paramVoucherCode!.promoID} Used",
+                          style: const TextStyle(color: Colors.black),
                         ),
-                        trailing: Icon(Icons.arrow_right),
+                        trailing: const Icon(Icons.arrow_right),
                       ),
                     ),
                   ),
                 ),
-                
+
                 Container(
                   padding: const EdgeInsets.only(bottom: 2),
                   decoration: const BoxDecoration(
@@ -280,26 +292,30 @@ class _CartPageState extends State<CartPage> {
                 // SUB TOTAL
                 TransactionLabel(
                   label: 'Sub-total',
-                  price: provOrders.paramTotals,
+                  price: provOrders.paramSubTotals,
                 ),
 
                 // DELIVERY FEE
-                TransactionLabel(
-                  label: 'Delivery Fee',
-                  price: provOrders.paramTotals,
-                ),
+                (provOrders.typeOrders == TypeOrder.delivery)
+                    ? TransactionLabel(
+                        label: 'Delivery Fee',
+                        price: provOrders.paramSubTotals,
+                      )
+                    : Container(),
 
                 // VOUCHER
                 TransactionLabel(
                   label: 'Voucher ABCD',
-                  price: provOrders.paramTotals,
+                  price: provOrders.paramSubTotals,
                 ),
 
                 // POINTS
-                TransactionLabel(
-                  label: 'Points used',
-                  price: provOrders.paramTotals,
-                ),
+                (provOrders.pointsUse)
+                    ? TransactionLabel(
+                        label: 'Points used',
+                        price: provOrders.paramSubTotals,
+                      )
+                    : Container(),
 
                 // line red
                 Padding(
@@ -338,7 +354,7 @@ class _CartPageState extends State<CartPage> {
                             ),
                             const Spacer(),
                             Text(
-                              provOrders.paramTotals,
+                              provOrders.paramSubTotals,
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),

@@ -19,7 +19,7 @@ class _MenuPageState extends State<MenuPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    final provMenu = Provider.of<MenuProvider>(context);
+    // final provMenu = Provider.of<MenuProvider>(context);
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(
