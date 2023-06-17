@@ -271,7 +271,7 @@ class _MainPageState extends State<MainPage> {
                     Border.all(color: Theme.of(context).colorScheme.primary)),
           ),
         ),
-        Padding(padding: EdgeInsets.all(8.0)),
+        const Padding(padding: EdgeInsets.all(8.0)),
         Padding(
           padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.2,
               0, MediaQuery.of(context).size.width * 0.2, 0),

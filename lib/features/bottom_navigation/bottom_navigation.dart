@@ -119,6 +119,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                     );
                   });
                 }
+                provOrders.calculateSubTotals(context);
                 Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const CartPage()));
               },
@@ -159,24 +160,6 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                         ],
                       ),
               ))
-          // FloatingActionButton(
-          //     onPressed: () {
-          // if (provOrders.typeOrders == null) {
-          //   WidgetsBinding.instance.addPostFrameCallback((_) {
-          //     showDialog(
-          //       context: context,
-          //       builder: (_) => typeMenuDialog.getDialog(context),
-          //     );
-          //   });
-          // }
-          // Navigator.push(context,
-          //     MaterialPageRoute(builder: (_) => const CartPage()));
-          //     },
-          //     backgroundColor: Theme.of(context).colorScheme.primary,
-          //     child: const Icon(
-          //       Icons.shopping_basket,
-          //       color: Colors.white,
-          //     ))
           : null,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

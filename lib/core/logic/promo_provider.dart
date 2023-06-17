@@ -20,6 +20,7 @@ class Promo {
     required this.dateExp,
     required this.monthExp,
     required this.yearExp,
+    required this.percentage,
   });
   String promoID;
   String promoName;
@@ -36,6 +37,7 @@ class Promo {
   int dateExp;
   int monthExp;
   int yearExp;
+  double percentage;
 }
 
 class PromoProvider extends ChangeNotifier {
@@ -70,6 +72,7 @@ class PromoProvider extends ChangeNotifier {
           dateExp: int.parse(row[12]!.value.toString()),
           monthExp: int.parse(row[13]!.value.toString()),
           yearExp: int.parse(row[14]!.value.toString()),
+          percentage: double.parse(row[15]!.value.toString()),
         );
       },
     );
@@ -85,16 +88,17 @@ class PromoProvider extends ChangeNotifier {
   bool validatePromo(Promo namePromo, int cartTotals, TypeOrder? typeOrders) {
     // print('${namePromo.minTrans}--${cartTotals}');
     List<TypeOrder> tmp = [];
-    if (namePromo.typeOrder == 'Delivery' || namePromo.typeOrder == 'All'){
+    if (namePromo.typeOrder == 'Delivery' || namePromo.typeOrder == 'All') {
       tmp.add(TypeOrder.delivery);
     }
-    if (namePromo.typeOrder == 'Takeaway' || namePromo.typeOrder == 'All'){
+    if (namePromo.typeOrder == 'Takeaway' || namePromo.typeOrder == 'All') {
       tmp.add(TypeOrder.takeaway);
     }
-    if (namePromo.typeOrder == 'Dine-In' || namePromo.typeOrder == 'All'){
+    if (namePromo.typeOrder == 'Dine-In' || namePromo.typeOrder == 'All') {
       tmp.add(TypeOrder.dinein);
     }
-    if (namePromo.minTrans < cartTotals && tmp.contains(typeOrders ?? TypeOrder.fail)) {
+    if (namePromo.minTrans < cartTotals &&
+        tmp.contains(typeOrders ?? TypeOrder.fail)) {
       return true;
     }
     return false;

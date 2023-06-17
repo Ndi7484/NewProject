@@ -13,9 +13,6 @@ class AddressPage extends StatefulWidget {
 }
 
 class _AddressPageState extends State<AddressPage> {
-  bool _ishold = false;
-  bool _isTriggred = false;
-
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);

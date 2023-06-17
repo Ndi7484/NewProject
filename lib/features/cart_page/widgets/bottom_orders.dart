@@ -47,7 +47,8 @@ class _BottomOrdersState extends State<BottomOrders> {
                         onChanged: (bool value) {
                           setState(() {
                             switchPoints = !switchPoints;
-                            provOrders.pointsUse = switchPoints;
+                            provOrders.setPointsUse(
+                                switchPoints, provAccount.selectedAccount!);
                           });
                         },
                       )
@@ -65,6 +66,7 @@ class _BottomOrdersState extends State<BottomOrders> {
               children: [
                 GestureDetector(
                   onTap: () {
+                    provOrders.softReset();
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -121,33 +123,6 @@ class _BottomOrdersState extends State<BottomOrders> {
                     ),
                   ),
                 ),
-
-                // ElevatedButton(
-                //     onPressed: () {},
-                //     style: ButtonStyle(
-                //         backgroundColor:
-                //             MaterialStateProperty.resolveWith(
-                //                 (states) => Colors.white)),
-                //     child: Row(
-                //       children: [
-                //         Icon(
-                //           Icons.add,
-                //           color: Theme.of(context).colorScheme.primary,
-                //         ),
-                //         const SizedBox(
-                //           width: 5,
-                //         ),
-                //         Text(
-                //           'Orders',
-                //           style: TextStyle(
-                //               color:
-                //                   Theme.of(context).colorScheme.primary),
-                //         ),
-                //       ],
-                //     )),
-                // const Spacer(),
-                // ElevatedButton(
-                //     onPressed: () {}, child: Text("Choose Payment")),
               ],
             ),
           ),

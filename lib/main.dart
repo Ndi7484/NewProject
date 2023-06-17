@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/,erchant_provider.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/logic/carousel_provider.dart';
@@ -16,7 +17,6 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        // ChangeNotifierProvider(create: (_) => CounterProvider()),
         ChangeNotifierProvider(
             create: (_) => AccountProvider()
               ..resetParam()
@@ -32,6 +32,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => MenuProvider()..readMenu()),
         ChangeNotifierProvider(create: (_) => PageProvider()),
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
+        ChangeNotifierProvider(create: (_) => MerchantProvider()..resetParam()..readMerchant()),
       ],
       child: const MyApp(),
     ),
@@ -50,9 +51,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
               .copyWith(secondary: Colors.grey[850])),
       home: const LoginPage(),
-      // const PaymentMethodPage(),
-      // debugShowCheckedModeBanner: false,
-      // home: const BottomNavigationPage(),
     );
   }
 }

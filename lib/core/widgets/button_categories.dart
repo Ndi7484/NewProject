@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
+import 'package:flutter_application_1/features/address_merchant_page/address_merchant.dart';
 import 'package:provider/provider.dart';
 
 class ButtonCategoriesMain extends StatelessWidget {
@@ -30,6 +31,7 @@ class ButtonCategoriesMain extends StatelessWidget {
           (index) => GestureDetector(
                 onTap: () {
                   provOrders.typeOrders = listTypeOrder[index];
+                  // if dellivery
                   if (index == 0) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -37,7 +39,7 @@ class ButtonCategoriesMain extends StatelessWidget {
                         duration: Duration(seconds: 2),
                       ),
                     );
-                    provPage.selectedIndex = 1;
+                    // if takeaway
                   } else if (index == 1) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -49,26 +51,9 @@ class ButtonCategoriesMain extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        fullscreenDialog: true,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('AlertDialog Title'),
-                            content: const Text('AlertDialog description'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, 'Cancel'),
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, 'OK'),
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                          builder: (_) => const AddressMerchantPage()),
                     );
+                    // if dine in
                   } else if (index == 2) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -77,6 +62,7 @@ class ButtonCategoriesMain extends StatelessWidget {
                       ),
                     );
                   }
+                  provPage.selectedIndex = 1;
                 },
                 child: Card(
                   color: Theme.of(context).colorScheme.primary,
