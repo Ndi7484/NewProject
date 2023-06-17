@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -11,9 +12,13 @@ class BottomOrders extends StatefulWidget {
 
 class _BottomOrdersState extends State<BottomOrders> {
   bool switchPoints = false;
+
   @override
   Widget build(BuildContext context) {
+    final provAccount = Provider.of<AccountProvider>(context);
     final provOrders = Provider.of<OrdersProvider>(context);
+    // print(provAccount.selectedAccount!.points);
+
     return Container(
       decoration: const BoxDecoration(
           color: Colors.white,
@@ -29,20 +34,28 @@ class _BottomOrdersState extends State<BottomOrders> {
                   "Use Points : ",
                   style: TextStyle(fontSize: 15),
                 ),
-                const Text(
-                  "17.000",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                Text(
+                  provAccount.selectedAccount!.pointsString,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
-                Switch(
-                  value: switchPoints,
-                  onChanged: (bool value) {
-                    setState(() {
-                      switchPoints = !switchPoints;
-                      provOrders.pointsUse = switchPoints;
-                    });
-                  },
-                ),
+                (provAccount.selectedAccount!.points > 0)
+                    ? Switch(
+                        // points is not 0 or less
+                        value: switchPoints,
+                        onChanged: (bool value) {
+                          setState(() {
+                            switchPoints = !switchPoints;
+                            provOrders.pointsUse = switchPoints;
+                          });
+                        },
+                      )
+                    : Switch(
+                        value: false,
+                        onChanged: (value) {},
+                        inactiveThumbColor: Colors.grey[300],
+                      )
               ],
             ),
           ),
