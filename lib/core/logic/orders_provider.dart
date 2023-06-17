@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
@@ -95,7 +97,7 @@ class OrdersProvider extends ChangeNotifier {
       paramMuchPoints = tmp;
       paramMuchPointsStr =
           formatter.format(tmp).toString().replaceAll(',', '.');
-    }else{
+    } else {
       paramMuchPoints = 0;
       paramMuchPointsStr = '';
     }
@@ -141,12 +143,72 @@ class OrdersProvider extends ChangeNotifier {
     countTotals();
   }
 
+  // delivery check calculate by lang and long of map
+  int paramDeliveryVal = 0;
+  String paramDeliveryStr = '0';
+  bool validAlamat = false;
+  double smallestDistance = 0;
+  // other param
+  double _degreesToRadians(double degrees) {
+    return degrees * pi / 180;
+  }
+
+  double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    const double earthRadius = 6371; // in kilometers
+    // Convert degrees to radians
+    double lat1Rad = _degreesToRadians(lat1);
+    double lon1Rad = _degreesToRadians(lon1);
+    double lat2Rad = _degreesToRadians(lat2);
+    double lon2Rad = _degreesToRadians(lon2);
+    // Calculate the difference between the latitudes and longitudes
+    double latDiff = lat2Rad - lat1Rad;
+    double lonDiff = lon2Rad - lon1Rad;
+    // Apply the Haversine formula
+    double a = pow(sin(latDiff / 2), 2) +
+        cos(lat1Rad) * cos(lat2Rad) * pow(sin(lonDiff / 2), 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    // Calculate the distance
+    double distance = earthRadius * c;
+    return distance;
+  } // in kilometers
+
+  // calculate
+  void calculateDelivery(Alamat? custAlamat, List<Alamat> mercAlamat) {
+    if (custAlamat == null) {
+      validAlamat = false;
+    } else {
+      validAlamat = true;
+      var listAlamatValue = [];
+      for (var i = 0; i < mercAlamat.length; i++) {
+        listAlamatValue.add(calculateDistance(
+            custAlamat.alamatLang,
+            custAlamat.alamatLong,
+            mercAlamat[i].alamatLang,
+            mercAlamat[i].alamatLong));
+      }
+      smallestDistance = listAlamatValue.reduce((currentMin, nextNumber) =>
+          currentMin < nextNumber ? currentMin : nextNumber);
+      calculateDeliveryNext();
+    }
+  }
+
+  void calculateDeliveryNext() {
+    // print(smallestDistance);
+    // constanta of distance vs price; just random calculation
+    var tmp = (3.7 * smallestDistance * 1000).toInt() +
+        ((0.2 * smallestDistance < 2.5) ? 2 * smallestDistance * 1000 : 0)
+            .toInt();
+    paramDeliveryVal = ((tmp / 1000).ceil()) * 1000;
+    paramDeliveryStr =
+        formatter.format(paramDeliveryVal).toString().replaceAll(',', '.');
+    notifyListeners();
+  }
+
   // calculation parameter
   // sub totals parameter
   int paramSubTotalsInt = 0;
   String paramSubTotals = '0';
-  double paramDeliveryVal = 0;
-  String paramDeliveryStr = '0';
   // totals
   int paramTotalPayInt = 0;
   String paramTotalPay = '0';
@@ -179,7 +241,8 @@ class OrdersProvider extends ChangeNotifier {
   }
 
   void countTotals() {
-    paramTotalPayInt = paramSubTotalsInt.toInt() -
+    paramTotalPayInt = paramSubTotalsInt.toInt() +
+        paramDeliveryVal.toInt() -
         paramVoucherDisc.toInt() -
         paramMuchPoints.toInt();
     paramTotalPay =

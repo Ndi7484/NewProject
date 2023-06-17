@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
+import 'package:flutter_application_1/core/logic/merchant_provider.dart';
+import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/widgets/address_listtile.dart';
 import 'package:flutter_application_1/features/add_address_page/add_address_page.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,7 @@ class _AddressPageState extends State<AddressPage> {
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
     final provAddress = Provider.of<AddressProvider>(context);
+    final provOrders = Provider.of<OrdersProvider>(context);
     // set address here
     provAddress.getAddress(provAccount.selectedAccount!.email);
 
@@ -37,6 +40,8 @@ class _AddressPageState extends State<AddressPage> {
                       onTap: () {
                         provAddress.changeSelected(
                             provAddress.listSelectedAlamat[index]);
+                            // set the value delayed
+                        provOrders.calculateSubTotals(context);
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

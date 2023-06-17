@@ -334,10 +334,16 @@ class _CartPageState extends State<CartPage> {
 
                   // DELIVERY FEE
                   (provOrders.typeOrders == TypeOrder.delivery)
-                      ? TransactionLabel(
-                          label: 'Delivery Fee',
-                          price: provOrders.paramSubTotals,
-                        )
+                      ? Builder(builder: (context) {
+                          // calculate delivery first
+                          provOrders.calculateDelivery(
+                              provAddress.selectedAlamat,
+                              provMerchant.listMerchant);
+                          return TransactionLabel(
+                            label: 'Delivery Fee',
+                            price: provOrders.paramDeliveryStr,
+                          );
+                        })
                       : Container(),
 
                   // VOUCHER
