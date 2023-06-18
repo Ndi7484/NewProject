@@ -38,7 +38,6 @@ class _QRViewPageState extends State<QRViewPage> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          Expanded(flex: 4, child: _buildQrView(context)),
           Expanded(
             flex: 1,
             child: FittedBox(
@@ -46,17 +45,15 @@ class _QRViewPageState extends State<QRViewPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  if (result != null)
-                    Text(
-                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  else
-                    const Text('Scan a code'),
+                  (result != null)
+                      ? Text(result!.code!)
+                      : const Text('Scan a code'),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        margin: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(16),
                         child: ElevatedButton(
                             onPressed: () async {
                               await controller?.toggleFlash();
@@ -65,7 +62,18 @@ class _QRViewPageState extends State<QRViewPage> {
                             child: FutureBuilder(
                               future: controller?.getFlashStatus(),
                               builder: (context, snapshot) {
-                                return Text('Flash: ${snapshot.data}');
+                                return Row(
+                                  children: [
+                                    Icon((snapshot.data ?? false)
+                                        ? Icons.flash_on
+                                        : Icons.flash_off),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                        'Flash: ${(snapshot.data ?? false) ? 'on' : 'off'}'),
+                                  ],
+                                );
                               },
                             )),
                       ),
@@ -74,7 +82,25 @@ class _QRViewPageState extends State<QRViewPage> {
                 ],
               ),
             ),
-          )
+          ),
+          Expanded(
+              flex: 4,
+              child: Stack(children: [
+                _buildQrView(context),
+                Positioned(
+                  bottom: MediaQuery.of(context).size.height * 0.06,
+                  left: MediaQuery.of(context).size.width * 0.35,
+                  child: GestureDetector(
+                      onTap: () {},
+                      child: const Text(
+                        "Can't Scan?",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      )),
+                )
+              ])),
         ],
       ),
     );

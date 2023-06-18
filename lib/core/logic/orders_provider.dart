@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
+import 'package:flutter_application_1/core/logic/payment_provider.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
 import 'package:flutter_flushbar/flutter_flushbar.dart';
 import 'package:intl/intl.dart';
@@ -13,25 +14,36 @@ enum TypeOrder { delivery, takeaway, dinein, fail }
 
 class OrdersCart {
   OrdersCart({
+    required this.dateTime,
     required this.typeOrder,
     this.deliveryAddress,
     this.takeawayAddress,
     this.dineInCode,
     required this.accountInformation,
     required this.listOrder,
+    this.deliveryVal,
     required this.voucherCode,
     required this.pointsUse,
-    this.muchPoints,
+    required this.voucherDisc,
+    required this.pointsMuch,
+    required this.pointsGet,
+    this.typePayment,
   });
+  String dateTime;
   TypeOrder typeOrder;
   Alamat? deliveryAddress;
   Alamat? takeawayAddress;
   String? dineInCode;
   Account accountInformation;
-  List<FoodMenu> listOrder;
-  Promo voucherCode;
+  Map<String, int> listOrder;
+  int? deliveryVal;
+  Promo? voucherCode;
   bool pointsUse;
-  int? muchPoints;
+  int voucherDisc;
+  int pointsMuch;
+  int pointsGet;
+  // typePayment let null first then filled
+  TypePayment? typePayment;
 }
 
 class OrdersProvider extends ChangeNotifier {
@@ -255,6 +267,62 @@ class OrdersProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
+  // we init the orders tidy first
+  OrdersCart? tmpOrdersCartHistory;
+  void setInitOrders() {
+    var tmp;
+    switch (typeOrders) {
+      case TypeOrder.delivery:
+        var tmp = OrdersCart(
+            dateTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+            typeOrder: typeOrders!,
+            accountInformation: paramAccountInformation!,
+            // alamat delivery address
+            deliveryAddress: paramDeliveryAlamat,
+            listOrder: listOrders,
+            // delivery fee
+            deliveryVal: paramDeliveryVal,
+            voucherCode: paramVoucherCode,
+            voucherDisc: paramVoucherDisc,
+            pointsUse: _pointsUse,
+            pointsMuch: paramMuchPoints,
+            pointsGet: paramPointsGetInt);
+        break;
+      case TypeOrder.takeaway:
+        var tmp = OrdersCart(
+            dateTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+            typeOrder: typeOrders!,
+            accountInformation: paramAccountInformation!,
+            // alamat takeaway merchant address
+            takeawayAddress: paramTakeawayAlamat,
+            listOrder: listOrders,
+            voucherCode: paramVoucherCode!,
+            voucherDisc: paramVoucherDisc,
+            pointsUse: _pointsUse,
+            pointsMuch: paramMuchPoints,
+            pointsGet: paramPointsGetInt);
+        break;
+      case TypeOrder.dinein:
+        var tmp = OrdersCart(
+            dateTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+            typeOrder: typeOrders!,
+            accountInformation: paramAccountInformation!,
+            // dine in code in jsonString
+            dineInCode: paramDineInCode,
+            listOrder: listOrders,
+            voucherCode: paramVoucherCode!,
+            voucherDisc: paramVoucherDisc,
+            pointsUse: _pointsUse,
+            pointsMuch: paramMuchPoints,
+            pointsGet: paramPointsGetInt);
+        break;
+      default:
+        tmp = null;
+        break;
+    }
+    tmpOrdersCartHistory = tmp;
+  }
+
   void resetParam() {
     _listOrders = {};
     paramAccountInformation = null;
@@ -269,6 +337,8 @@ class OrdersProvider extends ChangeNotifier {
     paramTotalPay = '';
     paramTotalPayInt = 0;
     _pointsUse = false;
+    paramMuchPoints = 0;
+    paramMuchPointsStr = '';
     // notifyListeners();
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
-import 'package:flutter_application_1/core/logic/merchant_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/widgets/address_listtile.dart';
 import 'package:flutter_application_1/features/add_address_page/add_address_page.dart';
@@ -40,7 +39,9 @@ class _AddressPageState extends State<AddressPage> {
                       onTap: () {
                         provAddress.changeSelected(
                             provAddress.listSelectedAlamat[index]);
-                            // set the value delayed
+                        // set the value delayed
+                        provOrders.paramDeliveryAlamat =
+                            provAddress.listSelectedAlamat[index];
                         provOrders.calculateSubTotals(context);
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(

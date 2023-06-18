@@ -313,7 +313,7 @@ class _CartPageState extends State<CartPage> {
                     padding: const EdgeInsets.only(top: 32),
                     child: GestureDetector(
                       onTap: () {
-                        bottomSheet.getBottomSheet(context, provPromo.listPromo,
+                        bottomSheet.getBottomSheet(context, provPromo.validPromo,
                             provOrders, provPromo);
                       },
                       child: Container(
@@ -356,6 +356,7 @@ class _CartPageState extends State<CartPage> {
                     ),
                   ),
 
+                  // decoration payment lines
                   Container(
                     padding: const EdgeInsets.only(bottom: 2),
                     decoration: const BoxDecoration(

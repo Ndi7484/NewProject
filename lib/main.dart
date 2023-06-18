@@ -6,6 +6,7 @@ import 'package:flutter_application_1/core/logic/carousel_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
+import 'package:flutter_application_1/core/logic/payment_provider.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 // import 'package:flutter_application_1/features/payment_method_page/bank_transfer_page.dart';
 // import 'package:flutter_application_1/features/payment_method_page/ovo.dart';
@@ -36,6 +37,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => PageProvider()),
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
         ChangeNotifierProvider(create: (_) => MerchantProvider()..resetParam()..readMerchant()),
+        ChangeNotifierProvider(create: (_) => PaymentProvider()),
       ],
       child: const MyApp(),
     ),

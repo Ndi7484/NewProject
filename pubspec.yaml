@@ -78,9 +78,7 @@ flutter:
   fonts:
     - family: LeagueGothic
       fonts:
-        # - asset: fonts/LeagueGothic-Regular.ttf
         - asset: fonts/LeagueGothic_Condensed-Regular.ttf
-          # weight: 300
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

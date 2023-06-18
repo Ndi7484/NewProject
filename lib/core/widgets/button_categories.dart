@@ -46,7 +46,7 @@ class ButtonCategoriesMain extends StatelessWidget {
                   } else if (index == 1) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('selected takeaway'),
+                        content: Text('selected takeaway, choose merchant..'),
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -60,7 +60,7 @@ class ButtonCategoriesMain extends StatelessWidget {
                   } else if (index == 2) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('selected dine-in'),
+                        content: Text('selected dine-in, qr first..'),
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -124,18 +124,18 @@ class ButtonCategoriesMain extends StatelessWidget {
                               Stack(children: [
                                 Text(
                                   typeOrderList[index],
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                                Text(
-                                  typeOrderList[index],
                                   style: TextStyle(
                                       foreground: Paint()
                                         ..style = PaintingStyle.stroke
                                         ..strokeWidth = 0.5
                                         ..color = Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                Text(
+                                  typeOrderList[index],
+                                  style: const TextStyle(
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18),
                                 ),
