@@ -42,7 +42,8 @@ class OrdersProvider extends ChangeNotifier {
   Map<String, int> _listOrders = {};
   Map<String, int> get listOrders => _listOrders;
 
-  // list of orders that must be filled : list takeaway or dine-in
+  // list of orders that must be filled : delivery, takeaway or dine-in
+  Alamat? paramDeliveryAlamat;
   Alamat? paramTakeawayAlamat;
   String? paramDineInCode;
 
@@ -102,7 +103,7 @@ class OrdersProvider extends ChangeNotifier {
       paramMuchPointsStr = '';
     }
     countTotals();
-    // notifyListeners();
+    notifyListeners();
   }
 
   // voucher based code checker
@@ -194,15 +195,14 @@ class OrdersProvider extends ChangeNotifier {
   }
 
   void calculateDeliveryNext() {
-    // print(smallestDistance);
     // constanta of distance vs price; just random calculation
-    var tmp = (3.7 * smallestDistance * 1000).toInt() +
-        ((0.2 * smallestDistance < 2.5) ? 2 * smallestDistance * 1000 : 0)
+    var tmp = (3.5 * smallestDistance * 1000).toInt() +
+        ((0.2 * smallestDistance < 3.5) ? 1.5 * smallestDistance * 1000 : 0)
             .toInt();
-    paramDeliveryVal = ((tmp / 1000).ceil()) * 1000;
+    paramDeliveryVal = ((tmp / 1000).floor()) * 1000;
     paramDeliveryStr =
         formatter.format(paramDeliveryVal).toString().replaceAll(',', '.');
-    notifyListeners();
+    // notifyListeners();
   }
 
   // calculation parameter
@@ -247,10 +247,12 @@ class OrdersProvider extends ChangeNotifier {
         paramMuchPoints.toInt();
     paramTotalPay =
         formatter.format(paramTotalPayInt).toString().replaceAll(',', '.');
-    paramPointsGetInt = (paramTotalPayInt * 0.03).floor();
+    paramPointsGetInt =
+        ((paramSubTotalsInt - paramVoucherDisc - paramMuchPoints) * 0.03)
+            .floor();
     paramPointsGet =
         formatter.format(paramPointsGetInt).toString().replaceAll(',', '.');
-    notifyListeners();
+    // notifyListeners();
   }
 
   void resetParam() {
@@ -267,6 +269,7 @@ class OrdersProvider extends ChangeNotifier {
     paramTotalPay = '';
     paramTotalPayInt = 0;
     _pointsUse = false;
+    // notifyListeners();
   }
 
   void softReset() {
@@ -276,9 +279,9 @@ class OrdersProvider extends ChangeNotifier {
     paramVoucherDisc = 0;
     paramVoucherDiscStr = '';
     paramVoucherValid = false;
-    _pointsUse = false;
-    paramMuchPoints = 0;
-    paramMuchPointsStr = '';
+    // _pointsUse = false;
+    // paramMuchPoints = 0;
+    // paramMuchPointsStr = '';
     // paramTotalPay = '';
     // paramTotalPayInt = 0;
     notifyListeners();

@@ -150,7 +150,7 @@ class AccountProvider extends ChangeNotifier {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const BottomNavigationPage(),
+            builder: (context) => BottomNavigationPage(selectNext: 0,),
           ),
         );
       }

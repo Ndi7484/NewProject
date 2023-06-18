@@ -1,7 +1,6 @@
 import 'package:custom_bottom_sheet/custom_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
-// import 'package:flutter_application_1/features/syarat_page/syarat_page.dart';
 import 'package:provider/provider.dart';
 
 class PromoPage extends StatefulWidget {

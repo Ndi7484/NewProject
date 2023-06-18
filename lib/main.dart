@@ -7,6 +7,9 @@ import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
+// import 'package:flutter_application_1/features/payment_method_page/bank_transfer_page.dart';
+// import 'package:flutter_application_1/features/payment_method_page/ovo.dart';
+// import 'package:flutter_application_1/features/payment_method_page/payment_method_page.dart';
 import 'package:provider/provider.dart';
 
 import 'core/logic/promo_provider.dart';

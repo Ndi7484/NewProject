@@ -10,14 +10,21 @@ import 'package:flutter_application_1/features/points_page/points_page.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavigationPage extends StatefulWidget {
-  const BottomNavigationPage({Key? key}) : super(key: key);
+  BottomNavigationPage({super.key, required this.selectNext});
+  int selectNext;
 
   @override
   State<BottomNavigationPage> createState() => _BottomNavigationPageState();
 }
 
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; // Set an initial default value here
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectNext; // Assign the value from widget.selectNext to _selectedIndex
+  }
 
   final List<String> _appBarTitle = [
     'Main Home',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
+import 'package:flutter_application_1/features/payment_method_page/payment_method_page.dart';
 import 'package:provider/provider.dart';
 
 class BottomOrders extends StatefulWidget {
@@ -101,7 +102,12 @@ class _BottomOrdersState extends State<BottomOrders> {
                   width: MediaQuery.of(context).size.width * 0.04,
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const PaymentMethodPage()));
+                  },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.5,
                     height: MediaQuery.of(context).size.height * 0.05,

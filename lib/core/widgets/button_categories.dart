@@ -4,6 +4,7 @@ import 'package:flutter_application_1/core/logic/merchant_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/features/address_merchant_page/address_merchant.dart';
+import 'package:flutter_application_1/features/qr_page_view/qr_page_view.dart';
 import 'package:provider/provider.dart';
 
 class ButtonCategoriesMain extends StatelessWidget {
@@ -61,6 +62,20 @@ class ButtonCategoriesMain extends StatelessWidget {
                       const SnackBar(
                         content: Text('selected dine-in'),
                         duration: Duration(seconds: 2),
+                      ),
+                    );
+                    // special case for qr view page
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //   builder: (context) => QRViewPage(
+                    //     provOrders: provOrders,
+                    //   ),
+                    // ));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => QRViewPage(
+                          provOrders: provOrders,
+                        ),
                       ),
                     );
                   }

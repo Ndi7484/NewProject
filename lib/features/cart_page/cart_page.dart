@@ -9,6 +9,7 @@ import 'package:flutter_application_1/core/widgets/address_listtile.dart';
 import 'package:flutter_application_1/features/address_merchant_page/address_merchant.dart';
 import 'package:flutter_application_1/features/address_page/address_page.dart';
 import 'package:flutter_application_1/features/cart_page/widgets/bottom_orders.dart';
+import 'package:flutter_application_1/features/cart_page/widgets/dine_in_card.dart';
 import 'package:flutter_application_1/features/cart_page/widgets/promo_bottom_sheet.dart';
 import 'package:flutter_application_1/features/menu_page/widgets/menu_card.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,47 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   List<String> list = ['Delivery', 'Takeaway', 'DineIn'];
   var dropdownValue = 'Delivery';
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     // provider instance
+  //     final provOrders = Provider.of<OrdersProvider>(context, listen: false);
+  //     final provAddress = Provider.of<AddressProvider>(context, listen: false);
+  //     final provMerchant =
+  //         Provider.of<MerchantProvider>(context, listen: false);
+  //     provOrders.calculateDelivery(
+  //       provAddress.selectedAlamat,
+  //       provMerchant.listMerchant,
+  //     );
+  //   });
+  // }
+
+  // @override
+  // void dispose(){
+  //   super.dispose();
+  // }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     // This function will be executed after the widget tree is built
+  //     // You can run your following functions here
+  //     // provider instance
+  //     final provOrders = Provider.of<OrdersProvider>(context, listen: false);
+  //     // final provAddress = Provider.of<AddressProvider>(context, listen: false);
+  //     // final provMerchant =
+  //     //     Provider.of<MerchantProvider>(context, listen: false);
+  //     // provOrders.calculateDelivery(
+  //     //   provAddress.selectedAlamat,
+  //     //   provMerchant.listMerchant,
+  //     // );
+  //     provOrders.calculateSubTotals(context);
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     final provOrders = Provider.of<OrdersProvider>(context);
@@ -59,6 +101,15 @@ class _CartPageState extends State<CartPage> {
         break;
       default:
     }
+
+    // this will trigger error on initstate of build
+    // because trigger rebuild when in build state
+    // if (provOrders.typeOrders == TypeOrder.delivery) {
+    //   provOrders.calculateDelivery(
+    //     provAddress.selectedAlamat,
+    //     provMerchant.listMerchant,
+    //   );
+    // }
 
     return WillPopScope(
       onWillPop: () async {
@@ -199,6 +250,17 @@ class _CartPageState extends State<CartPage> {
                         )
                       : Container(),
 
+                  // dine-in address state
+                  (provOrders.typeOrders == TypeOrder.dinein)
+                      ? Padding(
+                          padding: const EdgeInsets.fromLTRB(16,16,16,24),
+                          child: DineInCard(
+                              jsonString: (provOrders.paramDineInCode ??
+                                      '{"place":"","address":"","table":""}')
+                                  .toString()),
+                        )
+                      : Container(),
+
                   const Divider(),
                   const Padding(
                     padding: EdgeInsets.only(left: 8),
@@ -335,10 +397,10 @@ class _CartPageState extends State<CartPage> {
                   // DELIVERY FEE
                   (provOrders.typeOrders == TypeOrder.delivery)
                       ? Builder(builder: (context) {
-                          // calculate delivery first
                           provOrders.calculateDelivery(
-                              provAddress.selectedAlamat,
-                              provMerchant.listMerchant);
+                            provAddress.selectedAlamat,
+                            provMerchant.listMerchant,
+                          );
                           return TransactionLabel(
                             label: 'Delivery Fee',
                             price: provOrders.paramDeliveryStr,
@@ -400,11 +462,15 @@ class _CartPageState extends State<CartPage> {
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               const Spacer(),
-                              Text(
-                                provOrders.paramTotalPay,
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
+                              Builder(builder: (context) {
+                                provOrders.calculateSubTotals(context);
+                                return Text(
+                                  provOrders.paramTotalPay,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                );
+                              }),
                             ],
                           ),
                         ),
@@ -419,6 +485,8 @@ class _CartPageState extends State<CartPage> {
                 ],
               ),
             ),
+
+            // get points green line info
             Container(
               padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
