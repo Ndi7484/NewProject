@@ -1,17 +1,20 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:flutter_application_1/core/logic/page_provider.dart';
+import 'package:flutter_application_1/core/widgets/circular_progress.dart';
 import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
+import 'package:flutter_application_1/features/cart_page/cart_page.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 
 class QRViewPage extends StatefulWidget {
   final OrdersProvider provOrders;
-
-  const QRViewPage({Key? key, required this.provOrders}) : super(key: key);
+  final bool tocart;
+  const QRViewPage({Key? key, required this.provOrders, required this.tocart})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _QRViewPageState();
@@ -35,73 +38,80 @@ class _QRViewPageState extends State<QRViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  (result != null)
-                      ? Text(result!.code!)
-                      : const Text('Scan a code'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(16),
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.toggleFlash();
-                              setState(() {});
-                            },
-                            child: FutureBuilder(
-                              future: controller?.getFlashStatus(),
-                              builder: (context, snapshot) {
-                                return Row(
-                                  children: [
-                                    Icon((snapshot.data ?? false)
-                                        ? Icons.flash_on
-                                        : Icons.flash_off),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                        'Flash: ${(snapshot.data ?? false) ? 'on' : 'off'}'),
-                                  ],
-                                );
+    final provPage = Provider.of<PageProvider>(context);
+    return WillPopScope(
+      onWillPop: () async{
+        provPage.selectedIndex = 0;
+        return true;
+      },
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    (result != null)
+                        ? Text(result!.code!)
+                        : const Text('Scan a code'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.all(16),
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                await controller?.toggleFlash();
+                                setState(() {});
                               },
-                            )),
-                      ),
-                    ],
-                  ),
-                ],
+                              child: FutureBuilder(
+                                future: controller?.getFlashStatus(),
+                                builder: (context, snapshot) {
+                                  return Row(
+                                    children: [
+                                      Icon((snapshot.data ?? false)
+                                          ? Icons.flash_on
+                                          : Icons.flash_off),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                          'Flash: ${(snapshot.data ?? false) ? 'on' : 'off'}'),
+                                    ],
+                                  );
+                                },
+                              )),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-              flex: 4,
-              child: Stack(children: [
-                _buildQrView(context),
-                Positioned(
-                  bottom: MediaQuery.of(context).size.height * 0.06,
-                  left: MediaQuery.of(context).size.width * 0.35,
-                  child: GestureDetector(
-                      onTap: () {},
-                      child: const Text(
-                        "Can't Scan?",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
-                      )),
-                )
-              ])),
-        ],
+            Expanded(
+                flex: 4,
+                child: Stack(children: [
+                  _buildQrView(context),
+                  Positioned(
+                    bottom: MediaQuery.of(context).size.height * 0.06,
+                    left: MediaQuery.of(context).size.width * 0.35,
+                    child: GestureDetector(
+                        onTap: () {},
+                        child: const Text(
+                          "Can't Scan?",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        )),
+                  )
+                ])),
+          ],
+        ),
       ),
     );
   }
@@ -141,13 +151,21 @@ class _QRViewPageState extends State<QRViewPage> {
       // Delay the pop operation by 500 milliseconds (optional)
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => BottomNavigationPage(
-                        selectNext: 1,
-                      )));
-          Navigator.pop(context);
+          if (widget.tocart) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const CircularProgressPage()));
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => const CartPage()));
+          } else {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const CircularProgressPage()));
+            Navigator.pop(context);
+          }
         }
       });
     });

@@ -103,7 +103,6 @@ class _BottomOrdersState extends State<BottomOrders> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // TODO : recheck
                     provOrders.setInitOrders();
                     Navigator.push(
                         context,

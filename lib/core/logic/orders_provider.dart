@@ -270,10 +270,10 @@ class OrdersProvider extends ChangeNotifier {
   // we init the orders tidy first
   OrdersCart? tmpOrdersCartHistory;
   void setInitOrders() {
-    var tmp;
-    switch (typeOrders) {
+    print(_typeOrders);
+    switch (_typeOrders) {
       case TypeOrder.delivery:
-        var tmp = OrdersCart(
+        tmpOrdersCartHistory = OrdersCart(
             dateTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
             typeOrder: typeOrders!,
             accountInformation: paramAccountInformation!,
@@ -289,7 +289,7 @@ class OrdersProvider extends ChangeNotifier {
             pointsGet: paramPointsGetInt);
         break;
       case TypeOrder.takeaway:
-        var tmp = OrdersCart(
+        tmpOrdersCartHistory = OrdersCart(
             dateTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
             typeOrder: typeOrders!,
             accountInformation: paramAccountInformation!,
@@ -303,7 +303,7 @@ class OrdersProvider extends ChangeNotifier {
             pointsGet: paramPointsGetInt);
         break;
       case TypeOrder.dinein:
-        var tmp = OrdersCart(
+        tmpOrdersCartHistory = OrdersCart(
             dateTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
             typeOrder: typeOrders!,
             accountInformation: paramAccountInformation!,
@@ -317,10 +317,10 @@ class OrdersProvider extends ChangeNotifier {
             pointsGet: paramPointsGetInt);
         break;
       default:
-        tmp = null;
+        tmpOrdersCartHistory = null;
         break;
     }
-    tmpOrdersCartHistory = tmp;
+    print(tmpOrdersCartHistory);
   }
 
   void resetParam() {

@@ -117,6 +117,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                                           .listPayment[struct]
                                                           .children[index2]
                                                           .typePay;
+                                                  print('${provOrders.tmpOrdersCartHistory}');
                                                 },
                                               )),
                                     ],
@@ -160,18 +161,20 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                             ),
                             boxShadow: const [
                               BoxShadow(
-                                color: Colors.grey, // Shadow color
-                                spreadRadius: 1.0, // Spread radius
-                                blurRadius: 5.0, // Blur radius
+                                color: Colors.grey,
+                                spreadRadius: 1.0,
+                                blurRadius: 5.0,
                                 offset: Offset(
-                                    0, 3), // Offset in the x and y direction
+                                    0, 3),
                               ),
                             ],
                           ),
                           child: ListTile(
                             onTap: () {
+                              // Handle Bank selection
                               provOrders.tmpOrdersCartHistory!.typePayment =
                                   provPayment.listPayment[struct].typePay;
+                              print(provOrders.tmpOrdersCartHistory);
                             },
                             leading: Image.asset(
                                 provPayment.listPayment[struct].img),

@@ -12,6 +12,7 @@ import 'package:flutter_application_1/features/cart_page/widgets/bottom_orders.d
 import 'package:flutter_application_1/features/cart_page/widgets/dine_in_card.dart';
 import 'package:flutter_application_1/features/cart_page/widgets/promo_bottom_sheet.dart';
 import 'package:flutter_application_1/features/menu_page/widgets/menu_card.dart';
+import 'package:flutter_application_1/features/qr_page_view/qr_page_view.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/transaction_label.dart';
@@ -254,10 +255,24 @@ class _CartPageState extends State<CartPage> {
                   (provOrders.typeOrders == TypeOrder.dinein)
                       ? Padding(
                           padding: const EdgeInsets.fromLTRB(16,16,16,24),
-                          child: DineInCard(
-                              jsonString: (provOrders.paramDineInCode ??
-                                      '{"place":"","address":"","table":""}')
-                                  .toString()),
+                          child: GestureDetector(
+                            onTap: () {
+                              // Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => QRViewPage(
+                                    provOrders: provOrders,
+                                    tocart : true,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: DineInCard(
+                                jsonString: (provOrders.paramDineInCode ??
+                                        '{"place":"Not set","address":"Location address not set","table":"NOT"}')
+                                    .toString()),
+                          ),
                         )
                       : Container(),
 

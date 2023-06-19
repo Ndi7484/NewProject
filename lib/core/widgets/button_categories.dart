@@ -65,16 +65,12 @@ class ButtonCategoriesMain extends StatelessWidget {
                       ),
                     );
                     // special case for qr view page
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //   builder: (context) => QRViewPage(
-                    //     provOrders: provOrders,
-                    //   ),
-                    // ));
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => QRViewPage(
                           provOrders: provOrders,
+                          tocart: false,
                         ),
                       ),
                     );
