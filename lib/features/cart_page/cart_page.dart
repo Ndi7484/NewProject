@@ -28,46 +28,6 @@ class _CartPageState extends State<CartPage> {
   List<String> list = ['Delivery', 'Takeaway', 'DineIn'];
   var dropdownValue = 'Delivery';
 
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     // provider instance
-  //     final provOrders = Provider.of<OrdersProvider>(context, listen: false);
-  //     final provAddress = Provider.of<AddressProvider>(context, listen: false);
-  //     final provMerchant =
-  //         Provider.of<MerchantProvider>(context, listen: false);
-  //     provOrders.calculateDelivery(
-  //       provAddress.selectedAlamat,
-  //       provMerchant.listMerchant,
-  //     );
-  //   });
-  // }
-
-  // @override
-  // void dispose(){
-  //   super.dispose();
-  // }
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     // This function will be executed after the widget tree is built
-  //     // You can run your following functions here
-  //     // provider instance
-  //     final provOrders = Provider.of<OrdersProvider>(context, listen: false);
-  //     // final provAddress = Provider.of<AddressProvider>(context, listen: false);
-  //     // final provMerchant =
-  //     //     Provider.of<MerchantProvider>(context, listen: false);
-  //     // provOrders.calculateDelivery(
-  //     //   provAddress.selectedAlamat,
-  //     //   provMerchant.listMerchant,
-  //     // );
-  //     provOrders.calculateSubTotals(context);
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     final provOrders = Provider.of<OrdersProvider>(context);

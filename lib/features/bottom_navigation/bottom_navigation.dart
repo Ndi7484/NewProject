@@ -4,6 +4,7 @@ import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/widgets/typemenu_dialog.dart';
 import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
 import 'package:flutter_application_1/features/cart_page/cart_page.dart';
+import 'package:flutter_application_1/features/history_orders/orders_page.dart';
 import 'package:flutter_application_1/features/main_page/main_page.dart';
 import 'package:flutter_application_1/features/menu_page/menu_page.dart';
 import 'package:flutter_application_1/features/points_page/points_page.dart';
@@ -38,7 +39,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     const MenuPage(),
     const PointsPage(),
     const PromoPage(),
-    const MainPage(),
+    const OrdersPage(),
   ];
 
   @override

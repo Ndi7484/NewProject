@@ -21,6 +21,8 @@ class OrdersCart {
     this.dineInCode,
     required this.accountInformation,
     required this.listOrder,
+    required this.subTotals,
+    required this.totals,
     this.deliveryVal,
     required this.voucherCode,
     required this.pointsUse,
@@ -28,6 +30,7 @@ class OrdersCart {
     required this.pointsMuch,
     required this.pointsGet,
     this.typePayment,
+    required this.doneStatus,
   });
   String dateTime;
   TypeOrder typeOrder;
@@ -36,6 +39,8 @@ class OrdersCart {
   String? dineInCode;
   Account accountInformation;
   Map<String, int> listOrder;
+  int subTotals;
+  int totals;
   int? deliveryVal;
   Promo? voucherCode;
   bool pointsUse;
@@ -44,6 +49,7 @@ class OrdersCart {
   int pointsGet;
   // typePayment let null first then filled
   TypePayment? typePayment;
+  bool doneStatus;
 }
 
 class OrdersProvider extends ChangeNotifier {
@@ -286,7 +292,10 @@ class OrdersProvider extends ChangeNotifier {
             voucherDisc: paramVoucherDisc,
             pointsUse: _pointsUse,
             pointsMuch: paramMuchPoints,
-            pointsGet: paramPointsGetInt);
+            pointsGet: paramPointsGetInt,
+            subTotals: paramSubTotalsInt,
+            totals: paramTotalPayInt,
+            doneStatus: false);
         break;
       case TypeOrder.takeaway:
         tmpOrdersCartHistory = OrdersCart(
@@ -296,11 +305,14 @@ class OrdersProvider extends ChangeNotifier {
             // alamat takeaway merchant address
             takeawayAddress: paramTakeawayAlamat,
             listOrder: listOrders,
-            voucherCode: paramVoucherCode!,
+            voucherCode: paramVoucherCode,
             voucherDisc: paramVoucherDisc,
             pointsUse: _pointsUse,
             pointsMuch: paramMuchPoints,
-            pointsGet: paramPointsGetInt);
+            pointsGet: paramPointsGetInt,
+            subTotals: paramSubTotalsInt,
+            totals: paramTotalPayInt,
+            doneStatus: false);
         break;
       case TypeOrder.dinein:
         tmpOrdersCartHistory = OrdersCart(
@@ -310,11 +322,14 @@ class OrdersProvider extends ChangeNotifier {
             // dine in code in jsonString
             dineInCode: paramDineInCode,
             listOrder: listOrders,
-            voucherCode: paramVoucherCode!,
+            voucherCode: paramVoucherCode,
             voucherDisc: paramVoucherDisc,
             pointsUse: _pointsUse,
             pointsMuch: paramMuchPoints,
-            pointsGet: paramPointsGetInt);
+            pointsGet: paramPointsGetInt,
+            subTotals: paramSubTotalsInt,
+            totals: paramTotalPayInt,
+            doneStatus: false);
         break;
       default:
         tmpOrdersCartHistory = null;
@@ -327,11 +342,14 @@ class OrdersProvider extends ChangeNotifier {
     _listOrders = {};
     paramAccountInformation = null;
     paramListOrder = null;
-    paramVoucherCode = null;
     paramSubTotals = '0';
     paramSubTotalsInt = 0;
+    paramDeliveryAlamat = null;
+    paramTakeawayAlamat = null;
+    paramDineInCode = null;
     paramDeliveryVal = 0;
     paramDeliveryStr = '';
+    paramVoucherCode = null;
     paramVoucherDisc = 0;
     paramVoucherDiscStr = '';
     paramTotalPay = '';
@@ -339,7 +357,7 @@ class OrdersProvider extends ChangeNotifier {
     _pointsUse = false;
     paramMuchPoints = 0;
     paramMuchPointsStr = '';
-    // notifyListeners();
+    notifyListeners();
   }
 
   void softReset() {

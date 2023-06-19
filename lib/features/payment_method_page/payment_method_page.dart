@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/payment_provider.dart';
+import 'package:flutter_application_1/features/history_orders/history_details_page.dart';
 import 'package:flutter_application_1/features/payment_method_page/bank_transfer_page.dart';
 import 'package:flutter_application_1/features/payment_method_page/widgets/snk_payment.dart';
 import 'package:provider/provider.dart';
@@ -117,7 +118,9 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                                           .listPayment[struct]
                                                           .children[index2]
                                                           .typePay;
-                                                  print('${provOrders.tmpOrdersCartHistory}');
+                                                  print(provOrders
+                                                      .tmpOrdersCartHistory!
+                                                      .typePayment);
                                                 },
                                               )),
                                     ],
@@ -164,8 +167,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                 color: Colors.grey,
                                 spreadRadius: 1.0,
                                 blurRadius: 5.0,
-                                offset: Offset(
-                                    0, 3),
+                                offset: Offset(0, 3),
                               ),
                             ],
                           ),
@@ -174,7 +176,22 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                               // Handle Bank selection
                               provOrders.tmpOrdersCartHistory!.typePayment =
                                   provPayment.listPayment[struct].typePay;
-                              print(provOrders.tmpOrdersCartHistory);
+                              print(
+                                  provOrders.tmpOrdersCartHistory!.typePayment);
+                              // just test case
+                              // just test case
+                              // just test case
+                              // just test case
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => HistoryDetailsPage(
+                                          ordersCartHistory: provOrders
+                                              .tmpOrdersCartHistory!)));
+                              // just test case
+                              // just test case
+                              // just test case
+                              // just test case
                             },
                             leading: Image.asset(
                                 provPayment.listPayment[struct].img),

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/features/menu_page/menu_list.dart';
 
-class MenuPage extends StatefulWidget {
-  const MenuPage({super.key});
+import 'list_orders.dart';
+
+class OrdersPage extends StatefulWidget {
+  const OrdersPage({super.key});
 
   @override
-  State<MenuPage> createState() => _MenuPageState();
+  State<OrdersPage> createState() => _OrdersPageState();
 }
 
-class _MenuPageState extends State<MenuPage> {
+class _OrdersPageState extends State<OrdersPage> {
   static const List<Tab> tabs = [
-    Tab(text: 'Appetizer'),
-    Tab(text: 'Main Dish'),
-    Tab(text: 'Dessert'),
+    Tab(text: 'Delivery'),
+    Tab(text: 'Takeaway'),
+    Tab(text: 'Dine-In'),
   ];
   @override
   Widget build(BuildContext context) {
@@ -34,9 +36,9 @@ class _MenuPageState extends State<MenuPage> {
             const Expanded(
               child: TabBarView(
                 children: [
-                  ListMenu(type: 'Appetizer'),
-                  ListMenu(type: 'Main Dish'),
-                  ListMenu(type: 'Dessert'),
+                  ListOrder(type: 'Delivery'),
+                  ListOrder(type: 'Takeaway'),
+                  ListOrder(type: 'Dine-In'),
                 ],
               ),
             ),

@@ -103,19 +103,28 @@ class _BottomOrdersState extends State<BottomOrders> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    provOrders.setInitOrders();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const PaymentMethodPage()));
+                    if (provOrders.typeOrders != null &&
+                        provOrders.paramTotalPayInt > 1) {
+                      provOrders.setInitOrders();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const PaymentMethodPage()));
+                    }
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.5,
                     height: MediaQuery.of(context).size.height * 0.05,
                     decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: (provOrders.typeOrders != null &&
+                                provOrders.paramTotalPayInt > 1)
+                            ? Theme.of(context).colorScheme.primary
+                            : Colors.red.shade100,
                         border: Border.all(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: (provOrders.typeOrders != null &&
+                                    provOrders.paramTotalPayInt > 1)
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.red.shade100,
                             width: 2),
                         borderRadius: BorderRadius.circular(5)),
                     child: const Center(
