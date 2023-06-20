@@ -25,7 +25,7 @@ class HistoryProvider extends ChangeNotifier {
             alamatLong: 67.989,
             alamatMapsDesc:
                 'Medan Timur, Petisah, Medan, Sumatera Utara, 20222, Indonesia'),
-        listOrder: {'A01':1, 'A02' : 2},
+        listOrder: {"A01": 1, "A02": 2},
         // delivery fee
         deliveryVal: 34000,
         voucherCode: null,
@@ -35,7 +35,7 @@ class HistoryProvider extends ChangeNotifier {
         pointsGet: 1000,
         subTotals: 100000,
         totals: 100000,
-        doneStatus: true),
+        doneStatus: false),
     OrdersCart(
         dateTime: '2022-09-29 10:11:30',
         typeOrder: TypeOrder.delivery,
@@ -50,13 +50,13 @@ class HistoryProvider extends ChangeNotifier {
         deliveryAddress: Alamat(
             alamatID: 'admin@admin.com',
             alamatTitle: 'Home',
-            alamatLengkap: 'Jl. Kertajaksaan Muraka No. 45',
-            alamatDesk: 'sebelah bakpao',
+            alamatLengkap: 'Jl. Kemangi Suaka No. 545A',
+            alamatDesk: 'sebelah kopi kenangan',
             alamatLang: 5.3434,
             alamatLong: 67.989,
             alamatMapsDesc:
                 'Medan Timur, Petisah, Medan, Sumatera Utara, 20222, Indonesia'),
-        listOrder: {'A01':1, 'A02' : 2},
+        listOrder: {"A01": 1, "A02": 2, "M01" : 1,},
         // delivery fee
         deliveryVal: 34000,
         voucherCode: null,

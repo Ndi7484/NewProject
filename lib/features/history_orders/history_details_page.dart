@@ -31,7 +31,7 @@ class HistoryDetailsPage extends StatelessWidget {
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height *
-                (ordersCartHistory.doneStatus ? 1 : 0.79),
+                (ordersCartHistory.doneStatus ? 0.9 : 0.79),
             child: ListView(
               children: [
                 // order date
@@ -165,9 +165,16 @@ class HistoryDetailsPage extends StatelessWidget {
                 Builder(
                   builder: (context) {
                     var keysList = ordersCartHistory.listOrder.keys.toList();
+                    // print(keysList);
                     List<Widget> widgets = [];
 
                     for (var i = 0; i < keysList.length; i++) {
+                      print(keysList[i].runtimeType);
+                      print(provMenu.returnMenu(keysList[i]));
+                      print(provMenu.listFoodMenu.length);
+                      print(provMenu.listFoodMenu[0].menuID == keysList[i]);
+                      print('stop');
+
                       if (ordersCartHistory.listOrder[keysList[i]] == 0) {
                         continue; // Skip this iteration and move to the next one
                       }
@@ -366,25 +373,28 @@ class HistoryDetailsPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height *
-                (ordersCartHistory.doneStatus ? 0 : 0.088),
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: const BoxDecoration(
-                border: Border(top: BorderSide(width: 1, color: Colors.black)),
-              ),
-              child: ElevatedButton(
-                onPressed: () {},
-                child: const Text(
-                  'Complete Orders',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+          (ordersCartHistory.doneStatus)
+              ? Container()
+              : SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height *
+                      (ordersCartHistory.doneStatus ? 0 : 0.088),
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                          top: BorderSide(width: 1, color: Colors.black)),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Complete Orders',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
         ],
       ),
     );

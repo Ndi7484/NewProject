@@ -43,6 +43,7 @@ class _CartPageState extends State<CartPage> {
     // get account and address
     provAddress.getAddress(provAccount.selectedAccount!.email);
     provOrders.paramAccountInformation = provAccount.selectedAccount!;
+    provOrders.paramDeliveryAlamat = provAddress.selectedAlamat;
 
     switch (provOrders.typeOrders) {
       case TypeOrder.delivery:
