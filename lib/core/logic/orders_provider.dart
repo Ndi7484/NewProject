@@ -50,6 +50,10 @@ class OrdersCart {
   // typePayment let null first then filled
   TypePayment? typePayment;
   bool doneStatus;
+
+  setDoneStatus(value){
+    doneStatus = value;
+  }
 }
 
 class OrdersProvider extends ChangeNotifier {

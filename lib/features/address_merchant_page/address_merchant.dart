@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/merchant_provider.dart';
-// import 'package:flutter_application_1/core/logic/account_provider.dart';
-// import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/widgets/address_listtile.dart';
-import 'package:flutter_application_1/features/add_address_page/add_address_page.dart';
 import 'package:provider/provider.dart';
 
 class AddressMerchantPage extends StatefulWidget {
@@ -57,6 +54,7 @@ class _AddressMerchantPageState extends State<AddressMerchantPage> {
                               ? true
                               : false,
                       slider: false,
+                      icon: true,
                     ),
                   )),
           (provMerchant.listMerchant.isEmpty == true)

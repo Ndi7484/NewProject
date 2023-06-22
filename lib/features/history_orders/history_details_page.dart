@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/history_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/widgets/address_listtile.dart';
@@ -18,6 +19,8 @@ class HistoryDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provMenu = Provider.of<MenuProvider>(context);
+    final provHistory = Provider.of<HistoryProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -31,7 +34,7 @@ class HistoryDetailsPage extends StatelessWidget {
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height *
-                (ordersCartHistory.doneStatus ? 0.9 : 0.79),
+                (ordersCartHistory.doneStatus ? 0.88 : 0.79),
             child: ListView(
               children: [
                 // order date
@@ -126,6 +129,7 @@ class HistoryDetailsPage extends StatelessWidget {
                           alamat: ordersCartHistory.deliveryAddress,
                           selection: false,
                           slider: false,
+                          icon: false,
                         ),
                       )
                     : Container(),
@@ -139,6 +143,7 @@ class HistoryDetailsPage extends StatelessWidget {
                           alamat: ordersCartHistory.takeawayAddress,
                           selection: false,
                           slider: false,
+                          icon: false,
                         ),
                       )
                     : Container(),
@@ -169,12 +174,6 @@ class HistoryDetailsPage extends StatelessWidget {
                     List<Widget> widgets = [];
 
                     for (var i = 0; i < keysList.length; i++) {
-                      print(keysList[i].runtimeType);
-                      print(provMenu.returnMenu(keysList[i]));
-                      print(provMenu.listFoodMenu.length);
-                      print(provMenu.listFoodMenu[0].menuID == keysList[i]);
-                      print('stop');
-
                       if (ordersCartHistory.listOrder[keysList[i]] == 0) {
                         continue; // Skip this iteration and move to the next one
                       }
@@ -386,7 +385,10 @@ class HistoryDetailsPage extends StatelessWidget {
                           top: BorderSide(width: 1, color: Colors.black)),
                     ),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        provHistory.changeDoneStatus(
+                            ordersCartHistory, context);
+                      },
                       child: const Text(
                         'Complete Orders',
                         style: TextStyle(

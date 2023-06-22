@@ -58,7 +58,7 @@ class _AddressPageState extends State<AddressPage> {
                                 provAddress.selectedAlamat?.alamatLengkap)
                             ? true
                             : false,
-                        slider: true,
+                        slider: true, icon: true,
                       ),
                     )),
             (provAddress.listSelectedAlamat.isEmpty == true)

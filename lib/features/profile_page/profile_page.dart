@@ -145,6 +145,7 @@ class ProfilePageState extends State<ProfilePage> {
             alamat: provAddress.selectedAlamat,
             selection: false,
             slider: false,
+            icon: true,
           ),
         ),
       ]),

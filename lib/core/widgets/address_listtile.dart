@@ -9,10 +9,12 @@ class AddressListTile extends StatelessWidget {
       {super.key,
       required this.alamat,
       required this.selection,
-      required this.slider});
+      required this.slider,
+      required this.icon});
   Alamat? alamat;
   bool selection;
   bool slider;
+  bool icon;
 
   @override
   Widget build(BuildContext context) {
@@ -103,15 +105,17 @@ class AddressListTile extends StatelessWidget {
                               style: const TextStyle(fontSize: 12),
                             ),
                           ),
-                          trailing: Icon(
-                            (selection)
-                                ? Icons.check
-                                : Icons.arrow_right_outlined,
-                            size: 40,
-                            color: (selection)
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
-                          ),
+                          trailing: (icon)
+                              ? Icon(
+                                  (selection)
+                                      ? Icons.check
+                                      : Icons.arrow_right_outlined,
+                                  size: 40,
+                                  color: (selection)
+                                      ? Theme.of(context).colorScheme.primary
+                                      : null,
+                                )
+                              : null,
                         ),
                       ),
                     )
@@ -174,20 +178,22 @@ class AddressListTile extends StatelessWidget {
                             style: const TextStyle(fontSize: 12),
                           ),
                         ),
-                        trailing: Icon(
-                          (selection)
-                              ? Icons.check
-                              : Icons.arrow_right_outlined,
-                          size: 40,
-                          color: (selection)
-                              ? Theme.of(context).colorScheme.primary
-                              : null,
-                        ),
+                        trailing: (icon)
+                            ? Icon(
+                                (selection)
+                                    ? Icons.check
+                                    : Icons.arrow_right_outlined,
+                                size: 40,
+                                color: (selection)
+                                    ? Theme.of(context).colorScheme.primary
+                                    : null,
+                              )
+                            : null,
                       ),
                     ),
             ),
           ])
-          // alamat is null there is nothing to set
+        // alamat is null there is nothing to set
         : Padding(
             padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
             child: Container(
@@ -221,10 +227,12 @@ class AddressListTile extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 5),
                   child: Text("No details.."),
                 ),
-                trailing: const Icon(
-                  Icons.arrow_right_outlined,
-                  size: 40,
-                ),
+                trailing: (icon)
+                    ? const Icon(
+                        Icons.arrow_right_outlined,
+                        size: 40,
+                      )
+                    : null,
               ),
             ),
           );

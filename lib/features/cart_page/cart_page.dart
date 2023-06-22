@@ -184,7 +184,7 @@ class _CartPageState extends State<CartPage> {
                             child: AddressListTile(
                               alamat: provAddress.selectedAlamat,
                               selection: false,
-                              slider: false,
+                              slider: false, icon: true,
                             ),
                           ),
                         )
@@ -206,7 +206,7 @@ class _CartPageState extends State<CartPage> {
                             child: AddressListTile(
                               alamat: provMerchant.selectedMerchant,
                               selection: false,
-                              slider: false,
+                              slider: false, icon: true,
                             ),
                           ),
                         )
