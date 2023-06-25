@@ -35,8 +35,9 @@ class _BestPickCardState extends State<BestPickCard> {
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      // margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                      color: Colors.white,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)),
                       child: Column(
                         children: [
                           SizedBox(
@@ -44,9 +45,14 @@ class _BestPickCardState extends State<BestPickCard> {
                             child: Stack(children: [
                               SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                child: Image.asset(
-                                  provMenu.randomUniqueList[index].menuImage,
-                                  fit: BoxFit.fill,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(4),
+                                      topRight: Radius.circular(4)),
+                                  child: Image.asset(
+                                    provMenu.randomUniqueList[index].menuImage,
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
                               ),
                               Positioned(
