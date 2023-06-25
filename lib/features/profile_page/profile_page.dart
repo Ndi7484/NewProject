@@ -148,6 +148,22 @@ class ProfilePageState extends State<ProfilePage> {
             icon: true,
           ),
         ),
+        const Spacer(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            GestureDetector(
+                onTap: () {},
+                child: const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    "Log Out",
+                    style: TextStyle(color: Colors.red, fontSize: 20),
+                  ),
+                )),
+          ],
+        ),
+        // const Spacer(),
       ]),
     );
   }

@@ -27,8 +27,8 @@ class Account {
   final String email;
   String password;
   final String phone;
-  final int points;
-  final String pointsString;
+  int points;
+  String pointsString;
   // List<Alamat>? alamat;
 }
 
@@ -52,6 +52,9 @@ enum Forget {
 
 class AccountProvider extends ChangeNotifier {
   // more info excel dev https://pub.dev/packages/excel
+  // change formater
+  NumberFormat formatter = NumberFormat("#,###", "en_US");
+
   List<Account> _listAccount = [];
   // load data from excel
   void readAccount() async {
@@ -61,7 +64,6 @@ class AccountProvider extends ChangeNotifier {
 
     var table = excel.tables[excel.tables.keys.first];
 
-    NumberFormat formatter = NumberFormat("#,###", "en_US");
     _listAccount = List.generate(
       table!.maxRows,
       (index) {
@@ -403,6 +405,21 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
+  void pointsChange(int pointsMuch, int pointsGet){
+    for (var el in _listAccount) {
+      if(el.email == paramEmail){
+        el.points = el.points - pointsMuch;
+        if(el.points < 0){
+          el.points = 0;
+        }
+        el.points = el.points + pointsGet;
+        el.pointsString = formatter.format(el.points).toString().replaceAll(',', '.');
+        // re-select account newest
+        _selectedAccount == el;
+        break;
+      }
+    }
+  }
   // reset parameter to ''
   void resetParam() {
     _isAuthenticated = Auth.unauthenticated;

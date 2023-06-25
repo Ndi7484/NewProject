@@ -14,6 +14,7 @@ import 'package:flutter_application_1/features/cart_page/widgets/dine_in_card.da
 import 'package:flutter_application_1/features/cart_page/widgets/promo_bottom_sheet.dart';
 import 'package:flutter_application_1/features/menu_page/widgets/menu_card.dart';
 import 'package:flutter_application_1/features/qr_page_view/qr_page_view.dart';
+import 'package:flutter_flushbar/flutter_flushbar.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/transaction_label.dart';
@@ -490,7 +491,18 @@ class _CartPageState extends State<CartPage> {
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Flushbar(
+                        flushbarPosition: FlushbarPosition.TOP,
+                        messageText: const Text(
+                          'You points is calculated 3% from Totals Payments exclude delivery-fee',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                        backgroundColor: Colors.green,
+                        duration: const Duration(seconds: 3),
+                      ).show(context);
+                    },
                     child: Icon(
                       Icons.help_outline_rounded,
                       color: Colors.green.shade900,

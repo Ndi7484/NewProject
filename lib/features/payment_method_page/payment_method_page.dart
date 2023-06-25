@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/core/logic/history_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
+import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/logic/payment_provider.dart';
 import 'package:flutter_application_1/features/history_orders/history_details_page.dart';
 import 'package:flutter_application_1/features/payment_method_page/bank_transfer_page.dart';
@@ -20,6 +23,9 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
   Widget build(BuildContext context) {
     final provOrders = Provider.of<OrdersProvider>(context);
     final provPayment = Provider.of<PaymentProvider>(context);
+    final provHistory = Provider.of<HistoryProvider>(context);
+    final provAccount = Provider.of<AccountProvider>(context);
+    final provPage = Provider.of<PageProvider>(context);
 
     var bottomsheet = SnKPayment();
 
@@ -182,12 +188,25 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                               // just test case
                               // just test case
                               // just test case
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => HistoryDetailsPage(
-                                          ordersCartHistory: provOrders
-                                              .tmpOrdersCartHistory!)));
+                              provHistory.addListOrderHistory(
+                                  provOrders.tmpOrdersCartHistory!);
+                              provAccount.pointsChange(
+                                  provOrders.tmpOrdersCartHistory!.pointsMuch,
+                                  provOrders.tmpOrdersCartHistory!.pointsGet);
+                              provOrders.resetParam();
+                              provPage.selectedIndex = 4;
+                              // Navigator.pop(context);
+                              // Navigator.pop(context);
+                              // replace with pop til first
+                              Navigator.of(context).popUntil((route) => route.isFirst);
+
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (_) => HistoryDetailsPage(
+                              //             ordersCartHistory: provOrders
+                              //                 .tmpOrdersCartHistory!)));
+
                               // just test case
                               // just test case
                               // just test case

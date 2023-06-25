@@ -2,13 +2,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/carousel_provider.dart';
-import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
 import 'package:flutter_application_1/core/logic/warning_provider.dart';
 import 'package:flutter_application_1/core/widgets/button_categories.dart';
 import 'package:flutter_application_1/features/profile_page/profile_page.dart';
 import 'package:provider/provider.dart';
+
+import 'widgets/best_pick_card.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -271,7 +272,11 @@ class _MainPageState extends State<MainPage> {
                     Border.all(color: Theme.of(context).colorScheme.primary)),
           ),
         ),
-        const Padding(padding: EdgeInsets.all(8.0)),
+        // best pick card
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: BestPickCard(),
+        ),
         Padding(
           padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.2,
               0, MediaQuery.of(context).size.width * 0.2, 0),
@@ -282,6 +287,7 @@ class _MainPageState extends State<MainPage> {
                     Border.all(color: Theme.of(context).colorScheme.primary)),
           ),
         ),
+        const Divider(),
         const SizedBox(
           height: 16,
         ),
@@ -310,20 +316,6 @@ class _MainPageState extends State<MainPage> {
         // bottom padding for floating action button
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.1,
-          // child: ClipRect(
-          //   child: Align(
-          //     alignment: Alignment(
-          //         -1.0 + (100 / (MediaQuery.of(context).size.height * 0.1)),
-          //         -1.0 + (100 / (MediaQuery.of(context).size.height * 0.1))),
-          //     child: Transform.scale(
-          //       scale: 3,
-          //       child: Image.asset(
-          //         'assets/etc/Food_doodle.png',
-          //         height: MediaQuery.of(context).size.height * 0.1,
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ),
       ],
     );

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,7 +60,25 @@ class MenuProvider extends ChangeNotifier {
         },
       )
     ];
+    bestPickMenu();
     notifyListeners();
+  }
+
+  List<FoodMenu> _randomUniqueList = [];
+  List<FoodMenu> get randomUniqueList => _randomUniqueList;
+  set randomUniqueList(value){
+    _randomUniqueList = value;
+  }
+
+  void bestPickMenu(){
+    List<FoodMenu> tmp = List.from(listFoodMenu); // Create a copy of the original list
+
+    // Shuffle the randomUniqueList
+    final random = Random();
+    tmp.shuffle(random);
+
+    int newListLength = 5;
+    randomUniqueList = tmp.sublist(0, newListLength);
   }
 
   FoodMenu? returnMenu(String menuID) {

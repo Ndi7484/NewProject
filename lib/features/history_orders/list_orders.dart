@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/history_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
@@ -28,40 +29,46 @@ class _ListOrderState extends State<ListOrder>
     final provHistory = Provider.of<HistoryProvider>(context);
     // don't delete this line : to avoid range menu error / or not found
     final provMenu = Provider.of<MenuProvider>(context);
+    final provAccount = Provider.of<AccountProvider>(context);
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView(children: [
         ...List.generate(provHistory.listOrderHistory.length, (index) {
-          if (widget.type == 'Delivery' &&
-              provHistory.listOrderHistory[index].typeOrder ==
-                  TypeOrder.delivery) {
-            setState(() {
-              anyOrders = true;
-            });
+          if (provHistory.listOrderHistory[index].accountInformation.email ==
+              provAccount.selectedAccount!.email) {
+            if (widget.type == 'Delivery' &&
+                provHistory.listOrderHistory[index].typeOrder ==
+                    TypeOrder.delivery) {
+              setState(() {
+                anyOrders = true;
+              });
+            }
+            if (widget.type == 'Takeaway' &&
+                provHistory.listOrderHistory[index].typeOrder ==
+                    TypeOrder.takeaway) {
+              setState(() {
+                anyOrders = true;
+              });
+            }
+            if (widget.type == 'Dine-In' &&
+                provHistory.listOrderHistory[index].typeOrder ==
+                    TypeOrder.dinein) {
+              setState(() {
+                anyOrders = true;
+              });
+            }
+            return OrderCard(
+                type: (widget.type == 'Delivery')
+                    ? TypeOrder.delivery
+                    : (widget.type == 'Takeaway')
+                        ? TypeOrder.takeaway
+                        : TypeOrder.dinein,
+                data: provHistory.listOrderHistory[index],
+                indexing: index);
+          } else {
+            return Container();
           }
-          if (widget.type == 'Takeaway' &&
-              provHistory.listOrderHistory[index].typeOrder ==
-                  TypeOrder.takeaway) {
-            setState(() {
-              anyOrders = true;
-            });
-          }
-          if (widget.type == 'Dine-In' &&
-              provHistory.listOrderHistory[index].typeOrder ==
-                  TypeOrder.dinein) {
-            setState(() {
-              anyOrders = true;
-            });
-          }
-          return OrderCard(
-              type: (widget.type == 'Delivery')
-                  ? TypeOrder.delivery
-                  : (widget.type == 'Takeaway')
-                      ? TypeOrder.takeaway
-                      : TypeOrder.dinein,
-              data: provHistory.listOrderHistory[index],
-              indexing: index);
         }),
         (!anyOrders)
             ? Padding(
@@ -71,8 +78,13 @@ class _ListOrderState extends State<ListOrder>
                     child: Column(
                   children: [
                     Image.asset('assets/etc/Empty_Orders.png'),
-                    SizedBox(height: 8,),
-                    const Text('There is no orders here..', style: TextStyle(fontSize: 16),),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Text(
+                      'There is no orders here..',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ],
                 )),
               )
