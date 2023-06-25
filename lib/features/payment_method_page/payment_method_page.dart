@@ -4,8 +4,11 @@ import 'package:flutter_application_1/core/logic/history_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/logic/payment_provider.dart';
+import 'package:flutter_application_1/core/widgets/circular_progress.dart';
 import 'package:flutter_application_1/features/history_orders/history_details_page.dart';
 import 'package:flutter_application_1/features/payment_method_page/bank_transfer_page.dart';
+import 'package:flutter_application_1/features/payment_method_page/confirm_payment/bank_transfer_confirm.dart';
+import 'package:flutter_application_1/features/payment_method_page/confirm_payment/ewallet.dart';
 import 'package:flutter_application_1/features/payment_method_page/widgets/snk_payment.dart';
 import 'package:provider/provider.dart';
 
@@ -23,9 +26,6 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
   Widget build(BuildContext context) {
     final provOrders = Provider.of<OrdersProvider>(context);
     final provPayment = Provider.of<PaymentProvider>(context);
-    final provHistory = Provider.of<HistoryProvider>(context);
-    final provAccount = Provider.of<AccountProvider>(context);
-    final provPage = Provider.of<PageProvider>(context);
 
     var bottomsheet = SnKPayment();
 
@@ -127,6 +127,27 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                                   print(provOrders
                                                       .tmpOrdersCartHistory!
                                                       .typePayment);
+
+                                                  // navigation
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              CircularProgressPage()));
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          seconds: 1), () {
+                                                    Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                BankTransferConfirmPaymentPage(
+                                                                  bankData: provPayment
+                                                                      .listPayment[
+                                                                          struct]
+                                                                      .children[index2],
+                                                                )));
+                                                  });
                                                 },
                                               )),
                                     ],
@@ -178,39 +199,31 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                             ],
                           ),
                           child: ListTile(
-                            onTap: () {
+                            onTap: () async {
                               // Handle Bank selection
                               provOrders.tmpOrdersCartHistory!.typePayment =
                                   provPayment.listPayment[struct].typePay;
                               print(
                                   provOrders.tmpOrdersCartHistory!.typePayment);
-                              // just test case
-                              // just test case
-                              // just test case
-                              // just test case
-                              provHistory.addListOrderHistory(
-                                  provOrders.tmpOrdersCartHistory!);
-                              provAccount.pointsChange(
-                                  provOrders.tmpOrdersCartHistory!.pointsMuch,
-                                  provOrders.tmpOrdersCartHistory!.pointsGet);
-                              provOrders.resetParam();
-                              provPage.selectedIndex = 4;
-                              // Navigator.pop(context);
-                              // Navigator.pop(context);
-                              // replace with pop til first
-                              Navigator.of(context).popUntil((route) => route.isFirst);
 
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (_) => HistoryDetailsPage(
-                              //             ordersCartHistory: provOrders
-                              //                 .tmpOrdersCartHistory!)));
-
-                              // just test case
-                              // just test case
-                              // just test case
-                              // just test case
+                              // navigation
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => CircularProgressPage()));
+                              Future.delayed(const Duration(seconds: 1), () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => EWalletPage(
+                                              color: provPayment
+                                                  .listPayment[struct].color,
+                                              typePay: provPayment
+                                                  .listPayment[struct].typePay,
+                                              image: provPayment
+                                                  .listPayment[struct].img,
+                                            )));
+                              });
                             },
                             leading: Image.asset(
                                 provPayment.listPayment[struct].img),

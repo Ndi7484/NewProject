@@ -162,7 +162,7 @@ class _QRViewPageState extends State<QRViewPage> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => const CircularProgressPage()));
+                    builder: (_) => CircularProgressPage()));
             Navigator.pop(context);
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (_) => const CartPage()));
@@ -170,7 +170,7 @@ class _QRViewPageState extends State<QRViewPage> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => const CircularProgressPage()));
+                    builder: (_) => CircularProgressPage()));
             Navigator.pop(context);
           }
         }

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CircularProgressPage extends StatelessWidget {
-  const CircularProgressPage({super.key});
+  CircularProgressPage({super.key, this.messageText});
+  String? messageText;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(
               color: Theme.of(context).colorScheme.primary,
@@ -15,7 +18,7 @@ class CircularProgressPage extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            const Text('Please wait...'),
+            Text(messageText ?? 'Please wait initializing...'),
           ],
         ),
       ),

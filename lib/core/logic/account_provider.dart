@@ -146,7 +146,9 @@ class AccountProvider extends ChangeNotifier {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => BottomNavigationPage(selectNext: 0,),
+            builder: (context) => BottomNavigationPage(
+              selectNext: 0,
+            ),
           ),
         );
       }
@@ -190,6 +192,48 @@ class AccountProvider extends ChangeNotifier {
   void addAccount(context) async {
     _isSignUp = IsSignUp.initial;
     notifyListeners();
+    if (paramFirstName == '' ||
+        paramLastName == '' ||
+        paramEmail == '' ||
+        paramPhone == '' ||
+        paramPassword == '' ||
+        paramConfirmPass == '') {
+      message = 'Please input valid data';
+      _isSignUp = IsSignUp.fail;
+      notifyListeners();
+      return;
+    }
+    if (paramFirstName.length < 4 || paramLastName.length < 4) {
+      message = 'Name must at least 4 length';
+      _isSignUp = IsSignUp.fail;
+      notifyListeners();
+      return;
+    }
+    if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
+        .hasMatch(paramEmail)) {
+      message = 'Invalid email, must like **@**.**';
+      _isSignUp = IsSignUp.fail;
+      notifyListeners();
+      return;
+    }
+    if (!RegExp(r'^[+]?[0-9]{9,13}$').hasMatch(paramPhone)) {
+      message = 'Invalid phone, at least 9 in length with digits only';
+      _isSignUp = IsSignUp.fail;
+      notifyListeners();
+      return;
+    }
+    if (paramPassword.length < 8) {
+      message = 'Password at least eight in length';
+      _isSignUp = IsSignUp.fail;
+      notifyListeners();
+      return;
+    }
+    if (paramPassword != paramConfirmPass) {
+      message = "Password didn't match";
+      _isSignUp = IsSignUp.fail;
+      notifyListeners();
+      return;
+    }
     if (paramPassword == paramConfirmPass && checkAdd(paramEmail, paramPhone)) {
       // ByteData data = await rootBundle.load('assets/data/account.xlsx');
       // var bytes =
@@ -405,21 +449,23 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  void pointsChange(int pointsMuch, int pointsGet){
+  void pointsChange(int pointsMuch, int pointsGet) {
     for (var el in _listAccount) {
-      if(el.email == paramEmail){
+      if (el.email == paramEmail) {
         el.points = el.points - pointsMuch;
-        if(el.points < 0){
+        if (el.points < 0) {
           el.points = 0;
         }
         el.points = el.points + pointsGet;
-        el.pointsString = formatter.format(el.points).toString().replaceAll(',', '.');
+        el.pointsString =
+            formatter.format(el.points).toString().replaceAll(',', '.');
         // re-select account newest
         _selectedAccount == el;
         break;
       }
     }
   }
+
   // reset parameter to ''
   void resetParam() {
     _isAuthenticated = Auth.unauthenticated;

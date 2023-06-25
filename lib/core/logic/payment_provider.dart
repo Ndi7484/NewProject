@@ -7,12 +7,14 @@ class Payment {
     this.snk,
     required this.children,
     this.typePay,
+    this.color,
   });
   String img;
   String title;
   List<String>? snk;
   dynamic children;
   TypePayment? typePay;
+  dynamic color;
 }
 
 enum TypePayment {
@@ -56,6 +58,7 @@ class PaymentProvider extends ChangeNotifier {
             ],
             children: [],
             typePay: TypePayment.bankTfBCA,
+            color: Colors.blue[900],
           ),
           Payment(
             img: 'assets/etc/BNI.png',
@@ -71,6 +74,7 @@ class PaymentProvider extends ChangeNotifier {
             ],
             children: [],
             typePay: TypePayment.bankTfBNI,
+            color: Colors.orange[800],
           ),
         ]),
     'OVO': Payment(
@@ -84,6 +88,7 @@ class PaymentProvider extends ChangeNotifier {
       ],
       children: [],
       typePay: TypePayment.OVO,
+      color: Colors.purple[800],
     ),
     'Gopay': Payment(
       img: 'assets/etc/Gopay.png',
@@ -96,6 +101,7 @@ class PaymentProvider extends ChangeNotifier {
       ],
       children: [],
       typePay: TypePayment.Gopay,
+      color: Colors.blue,
     ),
     'DANA': Payment(
       img: 'assets/etc/Dana.png',
@@ -108,6 +114,7 @@ class PaymentProvider extends ChangeNotifier {
       ],
       children: [],
       typePay: TypePayment.Dana,
+      color: Colors.blue[800],
     ),
     'Pay at Randumu': Payment(
       img: 'assets/etc/Logo.png',
@@ -115,7 +122,26 @@ class PaymentProvider extends ChangeNotifier {
       snk: [],
       children: [],
       typePay: TypePayment.PayRandumu,
+      color: Colors.orange,
     ),
   };
   Map<String, dynamic> get listPayment => _listPayment;
+
+  String? findImg(TypePayment typePayment){
+    var keysList = listPayment.keys.toList();
+    for (var el in keysList) {
+      if(listPayment[el].children.isNotEmpty){
+        for (var el2 in listPayment[el].children) {
+          if(el2.typePay == typePayment){
+            return el2.img;
+          }
+        }
+      } else{
+        if(listPayment[el].typePay == typePayment){
+          return listPayment[el].img;
+        }
+      }
+    }
+    return null;
+  }
 }

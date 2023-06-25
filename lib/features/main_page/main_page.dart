@@ -110,7 +110,7 @@ class _MainPageState extends State<MainPage> {
         (provPromo.validPromo.isEmpty)
             ? Container()
             : const SizedBox(
-                height: 10,
+                height: 16,
               ),
         // green special voucher anouncement
         (provPromo.validPromo.isEmpty)
@@ -172,7 +172,7 @@ class _MainPageState extends State<MainPage> {
               ),
 
         const SizedBox(
-          height: 10,
+          height: 16,
         ),
 
         // choose type orders
@@ -181,7 +181,7 @@ class _MainPageState extends State<MainPage> {
         // warning padding
         (provWarning.getWarning != null)
             ? const SizedBox(
-                height: 10,
+                height: 16,
               )
             : Container(),
         // warning alert yellow sign
@@ -238,9 +238,12 @@ class _MainPageState extends State<MainPage> {
             : Container(),
 
         const SizedBox(
-          height: 10,
+          height: 16,
         ),
         const Divider(),
+        const SizedBox(
+          height: 16,
+        ),
         // other promotion and news of in the app
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -286,6 +289,9 @@ class _MainPageState extends State<MainPage> {
                 border:
                     Border.all(color: Theme.of(context).colorScheme.primary)),
           ),
+        ),
+        const SizedBox(
+          height: 16,
         ),
         const Divider(),
         const SizedBox(

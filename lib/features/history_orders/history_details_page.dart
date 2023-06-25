@@ -296,7 +296,7 @@ class HistoryDetailsPage extends StatelessWidget {
                 ),
 
                 // TOTAL
-                Padding(
+                Container(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
                   child: Row(
                     children: [
@@ -334,34 +334,32 @@ class HistoryDetailsPage extends StatelessWidget {
                 ),
 
                 // get points info
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.wallet_giftcard_rounded,
-                          color: Colors.green.shade900,
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          'Points',
-                          style: TextStyle(
-                              fontSize: 13, color: Colors.green.shade700),
-                        ),
-                        const Spacer(),
-                        Text(
-                          formatter
-                              .format(ordersCartHistory.pointsGet)
-                              .toString()
-                              .replaceAll(',', '.'),
-                          style: TextStyle(
-                              fontSize: 13, color: Colors.green.shade700),
-                        ),
-                      ],
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.wallet_giftcard_rounded,
+                        color: Colors.green.shade900,
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        'Points',
+                        style: TextStyle(
+                            fontSize: 13, color: Colors.green.shade700),
+                      ),
+                      const Spacer(),
+                      Text(
+                        formatter
+                            .format(ordersCartHistory.pointsGet)
+                            .toString()
+                            .replaceAll(',', '.'),
+                        style: TextStyle(
+                            fontSize: 13, color: Colors.green.shade700),
+                      ),
+                    ],
                   ),
                 ),
 

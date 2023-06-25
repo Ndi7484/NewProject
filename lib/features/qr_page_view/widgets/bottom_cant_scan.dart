@@ -76,7 +76,7 @@ class CantScanBottomSheet {
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) =>
-                                              const CircularProgressPage()));
+                                              CircularProgressPage()));
                                   Navigator.pop(context);
                                   Navigator.pushReplacement(
                                       context,
@@ -87,7 +87,7 @@ class CantScanBottomSheet {
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) =>
-                                              const CircularProgressPage()));
+                                              CircularProgressPage()));
                                   Navigator.pop(context);
                                   Flushbar(
                                     flushbarPosition: FlushbarPosition.TOP,

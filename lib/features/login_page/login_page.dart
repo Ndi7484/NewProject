@@ -105,9 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                                 width: MediaQuery.of(context).size.width * 0.75,
                                 child: TextField(
                                   onChanged: (value) {
-                                    setState(() {
-                                      provAccount.paramPassword = value;
-                                    });
+                                    provAccount.paramPassword = value;
                                   },
                                   obscureText: _passwordInvisible,
                                   decoration: const InputDecoration(
@@ -123,9 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                                 right: 10,
                                 child: GestureDetector(
                                   onTap: () {
-                                    setState(() {
-                                      _passwordInvisible = !_passwordInvisible;
-                                    });
+                                    _passwordInvisible = !_passwordInvisible;
                                   },
                                   child: Container(
                                     width: 40,

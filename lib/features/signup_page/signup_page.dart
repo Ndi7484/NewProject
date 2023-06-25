@@ -317,6 +317,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     TextButton(
                       onPressed: () {
+                        provAccount.message = '';
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

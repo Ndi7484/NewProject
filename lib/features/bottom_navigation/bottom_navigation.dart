@@ -32,7 +32,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     'Menu',
     'Points',
     'Promo',
-    'Orders'
+    'Orders',
   ];
   final List<dynamic> _bodyFill = [
     const MainPage(),
