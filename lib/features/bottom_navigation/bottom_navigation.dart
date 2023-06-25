@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/core/logic/notification_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/widgets/typemenu_dialog.dart';
 import 'package:flutter_application_1/features/Page_Promo/promopage.dart';
+import 'package:flutter_application_1/features/bottom_navigation/widgets/notif_page.dart';
 import 'package:flutter_application_1/features/cart_page/cart_page.dart';
 import 'package:flutter_application_1/features/history_orders/orders_page.dart';
 import 'package:flutter_application_1/features/main_page/main_page.dart';
@@ -24,7 +27,8 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.selectNext; // Assign the value from widget.selectNext to _selectedIndex
+    _selectedIndex = widget
+        .selectNext; // Assign the value from widget.selectNext to _selectedIndex
   }
 
   final List<String> _appBarTitle = [
@@ -44,10 +48,22 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    var typeMenuDialog = TypeOrderDialog();
-    var provPage = Provider.of<PageProvider>(context);
-    var provOrders = Provider.of<OrdersProvider>(context);
+    final typeMenuDialog = TypeOrderDialog();
+    final provPage = Provider.of<PageProvider>(context);
+    final provOrders = Provider.of<OrdersProvider>(context);
+    final provAccount = Provider.of<AccountProvider>(context);
+    final provNotif = Provider.of<NotificationProvider>(context);
     _selectedIndex = provPage.selectedIndex;
+    // tmp
+    var _selectedAccount = provAccount.selectedAccount;
+    int totalNotif = 0;
+    List<Notif>? listNotification = []; 
+    for (var el in provNotif.listNotification) {
+      if (el.subject == _selectedAccount!.email || el.subject == "ALL") {
+        totalNotif += 1;
+        listNotification.add(el);
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +71,10 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         actions: [
           (_selectedIndex == 0)
               ? GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => NotifPage(notif : listNotification)));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.only(
                       top: 15,
@@ -65,25 +84,28 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                         Icons.notifications,
                         size: 25,
                       ),
-                      Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            width: 13,
-                            height: 13,
-                            decoration: BoxDecoration(
-                                color: Colors.yellow,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Center(
-                              child: Text(
-                                '10',
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    fontSize: 8),
-                              ),
-                            ),
-                          ))
+                      (totalNotif > 0)
+                          ? Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Container(
+                                width: 13,
+                                height: 13,
+                                decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Center(
+                                  child: Text(
+                                    totalNotif.toString(),
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        fontSize: 8),
+                                  ),
+                                ),
+                              ))
+                          : Container(),
                     ]),
                   ))
               : Container(),
