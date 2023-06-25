@@ -166,6 +166,7 @@ class HistoryProvider extends ChangeNotifier {
                 builder: (_) => BottomNavigationPage(selectNext: 4)));
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('order status is complete'),
+          duration: Duration(seconds: 2),
         ));
         break;
       }

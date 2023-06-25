@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
@@ -13,6 +15,8 @@ class BestPickCard extends StatefulWidget {
 }
 
 class _BestPickCardState extends State<BestPickCard> {
+  final CarouselController _carouselController = CarouselController();
+
   dynamic color_picker = [
     Colors.amber,
     Colors.grey,
@@ -25,10 +29,32 @@ class _BestPickCardState extends State<BestPickCard> {
     final provMenu = Provider.of<MenuProvider>(context);
     final provOrders = Provider.of<OrdersProvider>(context);
     var bottomSheet = MenuBottomSheet();
-    ;
 
     return CarouselSlider(
-        items: List.generate(
+      carouselController: _carouselController,
+      items: [
+        Card(
+          elevation: 7,
+          child: Stack(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Image.asset(
+                  'assets/etc/WhiteCover.jpg',
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+              Positioned(
+                  top: MediaQuery.of(context).size.height * 0.1,
+                  right: 10,
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+                    child: Image.asset('assets/etc/Logo.png'),
+                  ))
+            ],
+          ),
+        ),
+        ...List.generate(
             provMenu.randomUniqueList.length,
             (index) => Card(
                   elevation: 7,
@@ -189,14 +215,51 @@ class _BestPickCardState extends State<BestPickCard> {
                         ],
                       )),
                 )),
-        options: CarouselOptions(
-          height: 300,
-          aspectRatio: 0.1,
-          viewportFraction: 0.5,
-          enableInfiniteScroll: false,
-          enlargeCenterPage: true,
-          enlargeFactor: 0.2,
-          scrollDirection: Axis.horizontal,
-        ));
+        Card(
+          elevation: 7,
+          child: Stack(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Image.asset(
+                  'assets/etc/WhiteCover.jpg',
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+              Positioned(
+                top: MediaQuery.of(context).size.height * 0.1,
+                left: 10,
+                child: Image.asset('assets/etc/Logo.png'),
+              )
+            ],
+          ),
+        ),
+      ],
+      options: CarouselOptions(
+        height: 300,
+        aspectRatio: 0.1,
+        viewportFraction: 0.5,
+        initialPage: 1,
+        enableInfiniteScroll: false,
+        enlargeCenterPage: true,
+        enlargeFactor: 0.2,
+        scrollDirection: Axis.horizontal,
+        onPageChanged: (index, reason) {
+          if (index == 0) {
+            _carouselController.nextPage();
+            // _carouselController.animateToPage(1,
+            //     duration: const Duration(milliseconds: 700),
+            //     curve: Curves.easeInOut);
+          } else if (index == color_picker.length + 1) {
+            _carouselController.previousPage();
+            // _carouselController.animateToPage(color_picker.length,
+            //     duration: const Duration(milliseconds: 700),
+            //     curve: Curves.easeInOut);
+          } else {
+            setState(() {});
+          }
+        },
+      ),
+    );
   }
 }
