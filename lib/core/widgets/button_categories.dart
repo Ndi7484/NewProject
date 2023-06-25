@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/logic/address_provider.dart';
-import 'package:flutter_application_1/core/logic/merchant_provider.dart';
+import 'package:flutter_application_1/core/logic/code_scan_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/features/address_merchant_page/address_merchant.dart';
@@ -26,6 +25,7 @@ class ButtonCategoriesMain extends StatelessWidget {
   Widget build(BuildContext context) {
     final provPage = Provider.of<PageProvider>(context);
     final provOrders = Provider.of<OrdersProvider>(context);
+    final provCode = Provider.of<CodeScanProvider>(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -71,6 +71,7 @@ class ButtonCategoriesMain extends StatelessWidget {
                         builder: (_) => QRViewPage(
                           provOrders: provOrders,
                           tocart: false,
+                          provCode: provCode,
                         ),
                       ),
                     );

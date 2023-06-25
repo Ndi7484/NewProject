@@ -1,8 +1,5 @@
 import 'dart:async';
-// import 'dart:io';
 import 'dart:math';
-// import 'dart:typed_data';
-// import 'package:path/path.dart' as path;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
@@ -13,9 +10,6 @@ import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:flutter_application_1/features/newpass_page/newpass_page.dart';
 import 'package:flutter_application_1/features/verification_page/verification_page.dart';
 import 'package:intl/intl.dart';
-// import 'package:provider/provider.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'package:provider/provider.dart';
 
 class Account {
   Account({

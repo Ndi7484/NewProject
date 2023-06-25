@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/code_scan_provider.dart';
 import 'package:flutter_application_1/core/logic/merchant_provider.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
@@ -36,6 +37,7 @@ class _CartPageState extends State<CartPage> {
     final provMerchant = Provider.of<MerchantProvider>(context);
     final provAccount = Provider.of<AccountProvider>(context);
     final provPromo = Provider.of<PromoProvider>(context);
+    final provCode = Provider.of<CodeScanProvider>(context);
 
     // bottom sheet
     var bottomSheet = PromoBottomSheet();
@@ -184,7 +186,8 @@ class _CartPageState extends State<CartPage> {
                             child: AddressListTile(
                               alamat: provAddress.selectedAlamat,
                               selection: false,
-                              slider: false, icon: true,
+                              slider: false,
+                              icon: true,
                             ),
                           ),
                         )
@@ -206,7 +209,8 @@ class _CartPageState extends State<CartPage> {
                             child: AddressListTile(
                               alamat: provMerchant.selectedMerchant,
                               selection: false,
-                              slider: false, icon: true,
+                              slider: false,
+                              icon: true,
                             ),
                           ),
                         )
@@ -215,7 +219,7 @@ class _CartPageState extends State<CartPage> {
                   // dine-in address state
                   (provOrders.typeOrders == TypeOrder.dinein)
                       ? Padding(
-                          padding: const EdgeInsets.fromLTRB(16,16,16,24),
+                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                           child: GestureDetector(
                             onTap: () {
                               // Navigator.pop(context);
@@ -224,7 +228,8 @@ class _CartPageState extends State<CartPage> {
                                 MaterialPageRoute(
                                   builder: (_) => QRViewPage(
                                     provOrders: provOrders,
-                                    tocart : true,
+                                    tocart: true,
+                                    provCode: provCode,
                                   ),
                                 ),
                               );
@@ -289,8 +294,8 @@ class _CartPageState extends State<CartPage> {
                     padding: const EdgeInsets.only(top: 32),
                     child: GestureDetector(
                       onTap: () {
-                        bottomSheet.getBottomSheet(context, provPromo.validPromo,
-                            provOrders, provPromo);
+                        bottomSheet.getBottomSheet(context,
+                            provPromo.validPromo, provOrders, provPromo);
                       },
                       child: Container(
                         decoration: BoxDecoration(

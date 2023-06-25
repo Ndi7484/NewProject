@@ -2,18 +2,21 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/code_scan_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/widgets/circular_progress.dart';
-import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
 import 'package:flutter_application_1/features/cart_page/cart_page.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 
+import 'widgets/bottom_cant_scan.dart';
+
 class QRViewPage extends StatefulWidget {
   final OrdersProvider provOrders;
+  final CodeScanProvider provCode;
   final bool tocart;
-  const QRViewPage({Key? key, required this.provOrders, required this.tocart})
+  const QRViewPage({Key? key, required this.provOrders, required this.tocart, required this.provCode})
       : super(key: key);
 
   @override
@@ -24,6 +27,7 @@ class _QRViewPageState extends State<QRViewPage> {
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  var bottom_cant = CantScanBottomSheet();
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -40,7 +44,7 @@ class _QRViewPageState extends State<QRViewPage> {
   Widget build(BuildContext context) {
     final provPage = Provider.of<PageProvider>(context);
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         provPage.selectedIndex = 0;
         return true;
       },
@@ -100,7 +104,10 @@ class _QRViewPageState extends State<QRViewPage> {
                     bottom: MediaQuery.of(context).size.height * 0.06,
                     left: MediaQuery.of(context).size.width * 0.35,
                     child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          bottom_cant.getBottomSheet(
+                              context, mounted, widget.tocart, widget.provOrders, widget.provCode);
+                        },
                         child: const Text(
                           "Can't Scan?",
                           style: TextStyle(
