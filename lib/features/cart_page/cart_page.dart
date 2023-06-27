@@ -174,73 +174,85 @@ class _CartPageState extends State<CartPage> {
 
                   // delivery address state
                   (provOrders.typeOrders == TypeOrder.delivery)
-                      ? Padding(
-                          padding: const EdgeInsets.only(
-                              right: 8, left: 8, bottom: 24),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const AddressPage()));
-                            },
-                            child: AddressListTile(
-                              alamat: provAddress.selectedAlamat,
-                              selection: false,
-                              slider: false,
-                              icon: true,
+                      ? Builder(builder: (context) {
+                          // set if the address is realy there and not null
+                          provOrders.paramDeliveryAlamat =
+                              provAddress.selectedAlamat;
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                right: 8, left: 8, bottom: 24),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const AddressPage()));
+                              },
+                              child: AddressListTile(
+                                alamat: provAddress.selectedAlamat,
+                                selection: false,
+                                slider: false,
+                                icon: true,
+                              ),
                             ),
-                          ),
-                        )
+                          );
+                        })
                       : Container(),
 
                   // takeaway address state
                   (provOrders.typeOrders == TypeOrder.takeaway)
-                      ? Padding(
-                          padding: const EdgeInsets.only(
-                              right: 8, left: 8, bottom: 24),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) =>
-                                          const AddressMerchantPage()));
-                            },
-                            child: AddressListTile(
-                              alamat: provMerchant.selectedMerchant,
-                              selection: false,
-                              slider: false,
-                              icon: true,
+                      ? Builder(builder: (context) {
+                          // set if the address is realy there and not null
+                          provOrders.paramTakeawayAlamat =
+                              provMerchant.selectedMerchant;
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                right: 8, left: 8, bottom: 24),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            const AddressMerchantPage()));
+                              },
+                              child: AddressListTile(
+                                alamat: provMerchant.selectedMerchant,
+                                selection: false,
+                                slider: false,
+                                icon: true,
+                              ),
                             ),
-                          ),
-                        )
+                          );
+                        })
                       : Container(),
 
                   // dine-in address state
                   (provOrders.typeOrders == TypeOrder.dinein)
-                      ? Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                          child: GestureDetector(
-                            onTap: () {
-                              // Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => QRViewPage(
-                                    provOrders: provOrders,
-                                    tocart: true,
-                                    provCode: provCode,
+                      ? Builder(builder: (context) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                            child: GestureDetector(
+                              onTap: () {
+                                // Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => QRViewPage(
+                                      provOrders: provOrders,
+                                      tocart: true,
+                                      provCode: provCode,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            child: DineInCard(
-                                jsonString: (provOrders.paramDineInCode ??
-                                        '{"place":"Not set","address":"Location address not set","table":"NOT"}')
-                                    .toString()),
-                          ),
-                        )
+                                );
+                              },
+                              child: DineInCard(
+                                  jsonString: (provOrders.paramDineInCode ??
+                                          '{"place":"Not set","address":"Location address not set","table":"NOT"}')
+                                      .toString()),
+                            ),
+                          );
+                        })
                       : Container(),
 
                   const Divider(),
@@ -390,6 +402,19 @@ class _CartPageState extends State<CartPage> {
                           );
                         })
                       : Container(),
+                  // ANY FREE DELIVERY
+                  (provOrders.typeOrders == TypeOrder.delivery && provOrders.freeDeliverValueStr != '')
+                      ? Builder(builder: (context) {
+                          provOrders.calculateDelivery(
+                            provAddress.selectedAlamat,
+                            provMerchant.listMerchant,
+                          );
+                          return TransactionLabel(
+                            label: 'Free Delivery',
+                            price: '-${provOrders.freeDeliverValueStr}',
+                          );
+                        })
+                      : Container(),
 
                   // VOUCHER
                   (provOrders.paramVoucherCode != null)
@@ -495,7 +520,7 @@ class _CartPageState extends State<CartPage> {
                       Flushbar(
                         flushbarPosition: FlushbarPosition.TOP,
                         messageText: const Text(
-                          'You points is calculated 3% from Totals Payments exclude delivery-fee',
+                          'Your points is calculated 3% from Totals Payments exclude delivery-fee',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.white),
                         ),

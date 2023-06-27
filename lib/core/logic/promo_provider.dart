@@ -56,6 +56,8 @@ class PromoProvider extends ChangeNotifier {
       table!.maxRows,
       (index) {
         var row = table.row(index);
+        // print('voucher obj');
+        // print(row[9]!.value.toString());
         return Promo(
           promoID: row[0]!.value.toString(),
           promoName: row[1]!.value.toString(),
@@ -66,7 +68,7 @@ class PromoProvider extends ChangeNotifier {
           typeOrder: row[6]!.value.toString(),
           menuExc: row[7]!.value.toString().split(','),
           typeExc: row[8]!.value.toString().split(','),
-          freeDelivery: (row[9]!.value.toString() == 'TRUE') ? true : false,
+          freeDelivery: (row[9]!.value.toString().toUpperCase() == 'TRUE') ? true : false,
           maxDelivery: int.parse(row[10]!.value.toString()),
           typeTrans: row[11]!.value.toString(),
           dateExp: int.parse(row[12]!.value.toString()),

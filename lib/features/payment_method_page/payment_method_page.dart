@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/logic/account_provider.dart';
-import 'package:flutter_application_1/core/logic/history_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
-import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/logic/payment_provider.dart';
 import 'package:flutter_application_1/core/widgets/circular_progress.dart';
-import 'package:flutter_application_1/features/history_orders/history_details_page.dart';
 import 'package:flutter_application_1/features/payment_method_page/bank_transfer_page.dart';
 import 'package:flutter_application_1/features/payment_method_page/confirm_payment/bank_transfer_confirm.dart';
 import 'package:flutter_application_1/features/payment_method_page/confirm_payment/ewallet.dart';
@@ -28,6 +24,59 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
     final provPayment = Provider.of<PaymentProvider>(context);
 
     var bottomsheet = SnKPayment();
+
+    // init avoid wrong payment that are deliver from the voucher 
+    List<TypePayment> tmp = [];
+    if (provOrders.tmpOrdersCartHistory!.voucherCode != null) {
+      var exc = provOrders.tmpOrdersCartHistory!.voucherCode!.typeTrans
+          .split(',')
+          .toList();
+      for (var el in exc) {
+        if (el == 'All-Trans') {
+          tmp = [
+            TypePayment.bankTfBCA,
+            TypePayment.bankTfBNI,
+            TypePayment.OVO,
+            TypePayment.Gopay,
+            TypePayment.Dana,
+            TypePayment.PayRandumu
+          ];
+        }
+        if (el == 'BCA') {
+          tmp.add(TypePayment.bankTfBCA);
+          continue;
+        }
+        if (el == 'BNI') {
+          tmp.add(TypePayment.bankTfBNI);
+          continue;
+        }
+        if (el == 'Gopay') {
+          tmp.add(TypePayment.Gopay);
+          continue;
+        }
+        if (el == 'OVO') {
+          tmp.add(TypePayment.OVO);
+          continue;
+        }
+        if (el == 'Dana') {
+          tmp.add(TypePayment.Dana);
+          continue;
+        }
+        if (el == 'Randumu') {
+          tmp.add(TypePayment.PayRandumu);
+          continue;
+        }
+      }
+    } else {
+      tmp = [
+        TypePayment.bankTfBCA,
+        TypePayment.bankTfBNI,
+        TypePayment.OVO,
+        TypePayment.Gopay,
+        TypePayment.Dana,
+        TypePayment.PayRandumu
+      ];
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -115,39 +164,51 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                                     .listPayment[struct]
                                                     .children[index2]
                                                     .title),
+                                                textColor: (tmp.contains(
+                                                        provPayment
+                                                            .listPayment[struct]
+                                                            .children[index2]
+                                                            .typePay))
+                                                    ? null
+                                                    : Colors.grey,
                                                 onTap: () {
-                                                  // Handle Bank selection
-                                                  provOrders
-                                                          .tmpOrdersCartHistory!
-                                                          .typePayment =
-                                                      provPayment
-                                                          .listPayment[struct]
-                                                          .children[index2]
-                                                          .typePay;
-                                                  print(provOrders
-                                                      .tmpOrdersCartHistory!
-                                                      .typePayment);
+                                                  if (tmp.contains(provPayment
+                                                      .listPayment[struct]
+                                                      .children[index2]
+                                                      .typePay)) {
+                                                    // Handle Bank selection
+                                                    provOrders
+                                                            .tmpOrdersCartHistory!
+                                                            .typePayment =
+                                                        provPayment
+                                                            .listPayment[struct]
+                                                            .children[index2]
+                                                            .typePay;
+                                                    print(provOrders
+                                                        .tmpOrdersCartHistory!
+                                                        .typePayment);
 
-                                                  // navigation
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              CircularProgressPage()));
-                                                  Future.delayed(
-                                                      const Duration(
-                                                          seconds: 1), () {
-                                                    Navigator.pushReplacement(
+                                                    // navigation
+                                                    Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (_) =>
-                                                                BankTransferConfirmPaymentPage(
-                                                                  bankData: provPayment
-                                                                      .listPayment[
-                                                                          struct]
-                                                                      .children[index2],
-                                                                )));
-                                                  });
+                                                                CircularProgressPage()));
+                                                    Future.delayed(
+                                                        const Duration(
+                                                            seconds: 1), () {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (_) =>
+                                                                  BankTransferConfirmPaymentPage(
+                                                                    bankData: provPayment
+                                                                        .listPayment[
+                                                                            struct]
+                                                                        .children[index2],
+                                                                  )));
+                                                    });
+                                                  }
                                                 },
                                               )),
                                     ],
@@ -200,36 +261,46 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                           ),
                           child: ListTile(
                             onTap: () async {
-                              // Handle Bank selection
-                              provOrders.tmpOrdersCartHistory!.typePayment =
-                                  provPayment.listPayment[struct].typePay;
-                              print(
-                                  provOrders.tmpOrdersCartHistory!.typePayment);
+                              if (tmp.contains(
+                                  provPayment.listPayment[struct].typePay)) {
+                                // Handle Bank selection
+                                provOrders.tmpOrdersCartHistory!.typePayment =
+                                    provPayment.listPayment[struct].typePay;
+                                print(provOrders
+                                    .tmpOrdersCartHistory!.typePayment);
 
-                              // navigation
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => CircularProgressPage()));
-                              Future.delayed(const Duration(seconds: 1), () {
-                                Navigator.pushReplacement(
+                                // navigation
+                                Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => EWalletPage(
-                                              color: provPayment
-                                                  .listPayment[struct].color,
-                                              typePay: provPayment
-                                                  .listPayment[struct].typePay,
-                                              image: provPayment
-                                                  .listPayment[struct].img,
-                                            )));
-                              });
+                                        builder: (_) =>
+                                            CircularProgressPage()));
+                                Future.delayed(const Duration(seconds: 1), () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => EWalletPage(
+                                                color: provPayment
+                                                    .listPayment[struct].color,
+                                                typePay: provPayment
+                                                    .listPayment[struct]
+                                                    .typePay,
+                                                image: provPayment
+                                                    .listPayment[struct].img,
+                                              )));
+                                });
+                              }
                             },
                             leading: Image.asset(
                                 provPayment.listPayment[struct].img),
                             title: Text(
                               provPayment.listPayment[struct].title,
-                              style: const TextStyle(color: Colors.red),
+                              style: TextStyle(
+                                color: (tmp.contains(provPayment
+                                        .listPayment[struct].typePay))
+                                    ? Colors.red
+                                    : Colors.grey,
+                              ),
                             ),
                           ),
                         ),

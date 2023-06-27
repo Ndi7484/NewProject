@@ -13,6 +13,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   bool _passwordInvisible = true;
   bool _passwordInvisible2 = true;
+
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
@@ -318,6 +319,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     TextButton(
                       onPressed: () {
                         provAccount.message = '';
+                        provAccount.paramPassword = '';
+                        provAccount.paramConfirmPass = '';
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

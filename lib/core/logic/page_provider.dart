@@ -7,4 +7,11 @@ class PageProvider extends ChangeNotifier {
     _selectedIndex = value;
     notifyListeners();
   }
+  int _historyIndex = 0;
+  int get historyIndex => _historyIndex;
+  set historyIndex(value) {
+    _historyIndex = value;
+    notifyListeners();
+  }
+  
 }

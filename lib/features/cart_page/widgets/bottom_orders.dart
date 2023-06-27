@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/core/logic/address_provider.dart';
+import 'package:flutter_application_1/core/logic/merchant_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/features/payment_method_page/payment_method_page.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +20,38 @@ class _BottomOrdersState extends State<BottomOrders> {
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
     final provOrders = Provider.of<OrdersProvider>(context);
+    final provAddress = Provider.of<AddressProvider>(context);
+    final provMerchant = Provider.of<MerchantProvider>(context);
     // print(provAccount.selectedAccount!.points);
+
+    bool checkAddress() {
+      if (provOrders.typeOrders == TypeOrder.delivery) {
+        if (provOrders.paramDeliveryAlamat != null) {
+          return true;
+        }
+        try {
+          provOrders.paramDeliveryAlamat = provAddress.listSelectedAlamat[0];
+          return true;
+        } catch (e) {
+          provOrders.paramDeliveryAlamat = null;
+        }
+      } else if (provOrders.typeOrders == TypeOrder.takeaway) {
+        if (provOrders.paramTakeawayAlamat != null) {
+          return true;
+        }
+        try {
+          provOrders.paramTakeawayAlamat = provMerchant.listMerchant[0];
+          return true;
+        } catch (e) {
+          provOrders.paramTakeawayAlamat = null;
+        }
+      } else if (provOrders.typeOrders == TypeOrder.dinein) {
+        if (provOrders.paramDineInCode != null) {
+          return true;
+        }
+      }
+      return false;
+    }
 
     return Container(
       decoration: const BoxDecoration(
@@ -104,7 +137,8 @@ class _BottomOrdersState extends State<BottomOrders> {
                 GestureDetector(
                   onTap: () {
                     if (provOrders.typeOrders != null &&
-                        provOrders.paramTotalPayInt > 1) {
+                        provOrders.paramTotalPayInt > 1 &&
+                        checkAddress()) {
                       provOrders.setInitOrders();
                       Navigator.push(
                           context,
@@ -117,12 +151,14 @@ class _BottomOrdersState extends State<BottomOrders> {
                     height: MediaQuery.of(context).size.height * 0.05,
                     decoration: BoxDecoration(
                         color: (provOrders.typeOrders != null &&
-                                provOrders.paramTotalPayInt > 1)
+                                provOrders.paramTotalPayInt > 1 &&
+                                checkAddress())
                             ? Theme.of(context).colorScheme.primary
                             : Colors.red.shade100,
                         border: Border.all(
                             color: (provOrders.typeOrders != null &&
-                                    provOrders.paramTotalPayInt > 1)
+                                    provOrders.paramTotalPayInt > 1 &&
+                                    checkAddress())
                                 ? Theme.of(context).colorScheme.primary
                                 : Colors.red.shade100,
                             width: 2),

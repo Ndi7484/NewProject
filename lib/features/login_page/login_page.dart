@@ -13,6 +13,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _passwordInvisible = true;
+
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
@@ -121,7 +122,9 @@ class _LoginPageState extends State<LoginPage> {
                                 right: 10,
                                 child: GestureDetector(
                                   onTap: () {
-                                    _passwordInvisible = !_passwordInvisible;
+                                    setState(() {
+                                      _passwordInvisible = !_passwordInvisible;
+                                    });
                                   },
                                   child: Container(
                                     width: 40,

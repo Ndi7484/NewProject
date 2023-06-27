@@ -51,7 +51,7 @@ class OrdersCart {
   TypePayment? typePayment;
   bool doneStatus;
 
-  setDoneStatus(value){
+  setDoneStatus(value) {
     doneStatus = value;
   }
 }
@@ -163,6 +163,7 @@ class OrdersProvider extends ChangeNotifier {
     paramVoucherDiscStr =
         formatter.format(paramVoucherDisc).toString().replaceAll(',', '.');
     setPointsUse(_pointsUse, paramAccountInformation!);
+    calculateDeliveryNext();
     countTotals();
   }
 
@@ -216,12 +217,28 @@ class OrdersProvider extends ChangeNotifier {
     }
   }
 
+  int freeDeliverValue = 0;
+  String freeDeliverValueStr = '';
   void calculateDeliveryNext() {
     // constanta of distance vs price; just random calculation
     var tmp = (3.5 * smallestDistance * 1000).toInt() +
         ((0.2 * smallestDistance < 3.5) ? 1.5 * smallestDistance * 1000 : 0)
             .toInt();
     paramDeliveryVal = ((tmp / 1000).floor()) * 1000;
+    // if there is promo for free delivery
+    // free delivery is 15% from the sub totals of the menu
+    if (paramVoucherCode != null) {
+      // print(paramVoucherCode!.freeDelivery);
+      if (paramVoucherCode!.freeDelivery) {
+        freeDeliverValue =
+            ((paramSubTotalsInt - paramMuchPoints - paramVoucherDisc) * 0.1)
+                .toInt();
+        if (freeDeliverValue > paramVoucherCode!.maxDelivery) {
+          freeDeliverValue = paramVoucherCode!.maxDelivery;
+        }
+        freeDeliverValueStr = formatter.format(freeDeliverValue).toString().replaceAll(',', '.');
+      }
+    }
     paramDeliveryStr =
         formatter.format(paramDeliveryVal).toString().replaceAll(',', '.');
     // notifyListeners();
@@ -265,12 +282,13 @@ class OrdersProvider extends ChangeNotifier {
   void countTotals() {
     paramTotalPayInt = paramSubTotalsInt.toInt() +
         paramDeliveryVal.toInt() -
+        freeDeliverValue.toInt() -
         paramVoucherDisc.toInt() -
         paramMuchPoints.toInt();
     paramTotalPay =
         formatter.format(paramTotalPayInt).toString().replaceAll(',', '.');
     paramPointsGetInt =
-        ((paramSubTotalsInt - paramVoucherDisc - paramMuchPoints) * 0.03)
+        ((paramSubTotalsInt - freeDeliverValue - paramVoucherDisc - paramMuchPoints) * 0.03)
             .floor();
     paramPointsGet =
         formatter.format(paramPointsGetInt).toString().replaceAll(',', '.');
@@ -367,6 +385,8 @@ class OrdersProvider extends ChangeNotifier {
   void softReset() {
     paramDeliveryVal = 0;
     paramDeliveryStr = '';
+    freeDeliverValue = 0;
+    freeDeliverValueStr = '';
     paramVoucherCode = null;
     paramVoucherDisc = 0;
     paramVoucherDiscStr = '';

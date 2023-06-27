@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/page_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'list_orders.dart';
 
@@ -17,7 +19,10 @@ class _OrdersPageState extends State<OrdersPage> {
   ];
   @override
   Widget build(BuildContext context) {
+    final provPage = Provider.of<PageProvider>(context);
+
     return DefaultTabController(
+      initialIndex: provPage.historyIndex,
       length: tabs.length,
       child: Scaffold(
         body: Column(

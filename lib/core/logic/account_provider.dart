@@ -203,8 +203,8 @@ class AccountProvider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    if (paramFirstName.length < 4 || paramLastName.length < 4) {
-      message = 'Name must at least 4 length';
+    if (paramFirstName.length < 3 || paramLastName.length < 3) {
+      message = 'Name must at least 3 in length';
       _isSignUp = IsSignUp.fail;
       notifyListeners();
       return;

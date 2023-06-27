@@ -205,9 +205,7 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 230,
-              ),
+              const Spacer(),
               Container(
                 decoration: BoxDecoration(
                   color: bankData.color,
@@ -230,6 +228,14 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                     provAccount.pointsChange(
                         provOrders.tmpOrdersCartHistory!.pointsMuch,
                         provOrders.tmpOrdersCartHistory!.pointsGet);
+                    provPage.historyIndex =
+                        (provOrders.tmpOrdersCartHistory!.typeOrder ==
+                                TypeOrder.delivery)
+                            ? 0
+                            : (provOrders.tmpOrdersCartHistory!.typeOrder ==
+                                    TypeOrder.takeaway)
+                                ? 1
+                                : 2;
                     provOrders.resetParam();
                     provPage.selectedIndex = 4;
 
@@ -247,7 +253,10 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
+              const SizedBox(
+                height: 24,
+              ),
             ],
           ),
         ));

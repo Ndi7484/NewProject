@@ -20,11 +20,18 @@ class PromoBottomSheet {
                       children: [
                         GestureDetector(
                           onTap: () {
+                            // set the result of promo t/f
                             var result = provPromo.validatePromo(
-                                listPromo[index], provOrders.paramSubTotalsInt, provOrders.typeOrders);
+                                listPromo[index],
+                                provOrders.paramSubTotalsInt,
+                                provOrders.typeOrders);
+                            // change the voch validate
                             provOrders.changeVoucherValid(
                                 result, listPromo[index], context);
+                            // if the vocher valid close
                             if (result) {
+                              // recalculate delivery if there any free delivery occour
+                              // provOrders.calculateDeliveryNext();
                               Navigator.pop(context);
                             }
                           },
