@@ -3,6 +3,8 @@ import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/widgets/address_listtile.dart';
 import 'package:flutter_application_1/features/address_page/address_page.dart';
+import 'package:flutter_application_1/features/login_page/login_page.dart';
+import 'package:flutter_flushbar/flutter_flushbar.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -153,7 +155,22 @@ class ProfilePageState extends State<ProfilePage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  provAccount.message = '';
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    messageText: const Text(
+                      'Successfully Logout',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                    duration: const Duration(seconds: 2),
+                  ).show(context);
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (_) => const LoginPage()));
+                },
                 child: const Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Text(
