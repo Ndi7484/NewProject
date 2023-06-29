@@ -157,19 +157,18 @@ class ProfilePageState extends State<ProfilePage> {
             GestureDetector(
                 onTap: () {
                   provAccount.message = '';
-                  Flushbar(
-                    flushbarPosition: FlushbarPosition.TOP,
-                    messageText: const Text(
-                      'Successfully Logout',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                    backgroundColor: Colors.red,
-                    duration: const Duration(seconds: 2),
-                  ).show(context);
                   Navigator.of(context).popUntil((route) => route.isFirst);
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (_) => const LoginPage()));
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    messageText: const Text(
+                      'Successfully Logout..',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                    duration: const Duration(seconds: 2),
+                  ).show(context);
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(16.0),
