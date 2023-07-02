@@ -229,10 +229,7 @@ class _VerificationPageState extends State<VerificationPage> {
                     TextButton(
                       onPressed: () {
                         provAccount.resetParam();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const LoginPage()));
+                        Navigator.of(context).popUntil((route) => route.isFirst);
                       },
                       child: const Text(
                         "Login",

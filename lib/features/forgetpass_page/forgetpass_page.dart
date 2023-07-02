@@ -158,10 +158,7 @@ class _ForgetPassPageState extends State<ForgetPassPage> {
                     TextButton(
                       onPressed: () {
                         provAccount.resetParam();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const LoginPage()));
+                        Navigator.pop(context);
                       },
                       child: const Text(
                         "Login",

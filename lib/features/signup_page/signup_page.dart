@@ -373,10 +373,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         provAccount.message = '';
                         provAccount.paramPassword = '';
                         provAccount.paramConfirmPass = '';
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const LoginPage()));
+                        Navigator.of(context).popUntil((route) => route.isFirst);
                       },
                       child: const Text(
                         "Login",

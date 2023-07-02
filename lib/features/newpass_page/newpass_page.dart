@@ -196,6 +196,22 @@ class _NewPassPageState extends State<NewPassPage> {
                               ),
                             ),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          (provAccount.message != '')
+                              ? Container(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      provAccount.message,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),

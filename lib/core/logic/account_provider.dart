@@ -412,6 +412,12 @@ class AccountProvider extends ChangeNotifier {
   // change new password
   void changeNewPass(context) async {
     _isForget = Forget.initial;
+    message = '';
+    if(paramConfirmPass.length<8){
+      message = 'password must 8 in length';
+      notifyListeners();
+      return;
+    }
     if (paramConfirmPass == '' || paramPassword == '') {
       message = 'please input your new password';
       _isForget = Forget.fail;
@@ -453,8 +459,7 @@ class AccountProvider extends ChangeNotifier {
           message = 'password successfuly changed';
           notifyListeners();
           _isForget = Forget.success;
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => const LoginPage()));
+          Navigator.of(context).popUntil((route) => route.isFirst);
         }
       }
       if (!isFind) {
