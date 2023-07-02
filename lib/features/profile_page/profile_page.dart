@@ -86,7 +86,7 @@ class ProfilePageState extends State<ProfilePage> {
               Row(
                 children: [
                   const Text(
-                    "Name :  ",
+                    "Name        :  ",
                     style: TextStyle(
                         color: Colors.grey, letterSpacing: 0.5, fontSize: 15),
                   ),
@@ -110,7 +110,31 @@ class ProfilePageState extends State<ProfilePage> {
               Row(
                 children: [
                   const Text(
-                    "Phone :  ",
+                    "Date Birth :  ",
+                    style: TextStyle(
+                        color: Colors.grey, letterSpacing: 0.5, fontSize: 15),
+                  ),
+                  Text(
+                    "${provAccount.selectedAccount!.dateBirth.day.toString()}-${provAccount.selectedAccount!.dateBirth.month.toString()}-${provAccount.selectedAccount!.dateBirth.year.toString()}",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      letterSpacing: 0.5,
+                      fontSize: 15,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    "Phone       :  ",
                     style: TextStyle(
                         color: Colors.grey, letterSpacing: 0.5, fontSize: 15),
                   ),
@@ -131,7 +155,7 @@ class ProfilePageState extends State<ProfilePage> {
           padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
           child: Row(children: const [
             Text(
-              "Address: ",
+              "Address    : ",
               style: TextStyle(
                   color: Colors.grey, letterSpacing: 0.5, fontSize: 15),
             ),
@@ -156,7 +180,8 @@ class ProfilePageState extends State<ProfilePage> {
           children: [
             GestureDetector(
                 onTap: () {
-                  provAccount.message = '';
+                  provAccount.resetParam();
+                  provAddress.softReset();
                   Navigator.of(context).popUntil((route) => route.isFirst);
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (_) => const LoginPage()));

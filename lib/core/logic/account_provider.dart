@@ -21,6 +21,7 @@ class Account {
     required this.points,
     required this.pointsString,
     // this.alamat,
+    required this.dateBirth,
   });
   final String firstName;
   final String lastName;
@@ -30,6 +31,7 @@ class Account {
   int points;
   String pointsString;
   // List<Alamat>? alamat;
+  DateTime dateBirth;
 }
 
 enum Auth {
@@ -68,20 +70,31 @@ class AccountProvider extends ChangeNotifier {
       table!.maxRows,
       (index) {
         var row = table.row(index);
+        // print(row[6]!.value.toString());
+        List<String> dateExcel = row[6]!.value.toString().split('/');
+        // print(dateExcel);
         return Account(
-          firstName: row[0]!.value.toString(),
-          lastName: row[1]!.value.toString(),
-          email: row[2]!.value.toString(),
-          password: row[3]!.value.toString(),
-          phone: row[4]!.value.toString(),
-          points: int.parse(row[5]!.value.toString()),
-          pointsString: formatter
-              .format(int.parse(row[5]!.value.toString()))
-              .toString()
-              .replaceAll(',', '.'),
-        );
+            firstName: row[0]!.value.toString(),
+            lastName: row[1]!.value.toString(),
+            email: row[2]!.value.toString(),
+            password: row[3]!.value.toString(),
+            phone: row[4]!.value.toString(),
+            points: int.parse(row[5]!.value.toString()),
+            pointsString: formatter
+                .format(int.parse(row[5]!.value.toString()))
+                .toString()
+                .replaceAll(',', '.'),
+            dateBirth: DateTime(
+              int.parse(dateExcel[2]),
+              int.parse(dateExcel[1]),
+              int.parse(dateExcel[0]),
+            ));
       },
     );
+    notifyListeners();
+  }
+
+  void notifyme() {
     notifyListeners();
   }
 
@@ -98,6 +111,7 @@ class AccountProvider extends ChangeNotifier {
   String paramPhone = '';
   String paramPassword = '';
   String paramConfirmPass = '';
+  DateTime? paramBirthDate;
   // error message
   String message = '';
   String currentHour = '';
@@ -197,7 +211,8 @@ class AccountProvider extends ChangeNotifier {
         paramEmail == '' ||
         paramPhone == '' ||
         paramPassword == '' ||
-        paramConfirmPass == '') {
+        paramConfirmPass == '' ||
+        paramBirthDate == null) {
       message = 'Please input valid data';
       _isSignUp = IsSignUp.fail;
       notifyListeners();
@@ -276,7 +291,8 @@ class AccountProvider extends ChangeNotifier {
           password: paramPassword,
           phone: paramPhone,
           points: 0,
-          pointsString: '0'));
+          pointsString: '0',
+          dateBirth: paramBirthDate!));
       resetParam();
       // readAccount();
       message = 'Succesfully SignUp';
@@ -478,6 +494,7 @@ class AccountProvider extends ChangeNotifier {
     paramPhone = '';
     paramPassword = '';
     paramConfirmPass = '';
+    paramBirthDate = null;
     message = '';
     currentHour = '';
     paramV1 = '';

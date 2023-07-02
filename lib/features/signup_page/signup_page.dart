@@ -115,6 +115,58 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ],
                           ),
+                          const SizedBox(height: 5),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.68,
+                            child:
+                                // DatePicker
+                                Row(
+                              children: [
+                                Expanded(
+                                    child: InputDatePickerFormField(
+                                  fieldLabelText: 'Birth Date',
+                                  initialDate: provAccount.paramBirthDate ?? DateTime(2000,1,1),
+                                  firstDate: DateTime(1950),
+                                  lastDate: DateTime.now(),
+                                  onDateSubmitted: (date) {
+                                    provAccount.paramBirthDate = date;
+                                    provAccount.paramBirthDate = DateTime(
+                                        date.year, date.month, date.day);
+                                  },
+                                )),
+                                IconButton(
+                                    onPressed: () async {
+                                      var res = await showDatePicker(
+                                          context: context,
+                                          initialDate:
+                                              provAccount.paramBirthDate ??
+                                                  DateTime(2000, 1, 1),
+                                          firstDate: DateTime(1990),
+                                          lastDate: DateTime(2024),
+                                          initialEntryMode:
+                                              DatePickerEntryMode.input);
+                                      if (res != null) {
+                                        provAccount.paramBirthDate = res;
+                                        provAccount.notifyme();
+                                      }
+                                    },
+                                    icon: const Icon(Icons.date_range)),
+                              ],
+                            ),
+                            // TextField(
+                            //   onChanged: (value) {
+                            //     setState(() {
+                            //       provAccount.paramEmail = value;
+                            //     });
+                            //   },
+                            //   decoration: const InputDecoration(
+                            //     contentPadding:
+                            //         EdgeInsets.fromLTRB(12, 12, 12, 12),
+                            //     border: OutlineInputBorder(),
+                            //     labelText: 'Email',
+                            //   ),
+                            // ),
+                          ),
                           const SizedBox(height: 10),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.68,

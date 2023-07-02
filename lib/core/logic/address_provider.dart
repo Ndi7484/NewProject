@@ -162,4 +162,15 @@ class AddressProvider extends ChangeNotifier {
     paramLong = null;
     paramDisplayName = '';
   }
+
+  void softReset(){
+    _listSelectedAlamat = [];
+    _selectedAlamat = null;
+    paramCategory = '';
+    paramAddress = '';
+    paramNote = '';
+    paramLang = null;
+    paramLong = null;
+    paramDisplayName = '';
+  }
 }
