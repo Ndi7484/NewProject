@@ -36,11 +36,18 @@ void main() {
         ChangeNotifierProvider(create: (_) => MenuProvider()..readMenu()),
         ChangeNotifierProvider(create: (_) => PageProvider()),
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
-        ChangeNotifierProvider(create: (_) => MerchantProvider()..resetParam()..readMerchant()),
+        ChangeNotifierProvider(
+            create: (_) => MerchantProvider()
+              ..resetParam()
+              ..readMerchant()),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
         ChangeNotifierProvider(create: (_) => HistoryProvider()),
-        ChangeNotifierProvider(create: (_) => CodeScanProvider()..resetparam()..readCode()),
-        ChangeNotifierProvider(create: (_) => NotificationProvider()..readNotif()),
+        ChangeNotifierProvider(
+            create: (_) => CodeScanProvider()
+              ..resetparam()
+              ..readCode()),
+        ChangeNotifierProvider(
+            create: (_) => NotificationProvider()..readNotif()),
       ],
       child: const MyApp(),
     ),
@@ -55,6 +62,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Randumu App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
               .copyWith(secondary: Colors.grey[850])),
