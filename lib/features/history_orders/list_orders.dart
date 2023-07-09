@@ -69,7 +69,7 @@ class _ListOrderState extends State<ListOrder>
           } else {
             return Container();
           }
-        }),
+        }).reversed,
         (!anyOrders)
             ? Padding(
                 padding: EdgeInsets.only(
