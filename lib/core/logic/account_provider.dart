@@ -298,8 +298,7 @@ class AccountProvider extends ChangeNotifier {
       message = 'Succesfully SignUp';
       _isSignUp = IsSignUp.success;
       notifyListeners();
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const LoginPage()));
+      Navigator.pop(context);
     } else {
       message = 'Fail SignUp, Email/Phone already used..';
       _isSignUp = IsSignUp.fail;
@@ -413,7 +412,7 @@ class AccountProvider extends ChangeNotifier {
   void changeNewPass(context) async {
     _isForget = Forget.initial;
     message = '';
-    if(paramConfirmPass.length<8){
+    if (paramConfirmPass.length < 8) {
       message = 'password must 8 in length';
       notifyListeners();
       return;
