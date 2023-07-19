@@ -137,7 +137,7 @@ class _BottomOrdersState extends State<BottomOrders> {
                 GestureDetector(
                   onTap: () {
                     if (provOrders.typeOrders != null &&
-                        provOrders.paramTotalPayInt > 1 &&
+                        provOrders.paramSubTotalsInt > 1 &&
                         checkAddress()) {
                       provOrders.setInitOrders();
                       Navigator.push(
@@ -151,13 +151,13 @@ class _BottomOrdersState extends State<BottomOrders> {
                     height: MediaQuery.of(context).size.height * 0.05,
                     decoration: BoxDecoration(
                         color: (provOrders.typeOrders != null &&
-                                provOrders.paramTotalPayInt > 1 &&
+                                provOrders.paramSubTotalsInt > 1 &&
                                 checkAddress())
                             ? Theme.of(context).colorScheme.primary
                             : Colors.red.shade100,
                         border: Border.all(
                             color: (provOrders.typeOrders != null &&
-                                    provOrders.paramTotalPayInt > 1 &&
+                                    provOrders.paramSubTotalsInt > 1 &&
                                     checkAddress())
                                 ? Theme.of(context).colorScheme.primary
                                 : Colors.red.shade100,
