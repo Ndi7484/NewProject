@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
+// import 'dart:js_interop';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:excel/excel.dart';
@@ -32,6 +36,27 @@ class Account {
   String pointsString;
   // List<Alamat>? alamat;
   DateTime dateBirth;
+
+  Map<String, dynamic> toJson() => {
+        'birth': Timestamp.fromDate(dateBirth),
+        'email': email,
+        'first_name': firstName,
+        'last_name': lastName,
+        'pass': password,
+        'phone': phone,
+        'points': points,
+      };
+
+  static Account fromJson(Map<String, dynamic> json) => Account(
+        firstName: json['first_name'],
+        lastName: json['last_name'],
+        email: json['email'],
+        password: json['pass'],
+        phone: json['phone'],
+        points: json['points'],
+        pointsString: json['points'].toString(),
+        dateBirth: (json['birth'] as Timestamp).toDate(),
+      );
 }
 
 enum Auth {
@@ -57,41 +82,65 @@ class AccountProvider extends ChangeNotifier {
   // change formater
   NumberFormat formatter = NumberFormat("#,###", "en_US");
 
-  List<Account> _listAccount = [];
+  // Stream<List<Account>> readAccount() => FirebaseFirestore.instance
+  //     .collection('account')
+  //     .snapshots()
+  //     .map((snapshot) =>
+  //         snapshot.docs.map((doc) => Account.fromJson(doc.data())).toList());
+
+  // private don't public
+  // Stream<List<Account>>? _listAccount;
+
+  final Stream<List<Account>> _listAccount = FirebaseFirestore.instance
+      .collection('account')
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Account.fromJson(doc.data())).toList());
+
   // load data from excel
   void readAccount() async {
-    ByteData data = await rootBundle.load('assets/data/account.xlsx');
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var excel = Excel.decodeBytes(bytes);
+    // fire-base
+    // Stream<List<Account>> tmp = FirebaseFirestore.instance
+    //     .collection('account')
+    //     .snapshots()
+    //     .map((snapshot) =>
+    //         snapshot.docs.map((doc) => Account.fromJson(doc.data())).toList());
 
-    var table = excel.tables[excel.tables.keys.first];
+    // _listAccount = tmp;
 
-    _listAccount = List.generate(
-      table!.maxRows,
-      (index) {
-        var row = table.row(index);
-        // print(row[6]!.value.toString());
-        List<String> dateExcel = row[6]!.value.toString().split('/');
-        // print(dateExcel);
-        return Account(
-            firstName: row[0]!.value.toString(),
-            lastName: row[1]!.value.toString(),
-            email: row[2]!.value.toString(),
-            password: row[3]!.value.toString(),
-            phone: row[4]!.value.toString(),
-            points: int.parse(row[5]!.value.toString()),
-            pointsString: formatter
-                .format(int.parse(row[5]!.value.toString()))
-                .toString()
-                .replaceAll(',', '.'),
-            dateBirth: DateTime(
-              int.parse(dateExcel[2]),
-              int.parse(dateExcel[1]),
-              int.parse(dateExcel[0]),
-            ));
-      },
-    );
-    notifyListeners();
+    // return;
+    // ByteData data = await rootBundle.load('assets/data/account.xlsx');
+    // var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    // var excel = Excel.decodeBytes(bytes);
+
+    // var table = excel.tables[excel.tables.keys.first];
+
+    // _listAccount = List.generate(
+    //   table!.maxRows,
+    //   (index) {
+    //     var row = table.row(index);
+    //     // print(row[6]!.value.toString());
+    //     List<String> dateExcel = row[6]!.value.toString().split('/');
+    //     // print(dateExcel);
+    //     return Account(
+    //         firstName: row[0]!.value.toString(),
+    //         lastName: row[1]!.value.toString(),
+    //         email: row[2]!.value.toString(),
+    //         password: row[3]!.value.toString(),
+    //         phone: row[4]!.value.toString(),
+    //         points: int.parse(row[5]!.value.toString()),
+    //         pointsString: formatter
+    //             .format(int.parse(row[5]!.value.toString()))
+    //             .toString()
+    //             .replaceAll(',', '.'),
+    //         dateBirth: DateTime(
+    //           int.parse(dateExcel[2]),
+    //           int.parse(dateExcel[1]),
+    //           int.parse(dateExcel[0]),
+    //         ));
+    //   },
+    // );
+    // notifyListeners();
   }
 
   void notifyme() {
@@ -140,51 +189,59 @@ class AccountProvider extends ChangeNotifier {
   void checkAccount(context) async {
     _isAuthenticated = Auth.initial;
     bool authSet = false;
+
     if (paramEmail == '' && paramPhone == '' && paramPassword == '') {
       message = 'Please input the required email/password';
       _isAuthenticated = Auth.unauthenticated;
       notifyListeners();
       return;
     }
-    for (var el in _listAccount) {
-      if ((el.email == paramEmail || el.phone == paramPhone) &&
-          el.password == paramPassword) {
-        _selectedAccount = el;
-        _isAuthenticated = Auth.authenticated;
-        authSet = true;
-        message = 'Succesful Login';
-        // get account alamat if there is, if nothing then is [] or null
-        // only works outside of this provider
-        currentTime();
-        notifyListeners();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BottomNavigationPage(
-              selectNext: 0,
+
+    // Subscribe to the stream and handle data as it arrives
+    _listAccount.listen((account) {
+      for (var el in account) {
+        if ((el.email == paramEmail || el.phone == paramPhone) &&
+            el.password == md5.convert(utf8.encode(paramPassword)).toString()) {
+          _selectedAccount = el;
+          _isAuthenticated = Auth.authenticated;
+          authSet = true;
+          message = 'Succesful Login';
+          // get account alamat if there is, if nothing then is [] or null
+          // only works outside of this provider
+          currentTime();
+          notifyListeners();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BottomNavigationPage(
+                selectNext: 0,
+              ),
             ),
-          ),
-        );
+          );
+        }
       }
-    }
-    if (!authSet) {
-      _isAuthenticated = Auth.unauthenticated;
-      message = 'Login Fail, Incorrect Email/Password..';
-      notifyListeners();
-    }
+      if (!authSet) {
+        _isAuthenticated = Auth.unauthenticated;
+        message = 'Login Fail, Incorrect Email/Password..';
+        notifyListeners();
+      }
+    });
   }
 
   // check is there an duplicate email, phone
-  bool checkAdd(String email, String phone) {
-    bool toReturn = false;
-    // check duplicate
-    for (var el in _listAccount) {
-      if (el.email == email || el.phone == phone) {
-        return toReturn;
+  Future<bool> checkAdd(String email, String phone) async {
+    bool toReturn = true; // Default to true, assuming no duplicates
+
+    await for (var accounts in _listAccount) {
+      for (var el in accounts) {
+        if (el.email == email || el.phone == phone) {
+          toReturn = false; // Set to false if a duplicate is found
+          break; // No need to continue checking once a duplicate is found
+        }
       }
     }
-    // there is no duplicate
-    return !toReturn;
+
+    return toReturn;
   }
 
   // check current time
@@ -249,7 +306,8 @@ class AccountProvider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    if (paramPassword == paramConfirmPass && checkAdd(paramEmail, paramPhone)) {
+    if (paramPassword == paramConfirmPass &&
+        await checkAdd(paramEmail, paramPhone)) {
       // ByteData data = await rootBundle.load('assets/data/account.xlsx');
       // var bytes =
       //     data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
@@ -284,15 +342,27 @@ class AccountProvider extends ChangeNotifier {
       // File modifiedFile = File(filePath);
       // await modifiedFile.writeAsBytes(excel.encode()!);
 
-      _listAccount.add(Account(
-          firstName: paramFirstName,
-          lastName: paramLastName,
-          email: paramEmail,
-          password: paramPassword,
-          phone: paramPhone,
-          points: 0,
-          pointsString: '0',
-          dateBirth: paramBirthDate!));
+      var tmp = FirebaseFirestore.instance.collection('account').doc();
+      var json = {
+        'birth': Timestamp.fromDate(paramBirthDate!),
+        'email': paramEmail,
+        'first_name': paramFirstName,
+        'last_name': paramLastName,
+        'pass': md5.convert(utf8.encode(paramPassword)).toString(),
+        'phone': paramPhone,
+        'points': 0,
+      };
+      // await firebase set
+      await tmp.set(json);
+      // _listAccount.add(Account(
+      //     firstName: paramFirstName,
+      //     lastName: paramLastName,
+      //     email: paramEmail,
+      //     password: paramPassword,
+      //     phone: paramPhone,
+      //     points: 0,
+      //     pointsString: '0',
+      //     dateBirth: paramBirthDate!));
       resetParam();
       // readAccount();
       message = 'Succesfully SignUp';
@@ -310,80 +380,82 @@ class AccountProvider extends ChangeNotifier {
   void checkForget(context) async {
     _isForget = Forget.initial;
     if (paramEmail != '' || paramPhone != '') {
-      bool isFind = false;
-      for (var el in _listAccount) {
-        if (el.email == paramEmail) {
-          // there is an account named:
-          paramEmail = el.email;
-          isFind = true;
-          _isForget = Forget.success;
+      _listAccount.listen((account) {
+        bool isFind = false;
+        for (var el in account) {
+          if (el.email == paramEmail) {
+            // there is an account named:
+            paramEmail = el.email;
+            isFind = true;
+            _isForget = Forget.success;
 
-          // code validation
-          final random = Random();
-          const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-          const length = 4;
+            // code validation
+            final random = Random();
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            const length = 4;
 
-          // do a code randomizer
-          String randomString = '';
-          for (int i = 0; i < length; i++) {
-            randomString += chars[random.nextInt(chars.length)];
+            // do a code randomizer
+            String randomString = '';
+            for (int i = 0; i < length; i++) {
+              randomString += chars[random.nextInt(chars.length)];
+            }
+            _validateParam = randomString;
+
+            // show notif banner
+            var bannerNotif = NotifBanner();
+            ScaffoldMessenger.of(context).showMaterialBanner(
+              bannerNotif.getBanner(context, randomString),
+            );
+
+            // set timer
+            Timer(const Duration(seconds: 7), () {
+              bannerNotif.changeView(context);
+            });
+
+            // push to next page validate?
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const VerificationPage()));
           }
-          _validateParam = randomString;
+          if (el.phone == paramPhone) {
+            // there is an account named:
+            paramPhone = el.phone;
+            isFind = true;
+            _isForget = Forget.success;
 
-          // show notif banner
-          var bannerNotif = NotifBanner();
-          ScaffoldMessenger.of(context).showMaterialBanner(
-            bannerNotif.getBanner(context, randomString),
-          );
+            // code validation
+            final random = Random();
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            const length = 4;
 
-          // set timer
-          Timer(const Duration(seconds: 7), () {
-            bannerNotif.changeView(context);
-          });
+            // do a code randomizer
+            String randomString = '';
+            for (int i = 0; i < length; i++) {
+              randomString += chars[random.nextInt(chars.length)];
+            }
+            _validateParam = randomString;
 
-          // push to next page validate?
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const VerificationPage()));
-        }
-        if (el.phone == paramPhone) {
-          // there is an account named:
-          paramPhone = el.phone;
-          isFind = true;
-          _isForget = Forget.success;
+            // show notif banner
+            var bannerNotif = NotifBanner();
+            ScaffoldMessenger.of(context).showMaterialBanner(
+              bannerNotif.getBanner(context, randomString),
+            );
 
-          // code validation
-          final random = Random();
-          const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-          const length = 4;
+            // set timer
+            Timer(const Duration(seconds: 7), () {
+              bannerNotif.changeView(context);
+            });
 
-          // do a code randomizer
-          String randomString = '';
-          for (int i = 0; i < length; i++) {
-            randomString += chars[random.nextInt(chars.length)];
+            // push to next page validate?
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const VerificationPage()));
           }
-          _validateParam = randomString;
-
-          // show notif banner
-          var bannerNotif = NotifBanner();
-          ScaffoldMessenger.of(context).showMaterialBanner(
-            bannerNotif.getBanner(context, randomString),
-          );
-
-          // set timer
-          Timer(const Duration(seconds: 7), () {
-            bannerNotif.changeView(context);
-          });
-
-          // push to next page validate?
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const VerificationPage()));
         }
-      }
-      if (!isFind) {
-        message = 'There is no such email/phone';
-        _isForget = Forget.fail;
-        notifyListeners();
-      }
+        if (!isFind) {
+          message = 'There is no such email/phone';
+          _isForget = Forget.fail;
+          notifyListeners();
+        }
+      });
     } else {
       message = 'Please input the email/phone';
       _isForget = Forget.fail;
@@ -427,63 +499,68 @@ class AccountProvider extends ChangeNotifier {
         _isForget = Forget.fail;
         return;
       }
-      bool isFind = false;
-      for (var el in _listAccount) {
-        if (el.email == paramEmail || el.phone == paramPhone) {
-          // ByteData data = await rootBundle.load('assets/data/account.xlsx');
-          // var bytes =
-          //     data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-          // var excel = Excel.decodeBytes(bytes);
-          // var table = excel.tables[excel.tables.keys.first];
 
-          // for (var i = 0; i < table!.maxRows; i++) {
-          //   var row = table.row(i);
-          //   if (row[2]!.value.toString() == paramEmail ||
-          //       row[4]!.value.toString() == paramPhone) {
-          //     Sheet sheetObject = excel['Sheet1'];
-          //     var cell = sheetObject.cell(CellIndex.indexByString('D$i'));
-          //     cell.value = paramPassword;
-          //     // Save the updated Excel file
-          //     var updatedBytes = excel.encode();
-          //     // Overwrite the existing file
-          //     var file = File('assets/data/account.xlsx');
-          //     await file.writeAsBytes(updatedBytes!);
-          //   }
-          // }
+      _listAccount.listen((account) {
+        bool isFind = false;
+        for (var el in account) {
+          if (el.email == paramEmail || el.phone == paramPhone) {
+            // ByteData data = await rootBundle.load('assets/data/account.xlsx');
+            // var bytes =
+            //     data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+            // var excel = Excel.decodeBytes(bytes);
+            // var table = excel.tables[excel.tables.keys.first];
 
-          // readAccount();
-          el.password = paramPassword;
-          resetParam();
-          isFind = true;
-          message = 'password successfuly changed';
-          notifyListeners();
-          _isForget = Forget.success;
-          Navigator.of(context).popUntil((route) => route.isFirst);
+            // for (var i = 0; i < table!.maxRows; i++) {
+            //   var row = table.row(i);
+            //   if (row[2]!.value.toString() == paramEmail ||
+            //       row[4]!.value.toString() == paramPhone) {
+            //     Sheet sheetObject = excel['Sheet1'];
+            //     var cell = sheetObject.cell(CellIndex.indexByString('D$i'));
+            //     cell.value = paramPassword;
+            //     // Save the updated Excel file
+            //     var updatedBytes = excel.encode();
+            //     // Overwrite the existing file
+            //     var file = File('assets/data/account.xlsx');
+            //     await file.writeAsBytes(updatedBytes!);
+            //   }
+            // }
+
+            // readAccount();
+            el.password = paramPassword;
+            resetParam();
+            isFind = true;
+            message = 'password successfuly changed';
+            notifyListeners();
+            _isForget = Forget.success;
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          }
         }
-      }
-      if (!isFind) {
-        message = 'error system to confirm';
-        notifyListeners();
-        return;
-      }
+        if (!isFind) {
+          message = 'error system to confirm';
+          notifyListeners();
+          return;
+        }
+      });
     }
   }
 
   void pointsChange(int pointsMuch, int pointsGet) {
-    for (var el in _listAccount) {
-      if (el.email == paramEmail) {
-        el.points = el.points - pointsMuch;
-        if (el.points < 0) {
-          el.points = 0;
+    _listAccount.listen((account) {
+      for (var el in account) {
+        if (el.email == paramEmail) {
+          el.points = el.points - pointsMuch;
+          if (el.points < 0) {
+            el.points = 0;
+          }
+          el.points = el.points + pointsGet;
+          el.pointsString =
+              formatter.format(el.points).toString().replaceAll(',', '.');
+          // re-select account newest
+          _selectedAccount == el;
+          break;
         }
-        el.points = el.points + pointsGet;
-        el.pointsString =
-            formatter.format(el.points).toString().replaceAll(',', '.');
-        // re-select account newest
-        _selectedAccount == el;
-        break;
       }
-    }
+    });
   }
 
   // reset parameter to ''
