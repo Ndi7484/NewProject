@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/code_scan_provider.dart';
 import 'package:flutter_application_1/core/logic/history_provider.dart';
@@ -16,8 +17,15 @@ import 'package:provider/provider.dart';
 import 'core/logic/promo_provider.dart';
 import 'core/logic/warning_provider.dart';
 
+// import don't command/remove for firebase
+import 'package:firebase_core/firebase_core.dart';
+
 // multi provider is here
-void main() {
+Future<void> main() async {
+  // add firebase
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(
     MultiProvider(
       providers: [
