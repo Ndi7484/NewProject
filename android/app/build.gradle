@@ -47,8 +47,8 @@ android {
         applicationId "com.example.flutter_application_1"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        // minSdkVersion flutter.minSdkVersion (default)
-        minSdkVersion 20
+        // minSdkVersion flutter.minSdkVersion (default) change from 20 -> 21
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -67,6 +67,24 @@ flutter {
     source '../..'
 }
 
+// command firebase plugins
+// plugins {
+//   id 'com.android.application'
+
+//   // Add the Google services Gradle plugin
+//   id 'com.google.gms.google-services'
+
+//   ...
+// }
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // add some
+    // Import the Firebase BoM
+    // implementation platform('com.google.firebase:firebase-bom:32.3.1')
+    // TODO: Add the dependencies for Firebase products you want to use
+    // When using the BoM, don't specify versions in Firebase dependencies
+    // https://firebase.google.com/docs/android/setup#available-libraries
 }
+
+apply plugin: 'com.google.gms.google-services'
