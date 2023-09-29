@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/code_scan_provider.dart';
 import 'package:flutter_application_1/core/logic/history_provider.dart';
@@ -29,14 +29,8 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            create: (_) => AccountProvider()
-              ..resetParam()
-              ..readAccount()),
-        ChangeNotifierProvider(
-            create: (_) => AddressProvider()
-              ..resetParam()
-              ..readAddress()),
+        ChangeNotifierProvider(create: (_) => AccountProvider()..resetParam()),
+        ChangeNotifierProvider(create: (_) => AddressProvider()..resetParam()),
         ChangeNotifierProvider(create: (_) => PromoProvider()..readPromo()),
         ChangeNotifierProvider(
             create: (_) => CarouselProvider()..readCarousel()),
