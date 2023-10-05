@@ -151,9 +151,9 @@ class ProfilePageState extends State<ProfilePage> {
             ],
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(right: 10, left: 10, top: 15),
-          child: Row(children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10, left: 10, top: 15),
+          child: Row(children: const [
             Text(
               "Address    : ",
               style: TextStyle(

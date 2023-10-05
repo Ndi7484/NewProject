@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
@@ -23,73 +24,10 @@ class _AddressPageState extends State<AddressPage> {
     provAddress.getAddress(provAccount.selectedAccount!.email);
 
     // function build widget list
-    Widget buildAddressList(
-        BuildContext context, List<Alamat> listSelectedAlamat) {
-      List<Widget> generator = [];
-      if (listSelectedAlamat.isEmpty) {
-        generator.add(
-          Expanded(
-            child: Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.location_off,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 40,
-                    ),
-                    const SizedBox(
-                      height: 6,
-                    ),
-                    Text(
-                      'There is No Location Saved yet... ',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary),
-                    )
-                  ]),
-            ),
-          ),
-        );
-      } else {
-        for (var el in listSelectedAlamat) {
-          generator.add(
-              // Your GestureDetector and AddressListTile widgets here
-              GestureDetector(
-            onTap: () {
-              provAddress.changeSelected(el);
-              // set the value delayed
-              provOrders.paramDeliveryAlamat = el;
-              provOrders.calculateSubTotals(context);
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Address changed!'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            },
-            child: AddressListTile(
-              alamat: el,
-              selection: (el.alamatLengkap ==
-                      provAddress.selectedAlamat?.alamatLengkap)
-                  ? true
-                  : false,
-              slider: true,
-              icon: true,
-            ),
-          ));
-        }
-      }
-      return Column(
-        children: generator,
-      );
-    }
-
-    Widget buildAddressTile(Alamat address) {
+    Widget buildAddressTile(Alamat address, bool selection) {
       return (provAccount.selectedAccount!.email == address.alamatID)
           ? AddressListTile(
-              alamat: address, selection: true, slider: true, icon: true)
+              alamat: address, selection: selection, slider: true, icon: true)
           : Container();
     }
 
@@ -104,119 +42,70 @@ class _AddressPageState extends State<AddressPage> {
         ),
         body: Column(
           children: [
-            ...List.generate(
-                provAddress.listSelectedAlamat.length,
-                (index) => GestureDetector(
-                      onTap: () {
-                        provAddress.changeSelected(
-                            provAddress.listSelectedAlamat[index]);
-                        // set the value delayed
-                        provOrders.paramDeliveryAlamat =
-                            provAddress.listSelectedAlamat[index];
-                        provOrders.calculateSubTotals(context);
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Address changed!'),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                      },
-                      child: AddressListTile(
-                        alamat: provAddress.listSelectedAlamat[index],
-                        selection: (provAddress
-                                    .listSelectedAlamat[index].alamatLengkap ==
-                                provAddress.selectedAlamat?.alamatLengkap)
-                            ? true
-                            : false,
-                        slider: true,
-                        icon: true,
+            Flexible(
+              child: StreamBuilder<List<Alamat>>(
+                stream: FirebaseFirestore.instance
+                    .collection('address')
+                    .snapshots()
+                    .map((snapshot) => snapshot.docs
+                        .map((doc) => Alamat.fromJson(doc.data()))
+                        .toList()),
+                builder: (context, snapshot) {
+                  print(snapshot);
+                  if (snapshot.hasData) {
+                    List<Widget> addressWidgets = snapshot.data!.map((alamat) {
+                      provAddress.selectedAlamat ??= alamat;
+                      print(provAddress.selectedAlamat?.alamatLengkap);
+                      print(alamat.alamatLengkap);
+                      return GestureDetector(
+                          onTap: () {
+                            provAddress.changeSelected(alamat);
+                            Navigator.pop(context);
+                          },
+                          child: buildAddressTile(
+                              alamat,
+                              ((provAddress.selectedAlamat?.alamatLengkap) ==
+                                      alamat.alamatLengkap)
+                                  ? true
+                                  : false));
+                    }).toList();
+
+                    return Column(
+                      children: addressWidgets,
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return Expanded(
+                      child: Center(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.location_off,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 40,
+                              ),
+                              const SizedBox(
+                                height: 6,
+                              ),
+                              Text(
+                                'There is No Location Saved yet... ',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                              )
+                            ]),
                       ),
-                    )),
-            (provAddress.listSelectedAlamat.isEmpty == true)
-                ? Expanded(
-                    child: Center(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.location_off,
-                              color: Theme.of(context).colorScheme.primary,
-                              size: 40,
-                            ),
-                            const SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              'There is No Location Saved yet... ',
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary),
-                            )
-                          ]),
-                    ),
-                  )
-                : Container(),
+                    );
+                  }
+                },
+              ),
+            ),
           ],
         ),
-
-        // StreamBuilder<List<Alamat>>(
-        //   stream: provAddress.listSelectedAlamat, // Use the stream directly here
-        //   builder: (context, snapshot) {
-        //     print(snapshot.data);
-        //     if (snapshot.hasData) {
-        //       // Handle data state
-        //       final address = snapshot.data!;
-        //       return ListView(children: address.map(buildAddressTile).toList());
-
-        //       // final listAlamat = snapshot.data ?? [];
-        //       // List<Alamat> listSelectedAlamat = [];
-        //       // for (var el in listAlamat) {
-        //       //   if (el.alamatID == provAccount.selectedAccount!.email) {
-        //       //     listSelectedAlamat.add(el);
-        //       //   }
-        //       // }
-        //       // provAddress.listSelectedAlamat = listSelectedAlamat;
-
-        //       // return buildAddressList(context, listSelectedAlamat);
-        //       // return (listSelectedAlamat != [])
-        //       //     ? AddressListTile(
-        //       //         alamat: provAddress.selectedAlamat,
-        //       //         selection: false,
-        //       //         slider: false,
-        //       //         icon: true,
-        //       //       )
-        //       //     : AddressListTile(
-        //       //         alamat: Alamat(
-        //       //             alamatID: 'None',
-        //       //             alamatTitle: 'No Address',
-        //       //             alamatLengkap: 'No Address',
-        //       //             alamatDesk: 'No Address',
-        //       //             alamatLang: 0,
-        //       //             alamatLong: 0,
-        //       //             alamatMapsDesc: 'No Address'),
-        //       //         selection: false,
-        //       //         slider: false,
-        //       //         icon: true);
-        //       // Now you can use listAlamat to display the data in your widget
-        //       // ...
-        //     } else {
-        //       return AddressListTile(
-        //           alamat: Alamat(
-        //               alamatID: 'None',
-        //               alamatTitle: 'No Address',
-        //               alamatLengkap: 'No Address',
-        //               alamatDesk: 'No Address',
-        //               alamatLang: 0,
-        //               alamatLong: 0,
-        //               alamatMapsDesc: 'No Address'),
-        //           selection: false,
-        //           slider: false,
-        //           icon: true);
-        //     }
-        //   },
-        // ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(context,
