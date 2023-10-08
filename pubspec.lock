@@ -17,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.7"
-  args:
-    dependency: transitive
-    description:
-      name: args
-      sha256: c372bb384f273f0c2a8aaaa226dad84dc27c8519a691b888725dec59518ad53a
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.1"
   async:
     dependency: transitive
     description:
@@ -105,6 +97,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.0"
+<<<<<<< HEAD
   connectivity_plus:
     dependency: transitive
     description:
@@ -153,6 +146,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
+=======
+>>>>>>> 690a2eaf39f2b4dd2d2299c3d24796fd1afd7a35
   convert:
     dependency: transitive
     description:
@@ -185,14 +180,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.2"
-  dbus:
-    dependency: transitive
-    description:
-      name: dbus
-      sha256: "6f07cba3f7b3448d42d015bfd3d53fe12e5b36da2423f23838efc1d5fb31a263"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.8"
   equatable:
     dependency: "direct main"
     description:
@@ -278,14 +265,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.2"
-  flutter_google_location_picker:
-    dependency: "direct main"
-    description:
-      name: flutter_google_location_picker
-      sha256: "865e7e82a1077ebbf1f033c4014925802e0cd960d0c58bd1a463eb0d313ad3b9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.3"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -298,10 +277,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_map
-      sha256: "09010e452bcd8c57ade1b936b79643c4fd599f93b00d1696630f0b919b6f374a"
+      sha256: f1ff0f7c897cb72531851a8c6f5b9847449c01da3550026d0a0a3734ece4d8f8
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "1.1.1"
   flutter_slidable:
     dependency: "direct main"
     description:
@@ -376,6 +355,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  map_picker_free:
+    dependency: "direct main"
+    description:
+      name: map_picker_free
+      sha256: "94686565e949210b5e3a5e53dc7710a55aca140195d6b140545deccfac3acf63"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   matcher:
     dependency: transitive
     description:
@@ -416,14 +403,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  nm:
-    dependency: transitive
-    description:
-      name: nm
-      sha256: "2c9aae4127bdc8993206464fcc063611e0e36e72018696cd9631023a31b24254"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.0"
   path:
     dependency: transitive
     description:

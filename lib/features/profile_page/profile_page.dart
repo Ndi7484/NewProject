@@ -20,7 +20,7 @@ class ProfilePageState extends State<ProfilePage> {
     final provAccount = Provider.of<AccountProvider>(context);
     final provAddress = Provider.of<AddressProvider>(context);
     // set address here
-    provAddress.getAddress(provAccount.selectedAccount!.email);
+    // provAddress.getAddress(provAccount.selectedAccount!.email);
 
     return Scaffold(
       appBar: AppBar(
@@ -162,18 +162,73 @@ class ProfilePageState extends State<ProfilePage> {
           ]),
         ),
         GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const AddressPage()));
-          },
-          // it can be selected or null
-          child: AddressListTile(
-            alamat: provAddress.selectedAlamat,
-            selection: false,
-            slider: false,
-            icon: true,
-          ),
-        ),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const AddressPage()));
+            },
+            // it can be selected or null
+            child: StreamBuilder<List<Alamat>>(
+              stream: provAddress.listAlamat, // Use the stream directly here
+              builder: (context, snapshot) {
+                print(snapshot.data);
+                // if (snapshot.connectionState == ConnectionState.waiting) {
+                //   // Handle loading state
+                //   return const CircularProgressIndicator();
+                // } else
+                if (snapshot.hasError) {
+                  // Handle error state
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  // Handle data state
+                  final listAlamat = snapshot.data ?? [];
+                  if(provAddress.listSelectedAlamat.isEmpty){
+                    provAddress.listSelectedAlamat = <Alamat>[];
+                  }
+                  // List<Alamat> selectedAlamat = [];
+                  for (var el in listAlamat) {
+                    if (el.alamatID == provAccount.selectedAccount!.email) {
+                      provAddress.listSelectedAlamat.add(el);
+                      // provAddress.selectedAlamat = el;
+                    }
+                  }
+                  // try {
+                  //   provAddress.selectedAlamat =
+                  //       provAddress.listSelectedAlamat[0];
+                  // } catch (e) {
+                  //   print('wrong alamat or missing');
+                  // }
+                  return (listAlamat != [])
+                      ? AddressListTile(
+                          alamat: provAddress.selectedAlamat ??
+                              Alamat(
+                                  alamatID: 'None',
+                                  alamatTitle: 'No Address',
+                                  alamatLengkap: 'No Address',
+                                  alamatDesk: 'No Address',
+                                  alamatLang: 0,
+                                  alamatLong: 0,
+                                  alamatMapsDesc: 'No Address'),
+                          selection: false,
+                          slider: false,
+                          icon: true,
+                        )
+                      : AddressListTile(
+                          alamat: Alamat(
+                              alamatID: 'None',
+                              alamatTitle: 'No Address',
+                              alamatLengkap: 'No Address',
+                              alamatDesk: 'No Address',
+                              alamatLang: 0,
+                              alamatLong: 0,
+                              alamatMapsDesc: 'No Address'),
+                          selection: false,
+                          slider: false,
+                          icon: true);
+                  // Now you can use listAlamat to display the data in your widget
+                  // ...
+                }
+              },
+            )),
         const Spacer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

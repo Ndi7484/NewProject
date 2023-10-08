@@ -75,7 +75,7 @@ class _BestPickCardState extends State<BestPickCard> {
                                   borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(4),
                                       topRight: Radius.circular(4)),
-                                  child: Image.asset(
+                                  child: Image.network(
                                     provMenu.randomUniqueList[index].menuImage,
                                     fit: BoxFit.fill,
                                   ),

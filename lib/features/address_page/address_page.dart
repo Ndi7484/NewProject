@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
@@ -22,6 +23,14 @@ class _AddressPageState extends State<AddressPage> {
     // set address here
     provAddress.getAddress(provAccount.selectedAccount!.email);
 
+    // function build widget list
+    Widget buildAddressTile(Alamat address, bool selection) {
+      return (provAccount.selectedAccount!.email == address.alamatID)
+          ? AddressListTile(
+              alamat: address, selection: selection, slider: true, icon: true)
+          : Container();
+    }
+
     return Scaffold(
         appBar: AppBar(
           leading: GestureDetector(
@@ -33,59 +42,68 @@ class _AddressPageState extends State<AddressPage> {
         ),
         body: Column(
           children: [
-            ...List.generate(
-                provAddress.listSelectedAlamat.length,
-                (index) => GestureDetector(
-                      onTap: () {
-                        provAddress.changeSelected(
-                            provAddress.listSelectedAlamat[index]);
-                        // set the value delayed
-                        provOrders.paramDeliveryAlamat =
-                            provAddress.listSelectedAlamat[index];
-                        provOrders.calculateSubTotals(context);
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Address changed!'),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                      },
-                      child: AddressListTile(
-                        alamat: provAddress.listSelectedAlamat[index],
-                        selection: (provAddress
-                                    .listSelectedAlamat[index].alamatLengkap ==
-                                provAddress.selectedAlamat?.alamatLengkap)
-                            ? true
-                            : false,
-                        slider: true, icon: true,
+            Flexible(
+              child: StreamBuilder<List<Alamat>>(
+                stream: FirebaseFirestore.instance
+                    .collection('address')
+                    .snapshots()
+                    .map((snapshot) => snapshot.docs
+                        .map((doc) => Alamat.fromJson(doc.data()))
+                        .toList()),
+                builder: (context, snapshot) {
+                  print(snapshot);
+                  if (snapshot.hasData) {
+                    List<Widget> addressWidgets = snapshot.data!.map((alamat) {
+                      provAddress.selectedAlamat ??= alamat;
+                      print(provAddress.selectedAlamat?.alamatLengkap);
+                      print(alamat.alamatLengkap);
+                      return GestureDetector(
+                          onTap: () {
+                            provAddress.changeSelected(alamat);
+                            Navigator.pop(context);
+                          },
+                          child: buildAddressTile(
+                              alamat,
+                              ((provAddress.selectedAlamat?.alamatLengkap) ==
+                                      alamat.alamatLengkap)
+                                  ? true
+                                  : false));
+                    }).toList();
+
+                    return Column(
+                      children: addressWidgets,
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return Expanded(
+                      child: Center(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.location_off,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 40,
+                              ),
+                              const SizedBox(
+                                height: 6,
+                              ),
+                              Text(
+                                'There is No Location Saved yet... ',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                              )
+                            ]),
                       ),
-                    )),
-            (provAddress.listSelectedAlamat.isEmpty == true)
-                ? Expanded(
-                    child: Center(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.location_off,
-                              color: Theme.of(context).colorScheme.primary,
-                              size: 40,
-                            ),
-                            const SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              'There is No Location Saved yet... ',
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary),
-                            )
-                          ]),
-                    ),
-                  )
-                : Container(),
+                    );
+                  }
+                },
+              ),
+            ),
           ],
         ),
         floatingActionButton: FloatingActionButton(

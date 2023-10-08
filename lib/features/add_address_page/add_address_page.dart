@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
-import 'package:flutter_google_location_picker/export.dart';
-import 'package:flutter_google_location_picker/flutter_google_location_picker.dart';
-import 'package:flutter_google_location_picker/model/lat_lng_model.dart';
+// import 'package:flutter_google_location_picker/export.dart';
+// import 'package:flutter_google_location_picker/flutter_google_location_picker.dart';
+// import 'package:flutter_google_location_picker/model/lat_lng_model.dart';
+import 'package:map_picker_free/map_picker_free.dart';
 import 'package:provider/provider.dart';
 
 class AddAddressPage extends StatefulWidget {
@@ -140,21 +141,20 @@ class _AddAddressPageState extends State<AddAddressPage> {
                                 child: const Icon(Icons.close))
                           ],
                         ),
-                        content: FlutterGoogleLocationPicker(
+                        content: MapPicker(
                           center: LatLong(
-                              latitude: provAddress.paramLang ?? 3.6170236,
-                              longitude: provAddress.paramLong ?? 98.6797823),
+                              provAddress.paramLang ?? 3.6170236,
+                              provAddress.paramLong ?? 98.6797823),
                           primaryColor: Colors.red,
-                          markerColor: Theme.of(context).colorScheme.primary,
                           onPicked: (pickedData) {
-                            // print(pickedData.displayName);
-                            // print(pickedData.address);
-                            // print(pickedData.lat);
-                            // print(pickedData.lon);
-                            provAddress.paramLang = pickedData.lat;
-                            provAddress.paramLong = pickedData.lon;
+                            print('object here object here object here object here');
+                            print(pickedData.address);
+                            print(pickedData.latLong.latitude);
+                            print(pickedData.latLong.longitude);
+                            provAddress.paramLang = pickedData.latLong.latitude;
+                            provAddress.paramLong = pickedData.latLong.longitude;
                             provAddress.paramDisplayName =
-                                pickedData.displayName;
+                                pickedData.address;
                             provAddress.setMap();
                             Navigator.pop(context);
                           },

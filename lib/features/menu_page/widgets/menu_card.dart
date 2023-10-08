@@ -50,9 +50,23 @@ class _MenuCardState extends State<MenuCard> {
                       child: Row(
                         children: [
                           Stack(children: [
-                            Image.asset(
+                            Image.network(
                               widget.food.menuImage,
                               height: 120,
+                              frameBuilder: (context, child, frame,
+                                  wasSynchronouslyLoaded) {
+                                return child;
+                              },
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              },
                             ),
                             Positioned(
                               top: 0,
@@ -106,8 +120,8 @@ class _MenuCardState extends State<MenuCard> {
                                   Row(
                                     children: [
                                       GestureDetector(
-                                        onTap: () => provOrders
-                                            .deleteOrders(widget.food.menuID, context),
+                                        onTap: () => provOrders.deleteOrders(
+                                            widget.food.menuID, context),
                                         child: Icon(
                                           Icons.remove_circle_outline_rounded,
                                           color: ((provOrders.listOrders[
@@ -130,8 +144,8 @@ class _MenuCardState extends State<MenuCard> {
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () => provOrders
-                                            .addOrders(widget.food.menuID, context),
+                                        onTap: () => provOrders.addOrders(
+                                            widget.food.menuID, context),
                                         child: const Icon(
                                           Icons.add_circle_outline_rounded,
                                           color: Colors.red,
@@ -192,9 +206,23 @@ class _MenuCardState extends State<MenuCard> {
                   child: Row(
                     children: [
                       Stack(children: [
-                        Image.asset(
+                        Image.network(
                           widget.food.menuImage,
                           height: 120,
+                          frameBuilder: (context, child, frame,
+                                  wasSynchronouslyLoaded) {
+                                return child;
+                              },
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              },
                         ),
                         Positioned(
                           top: 0,
