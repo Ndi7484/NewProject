@@ -236,7 +236,8 @@ class OrdersProvider extends ChangeNotifier {
         if (freeDeliverValue > paramVoucherCode!.maxDelivery) {
           freeDeliverValue = paramVoucherCode!.maxDelivery;
         }
-        freeDeliverValueStr = formatter.format(freeDeliverValue).toString().replaceAll(',', '.');
+        freeDeliverValueStr =
+            formatter.format(freeDeliverValue).toString().replaceAll(',', '.');
       }
     }
     paramDeliveryStr =
@@ -255,24 +256,42 @@ class OrdersProvider extends ChangeNotifier {
   String paramPointsGet = '0';
 
   // calculate sub total of menu
-  void calculateSubTotals(context) {
+  void calculateSubTotals(context) async {
     MenuProvider provMenu = Provider.of<MenuProvider>(context, listen: false);
     int totals = 0;
     var arrKey = listOrders.keys.toList();
+    // for (var el in arrKey) {
+    //   // Use await to get the FoodMenu asynchronously
+    //   provMenu.listFoodMenu.listen((food) {
+    //     FoodMenu? found = food.firstWhere(
+    //       (menu) => menu.menuID == el,
+    //       orElse: () => FoodMenu(
+    //           menuID: 'XXX',
+    //           menuCategory: 'xxx',
+    //           menuName: 'xxx',
+    //           menuShortDesc: 'xxx',
+    //           menuLongDesc: 'xxx',
+    //           menuImage: 'xxx',
+    //           menuPrice: 0,
+    //           menuPriceString: '0'));
+    //   totals = totals + found.menuPrice * int.parse(listOrders[el].toString());
+    //    });
+    // }
+    // paramSubTotals = formatter.format(totals).toString().replaceAll(',', '.');
+    // paramSubTotalsInt = totals;
+    // countTotals();
+    // notifyListeners();
+
     for (var el in arrKey) {
-      FoodMenu? found = provMenu.listFoodMenu.firstWhere(
-          (menu) => menu.menuID == el,
-          orElse: () => FoodMenu(
-              menuID: 'XXX',
-              menuCategory: 'xxx',
-              menuName: 'xxx',
-              menuShortDesc: 'xxx',
-              menuLongDesc: 'xxx',
-              menuImage: 'xxx',
-              menuPrice: 0,
-              menuPriceString: '0'));
-      totals = totals + found.menuPrice * int.parse(listOrders[el].toString());
+      // Use await to get the FoodMenu asynchronously
+      FoodMenu? found = await provMenu.returnMenu(el);
+
+      if (found != null) {
+        totals =
+            totals + found.menuPrice * int.parse(listOrders[el].toString());
+      }
     }
+
     paramSubTotals = formatter.format(totals).toString().replaceAll(',', '.');
     paramSubTotalsInt = totals;
     countTotals();
@@ -287,9 +306,12 @@ class OrdersProvider extends ChangeNotifier {
         paramMuchPoints.toInt();
     paramTotalPay =
         formatter.format(paramTotalPayInt).toString().replaceAll(',', '.');
-    paramPointsGetInt =
-        ((paramSubTotalsInt - freeDeliverValue - paramVoucherDisc - paramMuchPoints) * 0.03)
-            .floor();
+    paramPointsGetInt = ((paramSubTotalsInt -
+                freeDeliverValue -
+                paramVoucherDisc -
+                paramMuchPoints) *
+            0.03)
+        .floor();
     paramPointsGet =
         formatter.format(paramPointsGetInt).toString().replaceAll(',', '.');
     // notifyListeners();
