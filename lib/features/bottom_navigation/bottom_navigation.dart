@@ -23,6 +23,7 @@ class BottomNavigationPage extends StatefulWidget {
 
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
   int _selectedIndex = 0; // Set an initial default value here
+  List<Notif> listNotification = [];  // set initial list notif
 
   @override
   void initState() {
@@ -56,14 +57,15 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     _selectedIndex = provPage.selectedIndex;
     // tmp
     var _selectedAccount = provAccount.selectedAccount;
-    int totalNotif = 0;
-    List<Notif>? listNotification = []; 
-    for (var el in provNotif.listNotification) {
-      if (el.subject == _selectedAccount!.email || el.subject == "ALL") {
-        totalNotif += 1;
-        listNotification.add(el);
+    provNotif.listNotification.listen((event) {
+      for (var el in event) {
+        if (el.subject == _selectedAccount!.email || el.subject == "ALL") {
+          setState(() {
+            listNotification.add(el);
+          });
+        }
       }
-    }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -72,8 +74,11 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           (_selectedIndex == 0)
               ? GestureDetector(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => NotifPage(notif : listNotification)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) =>
+                                NotifPage(notif: listNotification)));
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -84,7 +89,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                         Icons.notifications,
                         size: 25,
                       ),
-                      (totalNotif > 0)
+                      (listNotification.isNotEmpty)
                           ? Positioned(
                               top: 0,
                               right: 0,
@@ -96,7 +101,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                                     borderRadius: BorderRadius.circular(20)),
                                 child: Center(
                                   child: Text(
-                                    totalNotif.toString(),
+                                    listNotification.length.toString(),
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
