@@ -76,36 +76,50 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
         const Divider(),
-        CarouselSlider(
-            items: List.generate(
-                provCarousel.listCarousel.length,
-                (index) => Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        provCarousel.listCarousel[index].carouselImage,
-                        fit: BoxFit.fill,
-                      ),
-                    ))),
-            options: CarouselOptions(
-              height: 180,
-              aspectRatio: 17 / 9,
-              viewportFraction: 0.9,
-              initialPage: 0,
-              enableInfiniteScroll: true,
-              autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 3),
-              autoPlayAnimationDuration: const Duration(milliseconds: 800),
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enlargeCenterPage: true,
-              enlargeFactor: 0.1,
-              scrollDirection: Axis.horizontal,
-            )),
+        StreamBuilder(
+          stream: provCarousel.listCarousel,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error to Load Carousel : ${snapshot.hasError} ');
+            } else if (snapshot.data == null) {
+              return const Text('There is No Promo Today :)');
+            } else if (snapshot.connectionState == ConnectionState.waiting){
+              return const CircularProgressIndicator();
+            } else {
+              return CarouselSlider(
+                  items: List.generate(
+                      snapshot.data!.length,
+                      (index) => Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              snapshot.data![index].carouselImage,
+                              fit: BoxFit.fill,
+                            ),
+                          ))),
+                  options: CarouselOptions(
+                    height: 180,
+                    aspectRatio: 17 / 9,
+                    viewportFraction: 0.9,
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: const Duration(seconds: 3),
+                    autoPlayAnimationDuration:
+                        const Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enlargeCenterPage: true,
+                    enlargeFactor: 0.1,
+                    scrollDirection: Axis.horizontal,
+                  ));
+            }
+          },
+        ),
         // green special padding
         (provPromo.validPromo.isEmpty)
             ? Container()

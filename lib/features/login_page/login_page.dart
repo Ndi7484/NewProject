@@ -13,10 +13,20 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _passwordInvisible = true;
+  bool _runChecker = true;
 
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
+
+    if (_runChecker) {
+      _runChecker = !_runChecker;
+
+      Future.delayed(const Duration(seconds: 1), () async {
+        provAccount.tryFirst(context);
+      });
+    }
+
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -85,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                             padding: const EdgeInsets.all(8.0),
                             width: MediaQuery.of(context).size.width * 0.75,
                             child: TextField(
+                              controller: provAccount.controllerEmail,
                               onChanged: (value) {
                                 setState(() {
                                   provAccount.paramEmail = value;
@@ -105,6 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                                 padding: const EdgeInsets.all(8.0),
                                 width: MediaQuery.of(context).size.width * 0.75,
                                 child: TextField(
+                                  controller: provAccount.controllerPass,
                                   onChanged: (value) {
                                     provAccount.paramPassword = value;
                                   },

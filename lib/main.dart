@@ -21,7 +21,7 @@ import 'core/logic/warning_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 // multi provider is here
-Future<void> main() async {
+void main() async {
   // add firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -29,13 +29,13 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AccountProvider()..resetParam()),
+        ChangeNotifierProvider(create: (_) => AccountProvider()),
         ChangeNotifierProvider(create: (_) => AddressProvider()..resetParam()),
         ChangeNotifierProvider(create: (_) => PromoProvider()..readPromo()),
         ChangeNotifierProvider(
             create: (_) => CarouselProvider()..readCarousel()),
         ChangeNotifierProvider(create: (_) => WarningProvider()..readWarn()),
-        ChangeNotifierProvider(create: (_) => MenuProvider()..readMenu()),
+        ChangeNotifierProvider(create: (_) => MenuProvider()..readMenu()..bestPickMenu()),
         ChangeNotifierProvider(create: (_) => PageProvider()),
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
         ChangeNotifierProvider(

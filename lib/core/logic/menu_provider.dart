@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
-// import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
+
+NumberFormat formatter = NumberFormat("#,###", "en_US");
 
 class FoodMenu {
   FoodMenu({
@@ -37,16 +39,25 @@ class FoodMenu {
       };
 
   static FoodMenu fromJson(Map<String, dynamic> json) => FoodMenu(
-      menuID: json['menu_id'],
-      menuCategory: json['type'],
-      menuName: json['name'],
-      menuShortDesc: json['short_desc'],
-      menuLongDesc: json['long_desc'],
-      // menuImage: json['image'] ?? 'https://media.licdn.com/dms/image/C4D12AQEvahwBzDgypw/article-cover_image-shrink_600_2000/0/1626875581857?e=2147483647&v=beta&t=vPJ-f97pEohpJ3hV6bVzbT2J4MglLU55eDYFPrAEHv4',
-      menuImage: json['image'],
-      menuPrice: json['price'],
-      menuPriceString: json['price'].toString());
+        menuID: json['menu_id'],
+        menuCategory: json['type'],
+        menuName: json['name'],
+        menuShortDesc: json['short_desc'],
+        menuLongDesc: json['long_desc'],
+        // menuImage: json['image'] ?? 'https://media.licdn.com/dms/image/C4D12AQEvahwBzDgypw/article-cover_image-shrink_600_2000/0/1626875581857?e=2147483647&v=beta&t=vPJ-f97pEohpJ3hV6bVzbT2J4MglLU55eDYFPrAEHv4',
+        menuImage: json['image'],
+        menuPrice: json['price'],
+        menuPriceString: formatter
+            .format(int.parse(json['price'].toString()))
+            .toString()
+            .replaceAll(',', '.'),
+      );
 }
+
+//         menuPriceString: formatter
+//             .format(int.parse(row[6]!.value.toString()))
+//             .toString()
+//             .replaceAll(',', '.'),
 
 class MenuProvider extends ChangeNotifier {
   final Stream<List<FoodMenu>> listFoodMenu = FirebaseFirestore.instance
@@ -54,9 +65,9 @@ class MenuProvider extends ChangeNotifier {
       .snapshots()
       .map((snapshot) =>
           snapshot.docs.map((doc) => FoodMenu.fromJson(doc.data())).toList());
-  
+
   // Stream<List<FoodMenu>> get listFoodMenu => _listFoodMenu;
-  
+
   // load data from excel
   void readMenu() async {
     // ByteData data = await rootBundle.load('assets/data/menu.xlsx');
@@ -114,7 +125,11 @@ class MenuProvider extends ChangeNotifier {
   FoodMenu? returnMenu(String menuID) {
     FoodMenu? result;
     listFoodMenu.listen((food) {
+      print(food);
       for (var el in food) {
+        print(el.menuID);
+        print(menuID);
+        print('==================');
         if (el.menuID == menuID) {
           result = el;
           break;

@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
+// import 'package:flutter_application_1/core/widgets/circular_progress.dart';
 import 'package:flutter_application_1/features/menu_page/widgets/menu_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,16 @@ class _BestPickCardState extends State<BestPickCard> {
     Colors.blue,
     Colors.red,
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () {
+      // slide carousel slider
+      _carouselController.previousPage();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final provMenu = Provider.of<MenuProvider>(context);
@@ -33,6 +44,9 @@ class _BestPickCardState extends State<BestPickCard> {
     return CarouselSlider(
       carouselController: _carouselController,
       items: [
+        // (provMenu.randomUniqueList.isEmpty || provMenu.randomUniqueList == [])
+        // ? Container()
+        // :
         Card(
           elevation: 7,
           child: Stack(
@@ -54,186 +68,197 @@ class _BestPickCardState extends State<BestPickCard> {
             ],
           ),
         ),
-        ...List.generate(
-            provMenu.randomUniqueList.length,
-            (index) => Card(
-                  elevation: 7,
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Stack(children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4),
-                                      topRight: Radius.circular(4)),
-                                  child: Image.network(
-                                    provMenu.randomUniqueList[index].menuImage,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: Stack(
-                                    children: [
-                                      Icon(
-                                        Icons.star_rounded,
-                                        color: color_picker[index],
-                                        size: 40,
-                                      ),
-                                      Positioned(
-                                          top: 12,
-                                          right: 15,
-                                          child: Text(
-                                            (index + 1).toString(),
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                    ],
-                                  )),
-                            ]),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(0, 4.0, 4.0, 4.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    provMenu.randomUniqueList[index].menuName,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14),
-                                  ),
-                                  RichText(
-                                      textAlign: TextAlign.justify,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                      text: TextSpan(
-                                        text: provMenu.randomUniqueList[index]
-                                            .menuShortDesc,
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontSize: 10,
-                                        ),
-                                      )),
-                                  const SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text(
-                                    'Rp. ${provMenu.randomUniqueList[index].menuPriceString}',
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const Spacer(),
-                                  Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => provOrders.deleteOrders(
-                                            provMenu
-                                                .randomUniqueList[index].menuID,
-                                            context),
-                                        child: Icon(
-                                          Icons.remove_circle_outline_rounded,
-                                          color: ((provOrders.listOrders[
-                                                          provMenu
-                                                              .randomUniqueList[
-                                                                  index]
-                                                              .menuID] ??
-                                                      0) <=
-                                                  0)
-                                              ? Colors.red[100]
-                                              : Colors.red,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            10, 0, 10, 0),
-                                        child: Text(
-                                          (provOrders.listOrders[provMenu
-                                                      .randomUniqueList[index]
-                                                      .menuID] ??
-                                                  0)
-                                              .toString(),
-                                          style: const TextStyle(fontSize: 18),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () => provOrders.addOrders(
-                                            provMenu
-                                                .randomUniqueList[index].menuID,
-                                            context),
-                                        child: const Icon(
-                                          Icons.add_circle_outline_rounded,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      GestureDetector(
-                                        onTap: () {
-                                          bottomSheet.getBottomSheet(context,
-                                              provMenu.randomUniqueList[index]);
-                                        },
-                                        child: Row(
-                                          children: const [
-                                            Text(
-                                              'details',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 9,
-                                              ),
-                                            ),
-                                            Icon(
-                                              Icons.info_outline,
-                                              color: Colors.grey,
-                                              size: 18,
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
+        // StreamBuilder(
+        //   builder: (context, snapshot) {},
+        // ),
+        ...List.generate(provMenu.randomUniqueList.length, (index) {
+          if (provMenu.randomUniqueList == []) {
+            // didnt work
+            return const CircularProgressIndicator();
+          } else {
+            return Card(
+              elevation: 7,
+              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Stack(children: [
+                          const Positioned(
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                                child: CircularProgressIndicator(),
                               ),
                             ),
                           ),
-                        ],
-                      )),
-                )),
-        Card(
-          elevation: 7,
-          child: Stack(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Image.asset(
-                  'assets/etc/WhiteCover.jpg',
-                  fit: BoxFit.fitHeight,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4),
+                                  topRight: Radius.circular(4)),
+                              child: Image.network(
+                                provMenu.randomUniqueList[index].menuImage,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.star_rounded,
+                                    color: color_picker[index],
+                                    size: 40,
+                                  ),
+                                  Positioned(
+                                      top: 12,
+                                      right: 15,
+                                      child: Text(
+                                        (index + 1).toString(),
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                ],
+                              )),
+                        ]),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 4.0, 4.0, 4.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                provMenu.randomUniqueList[index].menuName,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14),
+                              ),
+                              RichText(
+                                  textAlign: TextAlign.justify,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    text: provMenu
+                                        .randomUniqueList[index].menuShortDesc,
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 10,
+                                    ),
+                                  )),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Text(
+                                'Rp. ${provMenu.randomUniqueList[index].menuPriceString}',
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Spacer(),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => provOrders.deleteOrders(
+                                        provMenu.randomUniqueList[index].menuID,
+                                        context),
+                                    child: Icon(
+                                      Icons.remove_circle_outline_rounded,
+                                      color: ((provOrders.listOrders[provMenu
+                                                      .randomUniqueList[index]
+                                                      .menuID] ??
+                                                  0) <=
+                                              0)
+                                          ? Colors.red[100]
+                                          : Colors.red,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    child: Text(
+                                      (provOrders.listOrders[provMenu
+                                                  .randomUniqueList[index]
+                                                  .menuID] ??
+                                              0)
+                                          .toString(),
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => provOrders.addOrders(
+                                        provMenu.randomUniqueList[index].menuID,
+                                        context),
+                                    child: const Icon(
+                                      Icons.add_circle_outline_rounded,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  GestureDetector(
+                                    onTap: () {
+                                      bottomSheet.getBottomSheet(context,
+                                          provMenu.randomUniqueList[index]);
+                                    },
+                                    child: Row(
+                                      children: const [
+                                        Text(
+                                          'details',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 9,
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.info_outline,
+                                          color: Colors.grey,
+                                          size: 18,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            );
+          }
+        }),
+        (provMenu.randomUniqueList.isEmpty || provMenu.randomUniqueList == [])
+            ? const Center(child: CircularProgressIndicator())
+            : Card(
+                elevation: 7,
+                child: Stack(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Image.asset(
+                        'assets/etc/WhiteCover.jpg',
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                    Positioned(
+                      top: MediaQuery.of(context).size.height * 0.1,
+                      left: 10,
+                      child: Image.asset('assets/etc/Logo.png'),
+                    )
+                  ],
                 ),
               ),
-              Positioned(
-                top: MediaQuery.of(context).size.height * 0.1,
-                left: 10,
-                child: Image.asset('assets/etc/Logo.png'),
-              )
-            ],
-          ),
-        ),
       ],
       options: CarouselOptions(
         height: 300,

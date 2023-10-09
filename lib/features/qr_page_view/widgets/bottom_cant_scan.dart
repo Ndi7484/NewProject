@@ -47,8 +47,8 @@ class CantScanBottomSheet {
                   children: [
                     const Spacer(),
                     ElevatedButton(
-                        onPressed: () {
-                          var result = provCode.checkCode();
+                        onPressed: () async{
+                          var result = await provCode.checkCode();
                           if (result == '') {
                             Flushbar(
                               flushbarPosition: FlushbarPosition.TOP,

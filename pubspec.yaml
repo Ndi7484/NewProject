@@ -39,13 +39,14 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_flushbar: ^0.0.2
+  flutter_google_location_picker: ^0.0.3
   flutter_slidable: ^3.0.0
   intl: ^0.18.1
-  map_picker_free: ^0.0.1
   path_provider: ^2.0.15
   provider: ^6.0.1
   qr_code_scanner: ^1.0.1
   qr_flutter: ^4.0.0
+  shared_preferences: ^2.2.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0

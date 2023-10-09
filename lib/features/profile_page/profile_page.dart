@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/widgets/address_listtile.dart';
@@ -58,7 +59,7 @@ class ProfilePageState extends State<ProfilePage> {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Text(
-                '${provAccount.selectedAccount!.firstName.toString()} ${provAccount.selectedAccount!.lastName.toString()}',
+                '${provAccount.selectedAccount?.firstName.toString()} ${provAccount.selectedAccount?.lastName.toString()}',
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     letterSpacing: 0.5,
@@ -249,11 +250,12 @@ class ProfilePageState extends State<ProfilePage> {
                     ),
                     duration: const Duration(seconds: 2),
                   ).show(context);
+                  SystemNavigator.pop();
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Text(
-                    "Log Out",
+                    "Log-Out",
                     style: TextStyle(color: Colors.red, fontSize: 20),
                   ),
                 )),

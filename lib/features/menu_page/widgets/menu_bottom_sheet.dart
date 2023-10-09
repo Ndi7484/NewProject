@@ -12,7 +12,7 @@ class MenuBottomSheet {
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.6,
           child: ListView(children: [
-            Image.asset(
+            Image.network(
               food.menuImage,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.cover,

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/code_scan_provider.dart';
 import 'package:flutter_application_1/core/logic/merchant_provider.dart';
@@ -273,13 +274,57 @@ class _CartPageState extends State<CartPage> {
                           continue; // Skip this iteration and move to the next one
                         }
 
-                        widgets.add(
-                          MenuCard(
-                            isMenu: false,
-                            qtyFood: provOrders.listOrders[keysList[i]],
-                            food: provMenu.returnMenu(keysList[i])!,
-                          ),
-                        );
+                        widgets.add(FutureBuilder(
+                          future: FirebaseFirestore.instance
+                              .collection('menu')
+                              .doc(keysList[i])
+                              .get(),
+                          builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                              return MenuCard(
+                                isMenu: false,
+                                qtyFood: provOrders.listOrders[keysList[i]],
+                                food: FoodMenu(
+                                    menuID: snapshot.data!['menu_id'],
+                                    menuCategory: snapshot.data!['type'],
+                                    menuName: snapshot.data!['name'],
+                                    menuShortDesc: snapshot.data!['short_desc'],
+                                    menuLongDesc: snapshot.data!['long_desc'],
+                                    menuImage: snapshot.data!['image'],
+                                    menuPrice: snapshot.data!['price'],
+                                    menuPriceString:
+                                        snapshot.data!['price'].toString()),
+                              );
+                            } else {
+                              return MenuCard(
+                                isMenu: false,
+                                qtyFood: provOrders.listOrders[keysList[i]],
+                                food: FoodMenu(
+                                    menuID: '',
+                                    menuCategory: '',
+                                    menuName: '',
+                                    menuShortDesc: '',
+                                    menuLongDesc: '',
+                                    menuImage:
+                                        'https://static.thenounproject.com/png/2616533-200.png',
+                                    menuPrice: 0,
+                                    menuPriceString: '0'),
+                              );
+                            }
+                            // for (var el in snapshot.data!) {
+                            //   if (el.menuID == menuID) {
+                            //     result = el;
+                            //     break;
+                            //   }
+                            // }
+                          },
+                        )
+                            // MenuCard(
+                            //   isMenu: false,
+                            //   qtyFood: provOrders.listOrders[keysList[i]],
+                            //   food: provMenu.returnMenu(keysList[i])!,
+                            // ),
+                            );
                       }
                       if (widgets.isNotEmpty) {
                         return Column(
@@ -403,7 +448,8 @@ class _CartPageState extends State<CartPage> {
                         })
                       : Container(),
                   // ANY FREE DELIVERY
-                  (provOrders.typeOrders == TypeOrder.delivery && provOrders.freeDeliverValueStr != '')
+                  (provOrders.typeOrders == TypeOrder.delivery &&
+                          provOrders.freeDeliverValueStr != '')
                       ? Builder(builder: (context) {
                           provOrders.calculateDelivery(
                             provAddress.selectedAlamat,

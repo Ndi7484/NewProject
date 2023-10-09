@@ -14,6 +14,7 @@ import 'package:flutter_application_1/features/bottom_navigation/bottom_navigati
 import 'package:flutter_application_1/features/newpass_page/newpass_page.dart';
 import 'package:flutter_application_1/features/verification_page/verification_page.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Account {
   Account({
@@ -185,6 +186,37 @@ class AccountProvider extends ChangeNotifier {
   IsSignUp get isSignUp => _isSignUp;
   Forget get isForget => _isForget;
 
+  // sharedpreferences variable
+  TextEditingController controllerEmail = TextEditingController();
+  TextEditingController controllerPass = TextEditingController();
+  final String _keyEmail = 'keyEmail';
+  final String _keyPassword = 'keyPass';
+  late SharedPreferences prefs;
+
+  Future<String?> getSavedEmail() async {
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyEmail);
+  }
+
+  Future<String?> getSavedPass() async {
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyPassword);
+  }
+
+  void tryFirst(context) async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+      controllerEmail.text = prefs.getString(_keyEmail)!;
+      controllerPass.text = prefs.getString(_keyPassword)!;
+      paramEmail = prefs.getString(_keyEmail)!;
+      paramPassword = prefs.getString(_keyPassword)!;
+      notifyListeners();
+      checkAccount(context);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   // checkAccount() to login to main page
   void checkAccount(context) async {
     _isAuthenticated = Auth.initial;
@@ -198,11 +230,29 @@ class AccountProvider extends ChangeNotifier {
     }
 
     // Subscribe to the stream and handle data as it arrives
-    _listAccount.listen((account) {
+    _listAccount.listen((account) async {
       for (var el in account) {
         if ((el.email == paramEmail || el.phone == paramPhone) &&
             el.password == md5.convert(utf8.encode(paramPassword)).toString()) {
           _selectedAccount = el;
+
+          // set sharedPrefereces saved
+          prefs = await SharedPreferences.getInstance();
+          if (paramEmail != '' && paramPassword != '') {
+            prefs.setString(_keyEmail, paramEmail);
+            prefs.setString(_keyPassword, paramPassword);
+            print(prefs.getString(_keyEmail));
+            print(prefs.getString(_keyEmail));
+            print(prefs.getString(_keyEmail));
+            print(prefs.getString(_keyEmail));
+            print(prefs.getString(_keyEmail));
+            print(prefs.getString(_keyEmail));
+            paramEmail = prefs.getString(_keyEmail)!;
+            paramPassword = prefs.getString(_keyPassword)!;
+            // paramEmail = '';
+            // paramPassword = '';
+          }
+
           _isAuthenticated = Auth.authenticated;
           authSet = true;
           message = 'Succesful Login';
@@ -210,6 +260,7 @@ class AccountProvider extends ChangeNotifier {
           // only works outside of this provider
           currentTime();
           notifyListeners();
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -218,6 +269,7 @@ class AccountProvider extends ChangeNotifier {
               ),
             ),
           );
+          break;
         }
       }
       if (!authSet) {
@@ -564,7 +616,7 @@ class AccountProvider extends ChangeNotifier {
   }
 
   // reset parameter to ''
-  void resetParam() {
+  Future<void> resetParam() async {
     _isAuthenticated = Auth.unauthenticated;
     _selectedAccount = null;
     _isSignUp = IsSignUp.success;
@@ -583,5 +635,8 @@ class AccountProvider extends ChangeNotifier {
     paramV3 = '';
     paramV4 = '';
     _validateParam = '';
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString(_keyEmail, '');
+    prefs.setString(_keyPassword, '');
   }
 }

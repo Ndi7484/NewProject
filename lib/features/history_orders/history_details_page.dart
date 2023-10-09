@@ -147,7 +147,6 @@ class HistoryDetailsPage extends StatelessWidget {
                         ),
                       )
                     : Container(),
-
                 // dine-in address state
                 (ordersCartHistory.typeOrder == TypeOrder.dinein)
                     ? Padding(
