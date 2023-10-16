@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/notification_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
@@ -23,7 +25,7 @@ class BottomNavigationPage extends StatefulWidget {
 
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
   int _selectedIndex = 0; // Set an initial default value here
-  List<Notif> listNotification = [];  // set initial list notif
+  List<Notif> listNotification = []; // set initial list notif
 
   @override
   void initState() {
@@ -176,10 +178,6 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                     ? const Icon(Icons.shopping_basket)
                     : Row(
                         children: [
-                          // const Padding(
-                          //   padding: EdgeInsets.only(right: 8.0),
-                          //   child: Icon(Icons.shopping_basket),
-                          // ),
                           Text(
                             "${provOrders.listOrders.values.fold(0, (prevEl, el) => prevEl + el)}",
                             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -191,7 +189,47 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                               style: TextStyle(color: Colors.white60),
                             ),
                           ),
-                          Text('Rp. ${provOrders.paramSubTotals},-'),
+                          StreamBuilder(
+                            stream: FirebaseFirestore.instance
+                                .collection('menu')
+                                .snapshots()
+                                .map((snapshot) => snapshot.docs
+                                    .map((doc) => FoodMenu.fromJson(doc.data()))
+                                    .toList()),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                // Convert the stream data into a default list
+                                List<FoodMenu> defaultList =
+                                    snapshot.data ?? [];
+                                // prov orders list keys
+                                var tmp = provOrders.listOrders.keys.toList();
+                                // access elements by index
+                                if (defaultList.isNotEmpty) {
+                                  int total = 0;
+                                  for (var el in tmp) {
+                                    for (var el2 in defaultList) {
+                                      if (el == el2.menuID) {
+                                        total = total + (el2.menuPrice * provOrders.listOrders[el]!);
+                                        break;
+                                      }
+                                    }
+                                  }
+                                  // add to provider subtotals
+                                  provOrders.setParamSubTotals(total);
+                                  return Text(
+                                      provOrders.paramSubTotalsInt.toString());
+                                } else {
+                                  return const Text('Empty error..');
+                                }
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                return const Text(
+                                    'Loading ...'); // Loading indicator
+                              }
+                            },
+                          ),
+                          // Text('Rp. ${provOrders.paramSubTotals},-'),
                         ],
                       ),
               ))

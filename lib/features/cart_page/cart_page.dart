@@ -429,10 +429,60 @@ class _CartPageState extends State<CartPage> {
                   ),
 
                   // SUB TOTAL
-                  TransactionLabel(
-                    label: 'Sub-total',
-                    price: provOrders.paramSubTotals,
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('menu')
+                        .snapshots()
+                        .map((snapshot) => snapshot.docs
+                            .map((doc) => FoodMenu.fromJson(doc.data()))
+                            .toList()),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        // Convert the stream data into a default list
+                        List<FoodMenu> defaultList = snapshot.data ?? [];
+                        // prov orders list keys
+                        var tmp = provOrders.listOrders.keys.toList();
+                        // access elements by index
+                        if (defaultList.isNotEmpty) {
+                          int total = 0;
+                          for (var el in tmp) {
+                            for (var el2 in defaultList) {
+                              if (el == el2.menuID) {
+                                total = total +
+                                    (el2.menuPrice *
+                                        provOrders.listOrders[el]!);
+                                break;
+                              }
+                            }
+                          }
+                          // add to provider subtotals
+                          provOrders.setParamSubTotals(total);
+                          return TransactionLabel(
+                            label: 'Sub-total',
+                            price: provOrders.paramSubTotals,
+                          );
+                        } else {
+                          return TransactionLabel(
+                            label: 'Sub-total',
+                            price: '0',
+                          );
+                        }
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return const Text('Loading ...'); // Loading indicator
+                      }
+                    },
                   ),
+                  // Builder(
+                  //   builder: (context) {
+                  //     provOrders.calculateSubTotals(context);
+                  //     return TransactionLabel(
+                  //       label: 'Sub-total',
+                  //       price: provOrders.paramSubTotals,
+                  //     );
+                  //   }
+                  // ),
 
                   // DELIVERY FEE
                   (provOrders.typeOrders == TypeOrder.delivery)
@@ -517,7 +567,7 @@ class _CartPageState extends State<CartPage> {
                               ),
                               const Spacer(),
                               Builder(builder: (context) {
-                                provOrders.calculateSubTotals(context);
+                                provOrders.countTotals();
                                 return Text(
                                   provOrders.paramTotalPay,
                                   style: const TextStyle(

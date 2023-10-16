@@ -259,9 +259,9 @@ class _MainPageState extends State<MainPage> {
           height: 16,
         ),
         // other promotion and news of in the app
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Icon(
               Icons.star,
               color: Colors.amber,

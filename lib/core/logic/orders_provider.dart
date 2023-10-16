@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
@@ -57,6 +58,14 @@ class OrdersCart {
 }
 
 class OrdersProvider extends ChangeNotifier {
+  // menu helper
+  // final List<FoodMenu> listFoodMenu
+  final Stream<List<FoodMenu>> listFoodMenu = FirebaseFirestore.instance
+      .collection('menu')
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => FoodMenu.fromJson(doc.data())).toList());
+
   // format helper
   NumberFormat formatter = NumberFormat("#,###", "en_US");
 
@@ -257,9 +266,28 @@ class OrdersProvider extends ChangeNotifier {
 
   // calculate sub total of menu
   void calculateSubTotals(context) async {
-    MenuProvider provMenu = Provider.of<MenuProvider>(context, listen: false);
     int totals = 0;
     var arrKey = listOrders.keys.toList();
+    // listFoodMenu.listen((food) {
+    //   print('object calculate 3');
+    //   for (var el in arrKey) {
+    //     var found = false;
+    //     for (var el2 in food) {
+    //       if (el2.menuID == el) {
+    //         totals =
+    //             totals + el2.menuPrice * int.parse(listOrders[el].toString());
+    //         print(totals);
+    //         found = true;
+    //         break;
+    //       }
+    //     }
+    //   }
+    // });
+
+    // old version
+    // MenuProvider provMenu = Provider.of<MenuProvider>(context, listen: false);
+    // int totals = 0;
+    // var arrKey = listOrders.keys.toList();
     // for (var el in arrKey) {
     //   // Use await to get the FoodMenu asynchronously
     //   provMenu.listFoodMenu.listen((food) {
@@ -282,15 +310,15 @@ class OrdersProvider extends ChangeNotifier {
     // countTotals();
     // notifyListeners();
 
-    for (var el in arrKey) {
-      // Use await to get the FoodMenu asynchronously
-      FoodMenu? found = await provMenu.returnMenu(el);
-
-      if (found != null) {
-        totals =
-            totals + found.menuPrice * int.parse(listOrders[el].toString());
-      }
-    }
+    // for (var el in arrKey) {
+    // Use await to get the FoodMenu asynchronously
+    // FoodMenu? found = await provMenu.returnMenu(el);
+    // if (found != null) {
+    //   totals =
+    //       totals + found.menuPrice * int.parse(listOrders[el].toString());
+    //   break;
+    // }
+    // }
 
     paramSubTotals = formatter.format(totals).toString().replaceAll(',', '.');
     paramSubTotalsInt = totals;
@@ -298,7 +326,18 @@ class OrdersProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
+  void setParamSubTotals(int totals) {
+    paramSubTotalsInt = totals;
+    paramSubTotals = formatter.format(totals).toString().replaceAll(',', '.');
+    countTotals();
+    // notifyListeners();
+  }
+
   void countTotals() {
+    print(paramSubTotalsInt);
+    print(paramDeliveryVal);
+    print(freeDeliverValue.toInt());
+    print(paramPointsGetInt);
     paramTotalPayInt = paramSubTotalsInt.toInt() +
         paramDeliveryVal.toInt() -
         freeDeliverValue.toInt() -
