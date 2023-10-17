@@ -1,13 +1,16 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/core/logic/ads_provider.dart';
 import 'package:flutter_application_1/core/logic/carousel_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
 import 'package:flutter_application_1/core/logic/warning_provider.dart';
+import 'package:flutter_application_1/core/state/ads_state.dart';
 import 'package:flutter_application_1/core/widgets/button_categories.dart';
 import 'package:flutter_application_1/features/profile_page/profile_page.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'widgets/best_pick_card.dart';
 
@@ -19,6 +22,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  Ad? AD;
+  bool alreadyAd = false;
+
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
@@ -26,6 +32,7 @@ class _MainPageState extends State<MainPage> {
     final provWarning = Provider.of<WarningProvider>(context);
     final provPromo = Provider.of<PromoProvider>(context);
     final provPage = Provider.of<PageProvider>(context);
+    final provAds = Provider.of<AdsProvider>(context);
 
     return ListView(
       children: [
@@ -83,7 +90,7 @@ class _MainPageState extends State<MainPage> {
               return Text('Error to Load Carousel : ${snapshot.hasError} ');
             } else if (snapshot.data == null) {
               return const Text('There is No Promo Today :)');
-            } else if (snapshot.connectionState == ConnectionState.waiting){
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else {
               return CarouselSlider(
@@ -308,6 +315,103 @@ class _MainPageState extends State<MainPage> {
           height: 16,
         ),
         const Divider(),
+        const SizedBox(
+          height: 16,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Card(
+              child: FutureBuilder<AdsState>(
+            future: provAds.loadApiAds(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && !alreadyAd) {
+                alreadyAd = !alreadyAd;
+                AD = snapshot.data?.ad;
+              }
+              // the ads is looping callback with connection waiting
+              // use this to call once if nothing circular() but try build Container first
+              try {
+                // return the same
+                return GestureDetector(
+                  onTap: () async {
+                    var url = AD!.redirectToUrl;
+                    if (await canLaunchUrl(Uri.parse(url))) {
+                      await launchUrl(Uri.parse(url));
+                    } else {
+                      print('Could not launch $url');
+                    }
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 1,
+                          color: Color(
+                            int.parse(
+                              AD!.accent.replaceAll('#', '0xff'),
+                            ),
+                          )),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(9.5),
+                              topRight: Radius.circular(9.5),
+                            ),
+                            child: Stack(
+                              children: [
+                                Image.network(AD!.imageUrl),
+                                Container(
+                                    decoration:
+                                        BoxDecoration(color: Colors.grey[300]),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(3),
+                                      child: Text(
+                                        'Ads Content',
+                                        style: TextStyle(
+                                            color: Colors.grey[500],
+                                            fontSize: 11),
+                                      ),
+                                    )),
+                              ],
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
+                          child: Text(
+                            AD!.title,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            (AD!.content)
+                                .replaceAll('<div>', '')
+                                .replaceAll('</div>', '')
+                                .replaceAll('<br>', '\n'),
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              } catch (e) {
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width * 0.4,
+                      16,
+                      MediaQuery.of(context).size.width * 0.4,
+                      16),
+                  child: const CircularProgressIndicator(),
+                );
+              }
+            },
+          )),
+        ),
         const SizedBox(
           height: 16,
         ),

@@ -34,4 +34,5 @@
     </application>
     <!-- for camera permit usage -->
         <uses-permission android:name="android.permission.CAMERA" />
+        <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

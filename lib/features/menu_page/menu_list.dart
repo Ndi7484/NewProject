@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
-import 'package:provider/provider.dart';
 
 import 'widgets/menu_card.dart';
 
@@ -22,8 +21,6 @@ class _ListMenuState extends State<ListMenu>
   @override
   Widget build(BuildContext context) {
     super.build(context); // Ensure the super.build is called
-
-    // final provMenu = Provider.of<MenuProvider>(context);
 
     return StreamBuilder<List<FoodMenu>>(
       stream: FirebaseFirestore.instance.collection('menu').snapshots().map(
