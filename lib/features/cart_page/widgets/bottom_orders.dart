@@ -14,7 +14,7 @@ class BottomOrders extends StatefulWidget {
 }
 
 class _BottomOrdersState extends State<BottomOrders> {
-  // bool switchPoints = false;
+  bool switchPoints = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +23,19 @@ class _BottomOrdersState extends State<BottomOrders> {
     final provAddress = Provider.of<AddressProvider>(context);
     final provMerchant = Provider.of<MerchantProvider>(context);
     // print(provAccount.selectedAccount!.points);
+
+    // trigger the calculation function, so the button is clickable
+    if (!switchPoints) {
+      switchPoints = !switchPoints;
+      Future.delayed(
+        const Duration(seconds: 1),
+        () {
+          setState(() {
+            provOrders.setPointsUse(false, provAccount.selectedAccount!);
+          });
+        },
+      );
+    }
 
     bool checkAddress() {
       if (provOrders.typeOrders == TypeOrder.delivery) {

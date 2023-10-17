@@ -1,5 +1,6 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/logic/ads_provider.dart';
 import 'package:flutter_application_1/core/logic/code_scan_provider.dart';
 import 'package:flutter_application_1/core/logic/history_provider.dart';
 import 'package:flutter_application_1/core/logic/merchant_provider.dart';
@@ -50,6 +51,8 @@ void main() async {
               ..readCode()),
         ChangeNotifierProvider(
             create: (_) => NotificationProvider()..readNotif()),
+        ChangeNotifierProvider(
+            create: (_) => AdsProvider()..loadApiAds()),
       ],
       child: const MyApp(),
     ),

@@ -31,17 +31,27 @@ class NotifPage extends StatelessWidget {
                       context: context,
                       tiles: List.generate(
                         notif.length,
-                        (index) => ListTile(
-                          leading: Icon(
-                            Icons.notifications_active_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          title: Text(notif[index].title),
-                          subtitle: Text(
-                            notif[index].text,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ),
+                        (index) {
+                          return Stack(children: [
+                            ListTile(
+                              leading: Icon(
+                                Icons.notifications_active_rounded,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              title: Text(notif[index].title),
+                              subtitle: Text(
+                                notif[index].text,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Text(
+                                  '${(notif[index].date.day.toString().length == 1) ? '0${notif[index].date.day}' : notif[index].date.day}-${(notif[index].date.month.toString().length == 1) ? '0${notif[index].date.month}' : notif[index].date.month}-${notif[index].date.year}',style: const TextStyle(color: Colors.grey, fontSize: 12),),
+                            )
+                          ]);
+                        },
                       ),
                     ),
                     const Divider(),
@@ -51,9 +61,18 @@ class NotifPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(Icons.notifications_off, color: Theme.of(context).colorScheme.primary, size: 50,),
-                        const SizedBox(height: 8,),
-                        const Text('There is no notifications..', style: TextStyle(fontSize: 20),)
+                        Icon(
+                          Icons.notifications_off,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 50,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        const Text(
+                          'There is no notifications..',
+                          style: TextStyle(fontSize: 20),
+                        )
                       ],
                     ),
                   )));

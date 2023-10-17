@@ -157,8 +157,8 @@ class _MenuCardState extends State<MenuCard> {
                                           bottomSheet.getBottomSheet(
                                               context, widget.food);
                                         },
-                                        child: Row(
-                                          children: const [
+                                        child: const Row(
+                                          children: [
                                             Text(
                                               'details',
                                               style: TextStyle(
