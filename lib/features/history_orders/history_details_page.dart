@@ -19,7 +19,6 @@ class HistoryDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provMenu = Provider.of<MenuProvider>(context);
     final provHistory = Provider.of<HistoryProvider>(context);
 
     return Scaffold(
