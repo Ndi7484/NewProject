@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/history_provider.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
@@ -169,6 +170,7 @@ class HistoryDetailsPage extends StatelessWidget {
                 Builder(
                   builder: (context) {
                     var keysList = ordersCartHistory.listOrder.keys.toList();
+                    var valueList = ordersCartHistory.listOrder.values.toList();
                     // print(keysList);
                     List<Widget> widgets = [];
 
@@ -178,11 +180,45 @@ class HistoryDetailsPage extends StatelessWidget {
                       }
 
                       widgets.add(
-                        MenuCard(
-                          isMenu: false,
-                          qtyFood: ordersCartHistory.listOrder[keysList[i]],
-                          food: provMenu.returnMenu(keysList[i])!,
-                        ),
+                        FutureBuilder(
+                          future: FirebaseFirestore.instance
+                              .collection('menu')
+                              .doc(keysList[i])
+                              .get(),
+                          builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                              return MenuCard(
+                                isMenu: false,
+                                qtyFood: ordersCartHistory.listOrder[keysList[i]],
+                                food: FoodMenu(
+                                    menuID: snapshot.data!['menu_id'],
+                                    menuCategory: snapshot.data!['type'],
+                                    menuName: snapshot.data!['name'],
+                                    menuShortDesc: snapshot.data!['short_desc'],
+                                    menuLongDesc: snapshot.data!['long_desc'],
+                                    menuImage: snapshot.data!['image'],
+                                    menuPrice: snapshot.data!['price'],
+                                    menuPriceString:
+                                        snapshot.data!['price'].toString()),
+                              );
+                            } else {
+                              return MenuCard(
+                                isMenu: false,
+                                qtyFood: ordersCartHistory.listOrder[keysList[i]],
+                                food: FoodMenu(
+                                    menuID: '',
+                                    menuCategory: '',
+                                    menuName: '',
+                                    menuShortDesc: '',
+                                    menuLongDesc: '',
+                                    menuImage:
+                                        'https://static.thenounproject.com/png/2616533-200.png',
+                                    menuPrice: 0,
+                                    menuPriceString: '0'),
+                              );
+                            }
+                          },
+                        )
                       );
                     }
                     if (widgets.isNotEmpty) {

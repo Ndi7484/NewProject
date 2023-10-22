@@ -311,20 +311,8 @@ class _CartPageState extends State<CartPage> {
                                     menuPriceString: '0'),
                               );
                             }
-                            // for (var el in snapshot.data!) {
-                            //   if (el.menuID == menuID) {
-                            //     result = el;
-                            //     break;
-                            //   }
-                            // }
                           },
-                        )
-                            // MenuCard(
-                            //   isMenu: false,
-                            //   qtyFood: provOrders.listOrders[keysList[i]],
-                            //   food: provMenu.returnMenu(keysList[i])!,
-                            // ),
-                            );
+                        ));
                       }
                       if (widgets.isNotEmpty) {
                         return Column(
