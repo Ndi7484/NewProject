@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
+import 'package:flutter_application_1/core/widgets/flutter_map_widget.dart';
 import 'package:flutter_google_location_picker/export.dart';
 import 'package:flutter_google_location_picker/flutter_google_location_picker.dart';
 import 'package:flutter_google_location_picker/model/lat_lng_model.dart';
@@ -141,25 +142,35 @@ class _AddAddressPageState extends State<AddAddressPage> {
                                 child: const Icon(Icons.close))
                           ],
                         ),
-                        content: FlutterGoogleLocationPicker(
-                          primaryColor: Colors.red,
-                          onPicked: (pickedData) {
-                            print(
-                                'object here object here object here object here');
-                            print(pickedData.address);
-                            print(pickedData.latLong.latitude);
-                            print(pickedData.latLong.longitude);
-                            provAddress.paramLang = pickedData.latLong.latitude;
-                            provAddress.paramLong =
-                                pickedData.latLong.longitude;
-                            provAddress.paramDisplayName = pickedData.displayName;
-                            provAddress.setMap();
-                            Navigator.pop(context);
-                          },
-                          center: LatLong(
-                              latitude: provAddress.paramLang ?? 3.6170236,
-                              longitude: provAddress.paramLong ?? 98.6797823),
+                        content: FlutterMapPage(
+                          center: LatLongCenter(
+                            latitude: provAddress.paramLang ?? 3.5952,
+                            longitude: provAddress.paramLong ?? 98.6722,
+                            // latitude: 3.5952,
+                            // longitude: 98.6722,
+                          ),
                         ),
+
+                        // FlutterGoogleLocationPicker(
+                        //   markerColor: Theme.of(context).colorScheme.primary,
+                        //   primaryColor: Theme.of(context).colorScheme.primary,
+                        //   onPicked: (pickedData) {
+                        //     print(
+                        //         'object here object here object here object here');
+                        //     print(pickedData.address);
+                        //     print(pickedData.latLong.latitude);
+                        //     print(pickedData.latLong.longitude);
+                        //     provAddress.paramLang = pickedData.latLong.latitude;
+                        //     provAddress.paramLong =
+                        //         pickedData.latLong.longitude;
+                        //     provAddress.paramDisplayName = pickedData.displayName;
+                        //     provAddress.setMap();
+                        //     Navigator.pop(context);
+                        //   },
+                        //   center: LatLong(
+                        //       latitude: provAddress.paramLang ?? 3.6170236,
+                        //       longitude: provAddress.paramLong ?? 98.6797823),
+                        // ),
                       ),
                     );
                   },

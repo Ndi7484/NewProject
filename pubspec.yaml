@@ -40,9 +40,11 @@ dependencies:
   flutter_bloc: ^8.0.1
   flutter_flushbar: ^0.0.2
   flutter_google_location_picker: ^0.0.3
+  flutter_map: ^2.2.0
   flutter_slidable: ^3.0.0
   http: ^0.13.6
   intl: ^0.18.1
+  latlong2: ^0.8.2
   path_provider: ^2.0.15
   provider: ^6.0.1
   qr_code_scanner: ^1.0.1
