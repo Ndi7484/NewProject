@@ -43,7 +43,7 @@ class Promo {
 class PromoProvider extends ChangeNotifier {
   List<Promo> _listPromo = [];
   List<Promo> get listPromo => _listPromo;
-  List<Promo> _validPromo = [];
+  final List<Promo> _validPromo = [];
   List<Promo> get validPromo => _validPromo;
   // load data from excel
   void readPromo() async {

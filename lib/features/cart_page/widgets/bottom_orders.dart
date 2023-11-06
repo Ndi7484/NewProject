@@ -3,6 +3,7 @@ import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/logic/merchant_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
+import 'package:flutter_application_1/core/state/analytic_helper.dart';
 import 'package:flutter_application_1/features/payment_method_page/payment_method_page.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class BottomOrders extends StatefulWidget {
 
 class _BottomOrdersState extends State<BottomOrders> {
   bool switchPoints = false;
+  AnalyticHelper fbAnalytics = AnalyticHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +155,8 @@ class _BottomOrdersState extends State<BottomOrders> {
                         provOrders.paramSubTotalsInt > 1 &&
                         checkAddress()) {
                       provOrders.setInitOrders();
+                      // analytics
+                      fbAnalytics.confirmAddCart();
                       Navigator.push(
                           context,
                           MaterialPageRoute(

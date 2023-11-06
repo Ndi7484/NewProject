@@ -34,7 +34,7 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     final provOrders = Provider.of<OrdersProvider>(context);
-    final provMenu = Provider.of<MenuProvider>(context);
+    // final provMenu = Provider.of<MenuProvider>(context);
     final provAddress = Provider.of<AddressProvider>(context);
     final provMerchant = Provider.of<MerchantProvider>(context);
     final provAccount = Provider.of<AccountProvider>(context);

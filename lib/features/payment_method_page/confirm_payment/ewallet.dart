@@ -4,6 +4,7 @@ import 'package:flutter_application_1/core/logic/history_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/logic/payment_provider.dart';
+import 'package:flutter_application_1/core/state/analytic_helper.dart';
 import 'package:flutter_application_1/core/widgets/circular_progress.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class EWalletPage extends StatelessWidget {
   String image;
 
   NumberFormat formatter = NumberFormat("#,###", "en_US");
+  AnalyticHelper fbAnalytics = AnalyticHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +83,7 @@ class EWalletPage extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                       border: Border(
-                          top: BorderSide(
-                              color: Colors.grey[200]!, width: 1))),
+                          top: BorderSide(color: Colors.grey[200]!, width: 1))),
                   child: Padding(
                     padding: const EdgeInsets.only(
                         top: 20.0, bottom: 5, left: 5, right: 5),
@@ -134,8 +135,15 @@ class EWalletPage extends StatelessWidget {
             child: Row(
               children: [
                 const Spacer(),
-                const Text('powered by ', style: TextStyle(color: Colors.grey),),
-                Image.asset(image, width: 30, height: 30,),
+                const Text(
+                  'powered by ',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                Image.asset(
+                  image,
+                  width: 30,
+                  height: 30,
+                ),
               ],
             ),
           ),
@@ -144,12 +152,13 @@ class EWalletPage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: GestureDetector(
               onTap: () {
+                // analytics
+                fbAnalytics.purchase();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (_) => CircularProgressPage(
-                              messageText:
-                                  'Please wait, confirming payment..',
+                              messageText: 'Please wait, confirming payment..',
                             )));
 
                 // set history
@@ -159,13 +168,13 @@ class EWalletPage extends StatelessWidget {
                     provOrders.tmpOrdersCartHistory!.pointsMuch,
                     provOrders.tmpOrdersCartHistory!.pointsGet);
                 provPage.historyIndex =
-                        (provOrders.tmpOrdersCartHistory!.typeOrder ==
-                                TypeOrder.delivery)
-                            ? 0
-                            : (provOrders.tmpOrdersCartHistory!.typeOrder ==
-                                    TypeOrder.takeaway)
-                                ? 1
-                                : 2;
+                    (provOrders.tmpOrdersCartHistory!.typeOrder ==
+                            TypeOrder.delivery)
+                        ? 0
+                        : (provOrders.tmpOrdersCartHistory!.typeOrder ==
+                                TypeOrder.takeaway)
+                            ? 1
+                            : 2;
                 provOrders.resetParam();
                 provPage.selectedIndex = 4;
 

@@ -318,7 +318,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 minimumSize: const Size(150, 25),
                               ),
                               child:
-                                  (provAccount.isAuthenticated == Auth.initial)
+                                  (provAccount.isAuthenticated == Authion.initial)
                                       ? const CircularProgressIndicator()
                                       : const Text(
                                           'Sign Up',

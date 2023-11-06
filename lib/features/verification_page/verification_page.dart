@@ -175,7 +175,7 @@ class _VerificationPageState extends State<VerificationPage> {
                                 minimumSize: const Size(150, 50),
                               ),
                               child:
-                                  (provAccount.isAuthenticated == Auth.initial)
+                                  (provAccount.isAuthenticated == Authion.initial)
                                       ? const CircularProgressIndicator()
                                       : const Text(
                                           'Continue',

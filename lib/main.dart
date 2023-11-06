@@ -47,8 +47,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HistoryProvider()),
         ChangeNotifierProvider(
             create: (_) => CodeScanProvider()
-              ..resetparam()
-              ..readCode()),
+              ..resetparam()),
         ChangeNotifierProvider(
             create: (_) => NotificationProvider()..readNotif()),
         ChangeNotifierProvider(

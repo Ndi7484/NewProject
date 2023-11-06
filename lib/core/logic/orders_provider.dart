@@ -9,7 +9,6 @@ import 'package:flutter_application_1/core/logic/payment_provider.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
 import 'package:flutter_flushbar/flutter_flushbar.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 enum TypeOrder { delivery, takeaway, dinein, fail }
 
@@ -267,7 +266,7 @@ class OrdersProvider extends ChangeNotifier {
   // calculate sub total of menu
   void calculateSubTotals(context) async {
     int totals = 0;
-    var arrKey = listOrders.keys.toList();
+    // var arrKey = listOrders.keys.toList();
     // listFoodMenu.listen((food) {
     //   print('object calculate 3');
     //   for (var el in arrKey) {

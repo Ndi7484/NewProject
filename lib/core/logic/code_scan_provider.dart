@@ -36,44 +36,17 @@ class CodeScanProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void readCode() async {
-    // ByteData data = await rootBundle.load('assets/data/code.xlsx');
-    // var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    // var excel = Excel.decodeBytes(bytes);
-
-    // var table = excel.tables[excel.tables.keys.first];
-
-    // _listCodeScan = List.generate(
-    //   table!.maxRows,
-    //   (index) {
-    //     var row = table.row(index);
-    //     return CodeScan(
-    //         codeId: row[0]!.value.toString(),
-    //         jsonData: row[1]!.value.toString());
-    //   },
-    // );
-    // notifyListeners();
-  }
-
   Future<String> checkCode() async {
-    DocumentSnapshot<Map<String, dynamic>> result = await FirebaseFirestore.instance
+    DocumentSnapshot<Map<String, dynamic>> result = await FirebaseFirestore
+        .instance
         .collection('code')
-        .doc(codeChecker.toString()).get();
+        .doc(codeChecker.toString())
+        .get();
     if (result.exists) {
       return CodeScan.fromJson(result.data()!).jsonData.toString();
     } else {
       return '';
     }
-    // _listCodeScan.listen((code) {
-    //   for (var el in code) {
-    //     print(el.codeId);
-    //     if (el.codeId == codeChecker) {
-    //       result = el.jsonData;
-    //       break;
-    //     }
-    //   }
-    // });
-    // return result;
   }
 
   void resetparam() {

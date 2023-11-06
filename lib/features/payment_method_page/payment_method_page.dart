@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/payment_provider.dart';
+import 'package:flutter_application_1/core/state/analytic_helper.dart';
 import 'package:flutter_application_1/core/widgets/circular_progress.dart';
 import 'package:flutter_application_1/features/payment_method_page/bank_transfer_page.dart';
 import 'package:flutter_application_1/features/payment_method_page/confirm_payment/bank_transfer_confirm.dart';
@@ -17,6 +18,7 @@ class PaymentMethodPage extends StatefulWidget {
 
 class _PaymentMethodPageState extends State<PaymentMethodPage> {
   bool _isBankTransferExpanded = false;
+  AnalyticHelper fbAnalytics = AnalyticHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
 
     var bottomsheet = SnKPayment();
 
-    // init avoid wrong payment that are deliver from the voucher 
+    // init avoid wrong payment that are deliver from the voucher
     List<TypePayment> tmp = [];
     if (provOrders.tmpOrdersCartHistory!.voucherCode != null) {
       var exc = provOrders.tmpOrdersCartHistory!.voucherCode!.typeTrans
@@ -197,6 +199,16 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                                     Future.delayed(
                                                         const Duration(
                                                             seconds: 1), () {
+                                                      // analytics
+                                                      fbAnalytics.addPayment(
+                                                          provPayment
+                                                              .listPayment[
+                                                                  struct]
+                                                              .children[index2]
+                                                              .title,
+                                                          provOrders
+                                                              .tmpOrdersCartHistory!
+                                                              .totals);
                                                       Navigator.pushReplacement(
                                                           context,
                                                           MaterialPageRoute(
@@ -276,6 +288,10 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                         builder: (_) =>
                                             CircularProgressPage()));
                                 Future.delayed(const Duration(seconds: 1), () {
+                                  // analytics
+                                  fbAnalytics.addPayment(
+                                      provPayment.listPayment[struct].title,
+                                      provOrders.tmpOrdersCartHistory!.totals);
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(

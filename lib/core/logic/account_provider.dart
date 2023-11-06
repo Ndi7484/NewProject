@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/state/analytic_helper.dart';
 // import 'package:flutter/services.dart' show ByteData, rootBundle;
 // import 'package:excel/excel.dart';
 import 'package:flutter_application_1/core/widgets/notif_banner.dart';
@@ -60,7 +61,7 @@ class Account {
       );
 }
 
-enum Auth {
+enum Authion {
   initial,
   authenticated,
   unauthenticated,
@@ -82,15 +83,7 @@ class AccountProvider extends ChangeNotifier {
   // more info excel dev https://pub.dev/packages/excel
   // change formater
   NumberFormat formatter = NumberFormat("#,###", "en_US");
-
-  // Stream<List<Account>> readAccount() => FirebaseFirestore.instance
-  //     .collection('account')
-  //     .snapshots()
-  //     .map((snapshot) =>
-  //         snapshot.docs.map((doc) => Account.fromJson(doc.data())).toList());
-
-  // private don't public
-  // Stream<List<Account>>? _listAccount;
+  final AnalyticHelper analytic = AnalyticHelper();
 
   final Stream<List<Account>> _listAccount = FirebaseFirestore.instance
       .collection('account')
@@ -98,59 +91,13 @@ class AccountProvider extends ChangeNotifier {
       .map((snapshot) =>
           snapshot.docs.map((doc) => Account.fromJson(doc.data())).toList());
 
-  // load data from excel
-  void readAccount() async {
-    // fire-base
-    // Stream<List<Account>> tmp = FirebaseFirestore.instance
-    //     .collection('account')
-    //     .snapshots()
-    //     .map((snapshot) =>
-    //         snapshot.docs.map((doc) => Account.fromJson(doc.data())).toList());
-
-    // _listAccount = tmp;
-
-    // return;
-    // ByteData data = await rootBundle.load('assets/data/account.xlsx');
-    // var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    // var excel = Excel.decodeBytes(bytes);
-
-    // var table = excel.tables[excel.tables.keys.first];
-
-    // _listAccount = List.generate(
-    //   table!.maxRows,
-    //   (index) {
-    //     var row = table.row(index);
-    //     // print(row[6]!.value.toString());
-    //     List<String> dateExcel = row[6]!.value.toString().split('/');
-    //     // print(dateExcel);
-    //     return Account(
-    //         firstName: row[0]!.value.toString(),
-    //         lastName: row[1]!.value.toString(),
-    //         email: row[2]!.value.toString(),
-    //         password: row[3]!.value.toString(),
-    //         phone: row[4]!.value.toString(),
-    //         points: int.parse(row[5]!.value.toString()),
-    //         pointsString: formatter
-    //             .format(int.parse(row[5]!.value.toString()))
-    //             .toString()
-    //             .replaceAll(',', '.'),
-    //         dateBirth: DateTime(
-    //           int.parse(dateExcel[2]),
-    //           int.parse(dateExcel[1]),
-    //           int.parse(dateExcel[0]),
-    //         ));
-    //   },
-    // );
-    // notifyListeners();
-  }
-
   void notifyme() {
     notifyListeners();
   }
 
   // Login purposes
   Account? _selectedAccount;
-  Auth _isAuthenticated = Auth.unauthenticated;
+  Authion _isAuthenticated = Authion.unauthenticated;
   IsSignUp _isSignUp = IsSignUp.success;
   Forget _isForget = Forget.success;
 
@@ -182,7 +129,7 @@ class AccountProvider extends ChangeNotifier {
   }
 
   Account? get selectedAccount => _selectedAccount;
-  Auth get isAuthenticated => _isAuthenticated;
+  Authion get isAuthenticated => _isAuthenticated;
   IsSignUp get isSignUp => _isSignUp;
   Forget get isForget => _isForget;
 
@@ -219,12 +166,12 @@ class AccountProvider extends ChangeNotifier {
 
   // checkAccount() to login to main page
   void checkAccount(context) async {
-    _isAuthenticated = Auth.initial;
+    _isAuthenticated = Authion.initial;
     bool authSet = false;
 
-    if (paramEmail == '' && paramPhone == '' && paramPassword == '') {
+    if (paramEmail == '' && paramPhone == '') {
       message = 'Please input the required email/password';
-      _isAuthenticated = Auth.unauthenticated;
+      _isAuthenticated = Authion.unauthenticated;
       notifyListeners();
       return;
     }
@@ -232,8 +179,7 @@ class AccountProvider extends ChangeNotifier {
     // Subscribe to the stream and handle data as it arrives
     _listAccount.listen((account) async {
       for (var el in account) {
-        if ((el.email == paramEmail || el.phone == paramPhone) &&
-            el.password == md5.convert(utf8.encode(paramPassword)).toString()) {
+        if (el.email == paramEmail || el.phone == paramPhone) {
           _selectedAccount = el;
 
           // set sharedPrefereces saved
@@ -241,25 +187,20 @@ class AccountProvider extends ChangeNotifier {
           if (paramEmail != '' && paramPassword != '') {
             prefs.setString(_keyEmail, paramEmail);
             prefs.setString(_keyPassword, paramPassword);
-            print(prefs.getString(_keyEmail));
-            print(prefs.getString(_keyEmail));
-            print(prefs.getString(_keyEmail));
-            print(prefs.getString(_keyEmail));
-            print(prefs.getString(_keyEmail));
-            print(prefs.getString(_keyEmail));
             paramEmail = prefs.getString(_keyEmail)!;
             paramPassword = prefs.getString(_keyPassword)!;
-            // paramEmail = '';
-            // paramPassword = '';
           }
 
-          _isAuthenticated = Auth.authenticated;
+          _isAuthenticated = Authion.authenticated;
           authSet = true;
           message = 'Succesful Login';
           // get account alamat if there is, if nothing then is [] or null
           // only works outside of this provider
           currentTime();
           notifyListeners();
+
+          // analytic
+          analytic.setUserId(paramEmail);
 
           Navigator.pushReplacement(
             context,
@@ -273,7 +214,7 @@ class AccountProvider extends ChangeNotifier {
         }
       }
       if (!authSet) {
-        _isAuthenticated = Auth.unauthenticated;
+        _isAuthenticated = Authion.unauthenticated;
         message = 'Login Fail, Incorrect Email/Password..';
         notifyListeners();
       }
@@ -360,40 +301,6 @@ class AccountProvider extends ChangeNotifier {
     }
     if (paramPassword == paramConfirmPass &&
         await checkAdd(paramEmail, paramPhone)) {
-      // ByteData data = await rootBundle.load('assets/data/account.xlsx');
-      // var bytes =
-      //     data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-      // var excel = Excel.decodeBytes(bytes);
-      // Sheet sheetObject = excel.tables[excel.tables.keys.first]!;
-      // var maxRows = sheetObject.maxRows;
-      // // start insert the parameters
-      // var cell1 = sheetObject.cell(CellIndex.indexByString('A${maxRows}'));
-      // cell1.value = paramFirstName;
-      // var cell2 = sheetObject.cell(CellIndex.indexByString('B${maxRows}'));
-      // cell2.value = paramLastName;
-      // var cell3 = sheetObject.cell(CellIndex.indexByString('C${maxRows}'));
-      // cell3.value = paramEmail;
-      // var cell4 = sheetObject.cell(CellIndex.indexByString('D${maxRows}'));
-      // cell4.value = paramPassword;
-      // var cell5 = sheetObject.cell(CellIndex.indexByString('E${maxRows}'));
-      // cell5.value = paramPhone;
-      // var cell6 = sheetObject.cell(CellIndex.indexByString('F${maxRows}'));
-      // cell6.value = 0;
-      // var cell7 = sheetObject.cell(CellIndex.indexByString('G${maxRows}'));
-      // cell7.value = '0';
-      // // stop insert
-      // // Get the documents directory for saving the modified file
-      // Directory documentsDirectory = await getApplicationDocumentsDirectory();
-      // String folderPath = '${documentsDirectory.path}/assets/data';
-      // String filePath = path.join(folderPath, 'account.xlsx');
-
-      // // Create the folder if it doesn't exist
-      // Directory(folderPath).createSync(recursive: true);
-
-      // // Save the modified Excel file to the documents directory
-      // File modifiedFile = File(filePath);
-      // await modifiedFile.writeAsBytes(excel.encode()!);
-
       var tmp = FirebaseFirestore.instance.collection('account').doc();
       var json = {
         'birth': Timestamp.fromDate(paramBirthDate!),
@@ -406,15 +313,6 @@ class AccountProvider extends ChangeNotifier {
       };
       // await firebase set
       await tmp.set(json);
-      // _listAccount.add(Account(
-      //     firstName: paramFirstName,
-      //     lastName: paramLastName,
-      //     email: paramEmail,
-      //     password: paramPassword,
-      //     phone: paramPhone,
-      //     points: 0,
-      //     pointsString: '0',
-      //     dateBirth: paramBirthDate!));
       resetParam();
       // readAccount();
       message = 'Succesfully SignUp';
@@ -556,28 +454,6 @@ class AccountProvider extends ChangeNotifier {
         bool isFind = false;
         for (var el in account) {
           if (el.email == paramEmail || el.phone == paramPhone) {
-            // ByteData data = await rootBundle.load('assets/data/account.xlsx');
-            // var bytes =
-            //     data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-            // var excel = Excel.decodeBytes(bytes);
-            // var table = excel.tables[excel.tables.keys.first];
-
-            // for (var i = 0; i < table!.maxRows; i++) {
-            //   var row = table.row(i);
-            //   if (row[2]!.value.toString() == paramEmail ||
-            //       row[4]!.value.toString() == paramPhone) {
-            //     Sheet sheetObject = excel['Sheet1'];
-            //     var cell = sheetObject.cell(CellIndex.indexByString('D$i'));
-            //     cell.value = paramPassword;
-            //     // Save the updated Excel file
-            //     var updatedBytes = excel.encode();
-            //     // Overwrite the existing file
-            //     var file = File('assets/data/account.xlsx');
-            //     await file.writeAsBytes(updatedBytes!);
-            //   }
-            // }
-
-            // readAccount();
             el.password = paramPassword;
             resetParam();
             isFind = true;
@@ -617,7 +493,7 @@ class AccountProvider extends ChangeNotifier {
 
   // reset parameter to ''
   Future<void> resetParam() async {
-    _isAuthenticated = Auth.unauthenticated;
+    _isAuthenticated = Authion.unauthenticated;
     _selectedAccount = null;
     _isSignUp = IsSignUp.success;
     _isForget = Forget.success;

@@ -7,6 +7,7 @@ import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/logic/promo_provider.dart';
 import 'package:flutter_application_1/core/logic/warning_provider.dart';
 import 'package:flutter_application_1/core/state/ads_state.dart';
+import 'package:flutter_application_1/core/state/analytic_helper.dart';
 import 'package:flutter_application_1/core/widgets/button_categories.dart';
 import 'package:flutter_application_1/features/profile_page/profile_page.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   Ad? AD;
   bool alreadyAd = false;
+  AnalyticHelper fbAnalytics = AnalyticHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,16 @@ class _MainPageState extends State<MainPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${provAccount.currentHour}, ${provAccount.selectedAccount!.firstName}',
+                    '${provAccount.currentHour}, ${(provAccount.selectedAccount ?? Account(
+                          firstName: '',
+                          lastName: '',
+                          email: '',
+                          password: '',
+                          phone: '',
+                          points: 0,
+                          pointsString: '0',
+                          dateBirth: DateTime.now(),
+                        )).firstName}',
                     style: TextStyle(
                         fontSize: 20,
                         color: Theme.of(context).colorScheme.primary),
@@ -286,6 +297,7 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
+
         Padding(
           padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.2,
               0, MediaQuery.of(context).size.width * 0.2, 0),
@@ -296,11 +308,13 @@ class _MainPageState extends State<MainPage> {
                     Border.all(color: Theme.of(context).colorScheme.primary)),
           ),
         ),
+
         // best pick card
         const Padding(
           padding: EdgeInsets.all(8.0),
           child: BestPickCard(),
         ),
+        
         Padding(
           padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.2,
               0, MediaQuery.of(context).size.width * 0.2, 0),
@@ -338,6 +352,7 @@ class _MainPageState extends State<MainPage> {
                   onTap: () async {
                     var url = AD!.redirectToUrl;
                     if (await canLaunchUrl(Uri.parse(url))) {
+                      fbAnalytics.eventLog('ads_clicked');
                       await launchUrl(Uri.parse(url));
                     } else {
                       print('Could not launch $url');

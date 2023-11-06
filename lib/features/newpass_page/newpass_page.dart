@@ -183,7 +183,7 @@ class _NewPassPageState extends State<NewPassPage> {
                                   minimumSize: const Size(150, 50),
                                 ),
                                 child: (provAccount.isAuthenticated ==
-                                        Auth.initial)
+                                        Authion.initial)
                                     ? const CircularProgressIndicator()
                                     : const Text(
                                         'Done',

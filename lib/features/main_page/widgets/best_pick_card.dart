@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/menu_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
+import 'package:flutter_application_1/core/state/analytic_helper.dart';
 // import 'package:flutter_application_1/core/widgets/circular_progress.dart';
 import 'package:flutter_application_1/features/menu_page/widgets/menu_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class BestPickCard extends StatefulWidget {
 
 class _BestPickCardState extends State<BestPickCard> {
   final CarouselController _carouselController = CarouselController();
+  AnalyticHelper fbAnalytics = AnalyticHelper();
 
   dynamic color_picker = [
     Colors.amber,
@@ -68,9 +70,6 @@ class _BestPickCardState extends State<BestPickCard> {
             ],
           ),
         ),
-        // StreamBuilder(
-        //   builder: (context, snapshot) {},
-        // ),
         ...List.generate(provMenu.randomUniqueList.length, (index) {
           if (provMenu.randomUniqueList == []) {
             // didnt work
@@ -169,9 +168,19 @@ class _BestPickCardState extends State<BestPickCard> {
                               Row(
                                 children: [
                                   GestureDetector(
-                                    onTap: () => provOrders.deleteOrders(
-                                        provMenu.randomUniqueList[index].menuID,
-                                        context),
+                                    onTap: () {
+                                      // analytics
+                                      fbAnalytics.addToCart(
+                                          provMenu
+                                              .randomUniqueList[index].menuID,
+                                          -1,
+                                          provMenu.randomUniqueList[index]
+                                              .menuPrice);
+                                      provOrders.deleteOrders(
+                                          provMenu
+                                              .randomUniqueList[index].menuID,
+                                          context);
+                                    },
                                     child: Icon(
                                       Icons.remove_circle_outline_rounded,
                                       color: ((provOrders.listOrders[provMenu
@@ -196,9 +205,19 @@ class _BestPickCardState extends State<BestPickCard> {
                                     ),
                                   ),
                                   GestureDetector(
-                                    onTap: () => provOrders.addOrders(
-                                        provMenu.randomUniqueList[index].menuID,
-                                        context),
+                                    onTap: () {
+                                      // analytics
+                                      fbAnalytics.addToCart(
+                                          provMenu
+                                              .randomUniqueList[index].menuID,
+                                          1,
+                                          provMenu.randomUniqueList[index]
+                                              .menuPrice);
+                                      provOrders.addOrders(
+                                          provMenu
+                                              .randomUniqueList[index].menuID,
+                                          context);
+                                    },
                                     child: const Icon(
                                       Icons.add_circle_outline_rounded,
                                       color: Colors.red,
@@ -210,8 +229,8 @@ class _BestPickCardState extends State<BestPickCard> {
                                       bottomSheet.getBottomSheet(context,
                                           provMenu.randomUniqueList[index]);
                                     },
-                                    child: Row(
-                                      children: const [
+                                    child: const Row(
+                                      children: [
                                         Text(
                                           'details',
                                           style: TextStyle(
@@ -272,14 +291,8 @@ class _BestPickCardState extends State<BestPickCard> {
         onPageChanged: (index, reason) {
           if (index == 0) {
             _carouselController.nextPage();
-            // _carouselController.animateToPage(1,
-            //     duration: const Duration(milliseconds: 700),
-            //     curve: Curves.easeInOut);
           } else if (index == color_picker.length + 1) {
             _carouselController.previousPage();
-            // _carouselController.animateToPage(color_picker.length,
-            //     duration: const Duration(milliseconds: 700),
-            //     curve: Curves.easeInOut);
           } else {
             setState(() {});
           }

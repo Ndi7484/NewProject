@@ -4,6 +4,7 @@ import 'package:flutter_application_1/core/logic/history_provider.dart';
 import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/logic/payment_provider.dart';
+import 'package:flutter_application_1/core/state/analytic_helper.dart';
 import 'package:flutter_application_1/core/widgets/circular_progress.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
   Payment bankData;
 
   NumberFormat formmater = NumberFormat("#,###", "en_US");
+  AnalyticHelper fbAnalytics = AnalyticHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -213,6 +215,8 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                 ),
                 child: TextButton(
                   onPressed: () {
+                    // analytics
+                    fbAnalytics.purchase();
                     // Handle button press
                     Navigator.push(
                         context,

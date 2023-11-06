@@ -126,9 +126,9 @@ class AddressProvider extends ChangeNotifier {
       print(snapshot.id); // <-- Document ID
     }
 
-    _listAlamat.listen((alamat) {
-      for (var el in alamat) {}
-    });
+    // _listAlamat.listen((alamat) {
+    //   for (var el in alamat) {}
+    // });
 
     // _listAlamat.removeWhere((el) =>
     //     el.alamatID == paramEmail &&

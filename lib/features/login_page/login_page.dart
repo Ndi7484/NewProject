@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/core/state/auth_helper.dart';
+import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
 import 'package:flutter_application_1/features/forgetpass_page/forgetpass_page.dart';
 import 'package:flutter_application_1/features/signup_page/signup_page.dart';
+import 'package:flutter_login/flutter_login.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,8 +15,29 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late AuthFirebase auth;
   bool _passwordInvisible = true;
   bool _runChecker = true;
+
+  @override
+  void initState() {
+    auth = AuthFirebase();
+    auth.getUser().then((value) {
+      var provAccount = Provider.of<AccountProvider>(context, listen: false);
+      provAccount.paramEmail = value ?? '';
+      provAccount.checkAccount(context);
+      // pushing?
+      // MaterialPageRoute route;
+      // if (value != null) {
+      //   route = MaterialPageRoute(
+      //       builder: (context) => BottomNavigationPage(
+      //             selectNext: 0,
+      //           ));
+      //   Navigator.pushReplacement(context, route);
+      // }
+    }).catchError((err) => print(err));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,27 +189,30 @@ class _LoginPageState extends State<LoginPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: ElevatedButton(
                               onPressed: () {
-                                Provider.of<AccountProvider>(context,
-                                        listen: false)
-                                    .checkAccount(context);
+                                _loginUser(LoginData(
+                                    name: provAccount.paramEmail,
+                                    password: provAccount.paramPassword));
+                                // Provider.of<AccountProvider>(context,
+                                //         listen: false)
+                                //     .checkAccount(context);
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(16.0),
                                 minimumSize: const Size(150, 50),
                               ),
-                              child:
-                                  (provAccount.isAuthenticated == Auth.initial)
-                                      ? const CircularProgressIndicator(
-                                          color: Colors.white,
-                                        )
-                                      : const Text(
-                                          'Login',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            wordSpacing: 5,
-                                            fontSize: 20,
-                                          ),
-                                        ),
+                              child: (provAccount.isAuthenticated ==
+                                      Authion.initial)
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : const Text(
+                                      'Login',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        wordSpacing: 5,
+                                        fontSize: 20,
+                                      ),
+                                    ),
                             ),
                           ),
                           const SizedBox(
@@ -213,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
               TextButton(
                 onPressed: () {
                   provAccount.resetParam();
-                  provAccount.readAccount();
+                  // provAccount.readAccount();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -274,5 +301,33 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<String?>? _loginUser(LoginData data) {
+    return auth.login(data.name, data.password).then((value) {
+      var provAccount = Provider.of<AccountProvider>(context);
+      if (value != null) {
+        provAccount.paramEmail = value[0];
+        provAccount.paramPassword = value[1];
+        provAccount.checkAccount(context);
+        // MaterialPageRoute(
+        //     builder: (context) => BottomNavigationPage(
+        //           selectNext: 0,
+        //         ));
+      } else {
+        final snackBar = SnackBar(
+          content: const Text('Login Failed, User Not Found'),
+          action: SnackBarAction(
+            label: 'OK',
+            onPressed: () {},
+          ),
+        );
+        provAccount.message = 'user not found';
+        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        // Navigator.of(context).pushReplacement(MaterialPageRoute(
+        //   builder: (context) => const (),
+        // ));
+      }
+    });
   }
 }

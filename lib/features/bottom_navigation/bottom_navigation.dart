@@ -91,28 +91,44 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                         Icons.notifications,
                         size: 25,
                       ),
-                      (listNotification.isNotEmpty)
-                          ? Positioned(
-                              top: 0,
-                              right: 0,
-                              child: Container(
-                                width: 13,
-                                height: 13,
-                                decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Center(
-                                  child: Text(
-                                    listNotification.length.toString(),
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        fontSize: 8),
-                                  ),
-                                ),
-                              ))
-                          : Container(),
+                      StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection('notification')
+                            .orderBy('date', descending: true)
+                            .snapshots()
+                            .map((snapshot) => snapshot.docs
+                                .map((doc) => Notif.fromJson(doc.data()))
+                                .toList()),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            if (snapshot.data != null &&
+                                snapshot.data!.isNotEmpty) {
+                              return Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Container(
+                                    width: 13,
+                                    height: 13,
+                                    decoration: BoxDecoration(
+                                        color: Colors.yellow,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Center(
+                                      child: Text(
+                                        listNotification.length.toString(),
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                            fontSize: 8),
+                                      ),
+                                    ),
+                                  ));
+                            }
+                          }
+                          return Container();
+                        },
+                      ),
                     ]),
                   ))
               : Container(),
@@ -209,7 +225,9 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                                   for (var el in tmp) {
                                     for (var el2 in defaultList) {
                                       if (el == el2.menuID) {
-                                        total = total + (el2.menuPrice * provOrders.listOrders[el]!);
+                                        total = total +
+                                            (el2.menuPrice *
+                                                provOrders.listOrders[el]!);
                                         break;
                                       }
                                     }
