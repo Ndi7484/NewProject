@@ -305,7 +305,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<String?>? _loginUser(LoginData data) {
     return auth.login(data.name, data.password).then((value) {
-      var provAccount = Provider.of<AccountProvider>(context);
+      var provAccount = Provider.of<AccountProvider>(context, listen: false);
+      provAccount.message = '';
       if (value != null) {
         provAccount.paramEmail = value[0];
         provAccount.paramPassword = value[1];
