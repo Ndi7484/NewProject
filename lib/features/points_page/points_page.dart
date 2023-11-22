@@ -36,7 +36,7 @@ class PointsPage extends StatelessWidget {
           height: 15,
         ),
         // qr code here
-        QrImage(
+        QrImageView(
           data:
               "{ 'email' : ${provAccount.selectedAccount!.email}, 'phone' : ${provAccount.selectedAccount!.phone}, 'points' : ${provAccount.selectedAccount!.points} }",
           version: QrVersions.auto,

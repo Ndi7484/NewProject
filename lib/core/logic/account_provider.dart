@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-// import 'dart:js_interop';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/state/analytic_helper.dart';
-// import 'package:flutter/services.dart' show ByteData, rootBundle;
-// import 'package:excel/excel.dart';
 import 'package:flutter_application_1/core/widgets/notif_banner.dart';
 import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
 // import 'package:flutter_application_1/features/login_page/login_page.dart';
