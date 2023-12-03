@@ -36,7 +36,10 @@ void main() async {
         ChangeNotifierProvider(
             create: (_) => CarouselProvider()..readCarousel()),
         ChangeNotifierProvider(create: (_) => WarningProvider()..readWarn()),
-        ChangeNotifierProvider(create: (_) => MenuProvider()..readMenu()..bestPickMenu()),
+        ChangeNotifierProvider(
+            create: (_) => MenuProvider()
+              ..readMenu()
+              ..bestPickMenu()),
         ChangeNotifierProvider(create: (_) => PageProvider()),
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
         ChangeNotifierProvider(
@@ -45,13 +48,10 @@ void main() async {
               ..readMerchant()),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
         ChangeNotifierProvider(create: (_) => HistoryProvider()),
-        ChangeNotifierProvider(
-            create: (_) => CodeScanProvider()
-              ..resetparam()),
+        ChangeNotifierProvider(create: (_) => CodeScanProvider()..resetparam()),
         ChangeNotifierProvider(
             create: (_) => NotificationProvider()..readNotif()),
-        ChangeNotifierProvider(
-            create: (_) => AdsProvider()..loadApiAds()),
+        ChangeNotifierProvider(create: (_) => AdsProvider()..loadApiAds()),
       ],
       child: const MyApp(),
     ),
@@ -68,6 +68,7 @@ class MyApp extends StatelessWidget {
       title: 'Randumu App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          useMaterial3: false,
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
               .copyWith(secondary: Colors.grey[850])),
       home: const LoginPage(),

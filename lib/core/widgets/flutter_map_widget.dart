@@ -45,55 +45,63 @@ class _FlutterMapPageState extends State<FlutterMapPage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: FlutterMap(
-              options: MapOptions(
-                center: LatLng(widget.center.latitude, widget.center.longitude),
-                zoom: 14,
-                maxZoom: 18,
-                minZoom: 6,
-                // onMapCreated: (mapController) async {
-                //   var response = await provAds.loadLatLong(
-                //       numLat ?? widget.center.latitude,
-                //       numLng ?? widget.center.longitude);
-                //   try {
-                //     print(response!.displayName);
-                //     setState(() {
-                //       _displayName = response.displayName;
-                //     });
-                //   } catch (e) {
-                //     print('response null');
-                //   }
-                // },
-                onPositionChanged: (position, hasGesture) async {
-                  if (!isProcess) {
-                    isProcess = true;
-                    Timer(const Duration(seconds: 2), () async {
-                      numLat = position.center!.latitude;
-                      numLng = position.center!.longitude;
-                      print('$numLat,$numLng');
-                      if (numLat != null && numLng != null) {
-                        var response =
-                            await provAds.loadLatLong(numLat!, numLng!);
-                        try {
-                          print(response!.displayName);
-                          setState(() {
-                            _displayName = response.displayName;
-                          });
-                        } catch (e) {
-                          print('response null');
-                        }
-                        isProcess = false;
+            options: MapOptions(
+              initialCenter:
+                  LatLng(widget.center.latitude, widget.center.longitude),
+              initialZoom: 14,
+              maxZoom: 18,
+              minZoom: 6,
+              // onMapCreated: (mapController) async {
+              //   var response = await provAds.loadLatLong(
+              //       numLat ?? widget.center.latitude,
+              //       numLng ?? widget.center.longitude);
+              //   try {
+              //     print(response!.displayName);
+              //     setState(() {
+              //       _displayName = response.displayName;
+              //     });
+              //   } catch (e) {
+              //     print('response null');
+              //   }
+              // },
+              onPositionChanged: (position, hasGesture) async {
+                if (!isProcess) {
+                  isProcess = true;
+                  Timer(const Duration(seconds: 2), () async {
+                    numLat = position.center!.latitude;
+                    numLng = position.center!.longitude;
+                    print('$numLat,$numLng');
+                    if (numLat != null && numLng != null) {
+                      var response =
+                          await provAds.loadLatLong(numLat!, numLng!);
+                      try {
+                        print(response!.displayName);
+                        setState(() {
+                          _displayName = response.displayName;
+                        });
+                      } catch (e) {
+                        print('response null');
                       }
-                    });
-                  }
-                },
-              ),
-              mapController: _mapController,
-              layers: [
-                TileLayerOptions(
-                    urlTemplate:
-                        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                    subdomains: ['a', 'b', 'c']),
-              ]),
+                      isProcess = false;
+                    }
+                  });
+                }
+              },
+            ),
+            mapController: _mapController,
+            // layers: [
+            //   TileLayerOptions(
+            //       urlTemplate:
+            //           "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            //       subdomains: ['a', 'b', 'c']),
+            // ],
+            children: [
+              // TileLayerOptions(
+              //     urlTemplate:
+              //         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              //     subdomains: ['a', 'b', 'c']),
+            ],
+          ),
         ),
       ),
       Center(

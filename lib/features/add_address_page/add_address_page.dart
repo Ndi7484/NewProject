@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/address_provider.dart';
 import 'package:flutter_application_1/core/widgets/flutter_map_widget.dart';
-import 'package:flutter_google_location_picker/export.dart';
-import 'package:flutter_google_location_picker/flutter_google_location_picker.dart';
-import 'package:flutter_google_location_picker/model/lat_lng_model.dart';
-// import 'package:map_picker_free/map_picker_free.dart';
 import 'package:provider/provider.dart';
 
 class AddAddressPage extends StatefulWidget {
