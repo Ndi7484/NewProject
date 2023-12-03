@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
 
 class Alamat {
   Alamat({
@@ -50,9 +48,6 @@ class AddressProvider extends ChangeNotifier {
           snapshot.docs.map((doc) => Alamat.fromJson(doc.data())).toList());
   Stream<List<Alamat>> get listAlamat => _listAlamat;
 
-  // list alamat from excel
-  // List<Alamat> _listAlamat = [];
-
   List<Alamat> _listSelectedAlamat = [];
   List<Alamat> get listSelectedAlamat => _listSelectedAlamat;
   set listSelectedAlamat(value) {
@@ -63,32 +58,6 @@ class AddressProvider extends ChangeNotifier {
   Alamat? get selectedAlamat => _selectedAlamat;
   set selectedAlamat(value) {
     _selectedAlamat = value;
-    // notifyListeners();
-  }
-
-  // load data from excel
-  void readAddress() async {
-    // ByteData data = await rootBundle.load('assets/data/address.xlsx');
-    // var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    // var excel = Excel.decodeBytes(bytes);
-
-    // var table = excel.tables[excel.tables.keys.first];
-    // _listAlamat = List.generate(
-    //   table!.maxRows,
-    //   (index) {
-    //     var row = table.row(index);
-    //     return Alamat(
-    //       alamatID: row[0]!.value.toString(),
-    //       alamatTitle: row[1]!.value.toString(),
-    //       alamatLengkap: row[2]!.value.toString(),
-    //       alamatDesk: row[3]!.value.toString(),
-    //       alamatLang: double.parse(row[4]!.value.toString()),
-    //       alamatLong: double.parse(row[5]!.value.toString()),
-    //       alamatMapsDesc: row[6]!.value.toString(),
-    //     );
-    //   },
-    // );
-    // // print(_listAlamat);
     // notifyListeners();
   }
 
@@ -126,16 +95,6 @@ class AddressProvider extends ChangeNotifier {
       print(snapshot.id); // <-- Document ID
     }
 
-    // _listAlamat.listen((alamat) {
-    //   for (var el in alamat) {}
-    // });
-
-    // _listAlamat.removeWhere((el) =>
-    //     el.alamatID == paramEmail &&
-    //     el.alamatTitle == alamat.alamatTitle &&
-    //     el.alamatTitle == alamat.alamatTitle &&
-    //     el.alamatLengkap == alamat.alamatLengkap &&
-    //     el.alamatDesk == alamat.alamatDesk);
     getAddress(paramEmail);
     if (_listSelectedAlamat.isEmpty) {
       _selectedAlamat = null;
@@ -178,16 +137,8 @@ class AddressProvider extends ChangeNotifier {
         'type': paramCategory,
       };
       await docAlamat.set(json);
-      // _listAlamat.add(Alamat(
-      //   alamatID: paramEmail,
-      //   alamatTitle: paramCategory,
-      //   alamatLengkap: paramAddress,
-      //   alamatDesk: paramNote,
-      //   alamatLang: paramLang!,
-      //   alamatLong: paramLong!,
-      //   alamatMapsDesc: paramDisplayName,
-      // ));
       notifyListeners();
+
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

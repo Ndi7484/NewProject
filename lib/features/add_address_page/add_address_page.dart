@@ -16,6 +16,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
     final provAddress = Provider.of<AddressProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
           leading: GestureDetector(
@@ -67,7 +68,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                   onChanged: (value) {
                     provAddress.paramAddress = value;
                   },
-                  decoration: const InputDecoration(
+                  decoration: const InputDecoration( 
                       hintText: 'Jl. ABC No. 45D',
                       contentPadding: EdgeInsets.all(6),
                       labelStyle: TextStyle(
@@ -146,27 +147,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
                             // longitude: 98.6722,
                           ),
                         ),
-
-                        // FlutterGoogleLocationPicker(
-                        //   markerColor: Theme.of(context).colorScheme.primary,
-                        //   primaryColor: Theme.of(context).colorScheme.primary,
-                        //   onPicked: (pickedData) {
-                        //     print(
-                        //         'object here object here object here object here');
-                        //     print(pickedData.address);
-                        //     print(pickedData.latLong.latitude);
-                        //     print(pickedData.latLong.longitude);
-                        //     provAddress.paramLang = pickedData.latLong.latitude;
-                        //     provAddress.paramLong =
-                        //         pickedData.latLong.longitude;
-                        //     provAddress.paramDisplayName = pickedData.displayName;
-                        //     provAddress.setMap();
-                        //     Navigator.pop(context);
-                        //   },
-                        //   center: LatLong(
-                        //       latitude: provAddress.paramLang ?? 3.6170236,
-                        //       longitude: provAddress.paramLong ?? 98.6797823),
-                        // ),
                       ),
                     );
                   },
