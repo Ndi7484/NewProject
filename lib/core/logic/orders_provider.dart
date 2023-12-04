@@ -12,6 +12,15 @@ import 'package:intl/intl.dart';
 
 enum TypeOrder { delivery, takeaway, dinein, fail }
 
+// helper variable
+Map<String, int> resultMap(Map<String, dynamic> originalMap) {
+  Map<String, int> resultMap = {};
+  originalMap.forEach((key, value) {
+    resultMap[key] = value;
+  });
+  return resultMap;
+}
+
 class OrdersCart {
   OrdersCart({
     required this.dateTime,
@@ -44,7 +53,7 @@ class OrdersCart {
   int? deliveryVal;
   Promo? voucherCode;
   bool pointsUse;
-  int voucherDisc;
+  int? voucherDisc;
   int pointsMuch;
   int pointsGet;
   // typePayment let null first then filled
@@ -54,6 +63,64 @@ class OrdersCart {
   setDoneStatus(value) {
     doneStatus = value;
   }
+
+  factory OrdersCart.fromJson(Map<String, dynamic> json) => OrdersCart(
+        dateTime: (json['date_time'] as Timestamp).toDate().toString(),
+        typeOrder: (json['type_order'] == 'Delivery')
+            ? TypeOrder.delivery
+            : (json['type_order'] == 'Takeaway')
+                ? TypeOrder.takeaway
+                : TypeOrder.dinein,
+        accountInformation: Account.fromJson(json['account']),
+        deliveryAddress: (json['delivery_address'] != null)
+            ? Alamat.fromJson(json['delivery_address'])
+            : null,
+        takeawayAddress: (json['takeaway_address'] != null)
+            ? Alamat.fromJson(json['takeaway_address'])
+            : null,
+        dineInCode: (json['dine_in_code'] != null)
+            ? json['dine_in_code'].toString()
+            : null,
+        listOrder: resultMap(json['list_order']),
+        subTotals: int.parse(json['sub_totals'].toString()),
+        totals: int.parse(json['totals'].toString()),
+        deliveryVal: json['delivery_val'],
+        voucherCode: (json['voucher_code'] != null)
+            ? Promo.fromJson(json['voucher_code'])
+            : null,
+        pointsUse: json['points_use'] as bool,
+        voucherDisc: (json['voucher_disc'] != null)
+            ? int.parse(json['voucher_disc'].toString())
+            : null,
+        pointsMuch: int.parse(json['points_much'].toString()),
+        pointsGet: int.parse(json['points_get'].toString()),
+        doneStatus: json['done_status'] as bool,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'date_time': Timestamp.fromDate(DateTime.parse(dateTime)),
+        'type_order': (typeOrder == TypeOrder.delivery)
+            ? 'Delivery'
+            : (typeOrder == TypeOrder.takeaway)
+                ? 'Takeaway'
+                : 'Dine-In',
+        'account': accountInformation.toJson(),
+        'delivery_address':
+            (deliveryAddress != null) ? deliveryAddress!.toJson() : null,
+        'takeaway_address':
+            (takeawayAddress != null) ? takeawayAddress!.toJson() : null,
+        'dine_in_code': dineInCode,
+        'list_order': listOrder,
+        'sub_totals': subTotals,
+        'totals': totals,
+        'delivery_val' : deliveryVal,
+        'voucher_code': (voucherCode != null) ? voucherCode!.toJson() : null,
+        'points_use': pointsUse,
+        'voucher_disc': voucherDisc,
+        'points_much': pointsMuch,
+        'points_get': pointsGet,
+        'done_status': doneStatus,
+      };
 }
 
 class OrdersProvider extends ChangeNotifier {
@@ -163,9 +230,9 @@ class OrdersProvider extends ChangeNotifier {
 
   // voucher disc calculation (private)
   void _voucherCalculate() {
-    int tmp = (paramSubTotalsInt * (paramVoucherCode!.percentage)).floor();
-    if (tmp > paramVoucherCode!.maxDisc) {
-      tmp = paramVoucherCode!.maxDisc;
+    int tmp = (paramSubTotalsInt * (paramVoucherCode!.percentage!)).floor();
+    if (tmp > paramVoucherCode!.maxDisc!) {
+      tmp = paramVoucherCode!.maxDisc!;
     }
     paramVoucherDisc = tmp;
     paramVoucherDiscStr =
@@ -237,12 +304,12 @@ class OrdersProvider extends ChangeNotifier {
     // free delivery is 15% from the sub totals of the menu
     if (paramVoucherCode != null) {
       // print(paramVoucherCode!.freeDelivery);
-      if (paramVoucherCode!.freeDelivery) {
+      if (paramVoucherCode!.freeDelivery!) {
         freeDeliverValue =
             ((paramSubTotalsInt - paramMuchPoints - paramVoucherDisc) * 0.1)
                 .toInt();
-        if (freeDeliverValue > paramVoucherCode!.maxDelivery) {
-          freeDeliverValue = paramVoucherCode!.maxDelivery;
+        if (freeDeliverValue > paramVoucherCode!.maxDelivery!) {
+          freeDeliverValue = paramVoucherCode!.maxDelivery!;
         }
         freeDeliverValueStr =
             formatter.format(freeDeliverValue).toString().replaceAll(',', '.');

@@ -30,8 +30,8 @@ class Alamat {
       };
 
   static Alamat fromJson(Map<String, dynamic> json) => Alamat(
-      alamatID: json['email'],
-      alamatTitle: json['type'],
+      alamatID: json['email'] ?? json['merch_id'],
+      alamatTitle: json['type'] ?? json['name'],
       alamatLengkap: json['address'],
       alamatDesk: json['desc'],
       alamatLang: json['lat'],

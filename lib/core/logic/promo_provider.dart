@@ -22,22 +22,60 @@ class Promo {
     required this.yearExp,
     required this.percentage,
   });
-  String promoID;
-  String promoName;
-  String promoShortDesc;
-  String promoLongDesc;
-  int maxDisc;
-  int minTrans;
-  String typeOrder;
-  List<String> menuExc;
-  List<String> typeExc;
-  bool freeDelivery;
-  int maxDelivery;
-  String typeTrans;
-  int dateExp;
-  int monthExp;
-  int yearExp;
-  double percentage;
+  String? promoID;
+  String? promoName;
+  String? promoShortDesc;
+  String? promoLongDesc;
+  int? maxDisc;
+  int? minTrans;
+  String? typeOrder;
+  List<String>? menuExc;
+  List<String>? typeExc;
+  bool? freeDelivery;
+  int? maxDelivery;
+  String? typeTrans;
+  int? dateExp;
+  int? monthExp;
+  int? yearExp;
+  double? percentage;
+
+  factory Promo.fromJson(Map<String, dynamic> json) => Promo(
+        promoID: json['promo_id'],
+        promoName: json['promo_name'],
+        promoShortDesc: json['short_desc'],
+        promoLongDesc: json['long_desc'],
+        maxDisc: json['max_disc'],
+        minTrans: json['min_trans'],
+        typeOrder: json['type_order'],
+        menuExc: (json['menu_except'] == 'All-Menu') ? [] : [],
+        typeExc: (json['type_menu_except'] == 'All-Types') ? [] : [],
+        freeDelivery: json['free_delivery'],
+        maxDelivery: json['max_ongkir'],
+        typeTrans: (json['transaction_type'] == 'Gopay') ? "Gopay" : '',
+        dateExp: json['date_exp'],
+        monthExp: json['month_exp'],
+        yearExp: json['year_exp'],
+        percentage: json['percentage'],
+      );
+
+  Map<String, dynamic> toJson() => {
+        'promo_id': promoID,
+        'promo_name': promoName,
+        'short_desc': promoShortDesc,
+        'long_desc': promoLongDesc,
+        'max_disc': maxDisc,
+        'min_trans': minTrans,
+        'type_order': typeOrder,
+        'menu_except': (menuExc == []) ? 'All-Menu' : menuExc,
+        'type_menu_except': (typeExc == []) ? 'All-Types' : typeExc,
+        'free_delivery': freeDelivery,
+        'max_ongkir': maxDelivery,
+        'transaction_type': typeTrans,
+        'date_exp': dateExp,
+        'month_exp': monthExp,
+        'year_exp': yearExp,
+        'percentage': percentage,
+      };
 }
 
 class PromoProvider extends ChangeNotifier {
@@ -68,7 +106,8 @@ class PromoProvider extends ChangeNotifier {
           typeOrder: row[6]!.value.toString(),
           menuExc: row[7]!.value.toString().split(','),
           typeExc: row[8]!.value.toString().split(','),
-          freeDelivery: (row[9]!.value.toString().toUpperCase() == 'TRUE') ? true : false,
+          freeDelivery:
+              (row[9]!.value.toString().toUpperCase() == 'TRUE') ? true : false,
           maxDelivery: int.parse(row[10]!.value.toString()),
           typeTrans: row[11]!.value.toString(),
           dateExp: int.parse(row[12]!.value.toString()),
@@ -79,7 +118,7 @@ class PromoProvider extends ChangeNotifier {
       },
     );
     for (var el in _listPromo) {
-      if (DateTime(el.yearExp, el.monthExp, el.dateExp)
+      if (DateTime(el.yearExp!, el.monthExp!, el.dateExp!)
           .isAfter(DateTime.now())) {
         _validPromo.add(el);
       }
@@ -99,7 +138,7 @@ class PromoProvider extends ChangeNotifier {
     if (namePromo.typeOrder == 'Dine-In' || namePromo.typeOrder == 'All') {
       tmp.add(TypeOrder.dinein);
     }
-    if (namePromo.minTrans < cartTotals &&
+    if (namePromo.minTrans! < cartTotals &&
         tmp.contains(typeOrders ?? TypeOrder.fail)) {
       return true;
     }

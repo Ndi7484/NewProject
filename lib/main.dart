@@ -43,9 +43,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => PageProvider()),
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
         ChangeNotifierProvider(
-            create: (_) => MerchantProvider()
-              ..resetParam()
-              ..readMerchant()),
+            create: (_) => MerchantProvider()..readMerchant()),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
         ChangeNotifierProvider(create: (_) => HistoryProvider()),
         ChangeNotifierProvider(create: (_) => CodeScanProvider()..resetparam()),

@@ -45,9 +45,9 @@ class PromoBottomSheet {
                                     Border.all(width: 1, color: Colors.black)),
                             child: ListTile(
                               leading: Image.asset('assets/etc/Voucher.png'),
-                              title: Text(listPromo[index].promoName),
+                              title: Text(listPromo[index].promoName!),
                               subtitle: Text(
-                                listPromo[index].promoShortDesc,
+                                listPromo[index].promoShortDesc!,
                                 style: const TextStyle(fontSize: 10),
                               ),
                               trailing: (provOrders.paramVoucherCode?.promoID ==

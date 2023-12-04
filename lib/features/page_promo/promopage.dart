@@ -33,8 +33,8 @@ class _PromoPageState extends State<PromoPage> {
                   height: 10,
                 ),
                 ...List.generate(
-                    isiDialog.promoLongDesc.split('\n').length,
-                    (index) => (isiDialog.promoLongDesc
+                    isiDialog.promoLongDesc!.split('\n').length,
+                    (index) => (isiDialog.promoLongDesc!
                             .split('\n')[index]
                             .contains('•'))
                         ? Padding(
@@ -50,7 +50,7 @@ class _PromoPageState extends State<PromoPage> {
                                   child: Wrap(
                                     children: [
                                       Text(
-                                        isiDialog.promoLongDesc
+                                        isiDialog.promoLongDesc!
                                             .split('\n')[index]
                                             .substring(2),
                                         style: const TextStyle(fontSize: 12),
@@ -66,7 +66,7 @@ class _PromoPageState extends State<PromoPage> {
                         : Padding(
                             padding: const EdgeInsets.fromLTRB(8, 12, 8, 8),
                             child: Text(
-                              isiDialog.promoLongDesc.split('\n')[index],
+                              isiDialog.promoLongDesc!.split('\n')[index],
                               style: TextStyle(color: Colors.red.shade900),
                               textAlign: TextAlign.justify,
                             ),
@@ -93,9 +93,9 @@ class _PromoPageState extends State<PromoPage> {
                   itemCount: provPromo.listPromo.length,
                   itemBuilder: (context, index) {
                     return (DateTime(
-                                provPromo.listPromo[index].yearExp,
-                                provPromo.listPromo[index].monthExp,
-                                provPromo.listPromo[index].dateExp)
+                                provPromo.listPromo[index].yearExp!,
+                                provPromo.listPromo[index].monthExp!,
+                                provPromo.listPromo[index].dateExp!)
                             .isAfter(DateTime.now()))
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -158,7 +158,7 @@ class _PromoPageState extends State<PromoPage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        provPromo.listPromo[index].promoName,
+                                        provPromo.listPromo[index].promoName!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -167,7 +167,7 @@ class _PromoPageState extends State<PromoPage> {
                                       ),
                                       Text(
                                         provPromo
-                                            .listPromo[index].promoShortDesc,
+                                            .listPromo[index].promoShortDesc!,
                                         style: const TextStyle(
                                             color: Colors.grey, fontSize: 10),
                                       ),

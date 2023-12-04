@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:provider/provider.dart';
@@ -20,10 +21,27 @@ class PointsPage extends StatelessWidget {
         const SizedBox(
           height: 15,
         ),
-        Text(
-          provAccount.selectedAccount!.pointsString,
-          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        ),
+        StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('account')
+                .snapshots()
+                .map((snapshot) => snapshot.docs
+                    .map((doc) => Account.fromJson(doc.data()))
+                    .toList()),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(
+                  provAccount.selectedAccount!.pointsString,
+                  style: const TextStyle(
+                      fontSize: 30, fontWeight: FontWeight.bold),
+                );
+              } else if (snapshot.hasError) {
+                return Text("Error : ${snapshot.error}");
+              } else {
+                return const CircularProgressIndicator();
+              }
+            }),
+
         const Text(
           '(1 points = Rp. 1)',
           style: TextStyle(color: Colors.grey),

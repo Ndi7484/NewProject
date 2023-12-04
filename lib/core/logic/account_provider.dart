@@ -197,16 +197,19 @@ class AccountProvider extends ChangeNotifier {
           notifyListeners();
 
           // analytic
-          analytic.setUserId(paramEmail);
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BottomNavigationPage(
-                selectNext: 0,
+          try {
+            analytic.setUserId(paramEmail);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BottomNavigationPage(
+                  selectNext: 0,
+                ),
               ),
-            ),
-          );
+            );
+          } catch (e) {}
+
           break;
         }
       }
@@ -469,23 +472,46 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  void pointsChange(int pointsMuch, int pointsGet) {
-    _listAccount.listen((account) {
-      for (var el in account) {
-        if (el.email == paramEmail) {
-          el.points = el.points - pointsMuch;
-          if (el.points < 0) {
-            el.points = 0;
-          }
-          el.points = el.points + pointsGet;
-          el.pointsString =
-              formatter.format(el.points).toString().replaceAll(',', '.');
-          // re-select account newest
-          _selectedAccount == el;
-          break;
-        }
+  void pointsChange(
+      Account selectedAccount, int pointsMuch, int pointsGet) async {
+    final QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('account').get();
+
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      final data = doc.data() as Map<String, dynamic>;
+
+      // Check if data is not null and is of type Map<String, dynamic>
+      final account = Account.fromJson(data);
+
+      if (account.email == selectedAccount.email) {
+        batch.update(
+          FirebaseFirestore.instance.collection('account').doc(doc.id),
+          {'points': account.points - pointsMuch + pointsGet},
+        );
       }
-    });
+    }
+
+    // done and send
+    await batch.commit();
+    notifyListeners();
+    // _listAccount.listen((account) {
+    //   for (var el in account) {
+    //     if (el.email == paramEmail) {
+    //       el.points = el.points - pointsMuch;
+    //       if (el.points < 0) {
+    //         el.points = 0;
+    //       }
+    //       el.points = el.points + pointsGet;
+    //       el.pointsString =
+    //           formatter.format(el.points).toString().replaceAll(',', '.');
+    //       // re-select account newest
+    //       _selectedAccount == el;
+    //       break;
+    //     }
+    //   }
+    // });
   }
 
   // reset parameter to ''

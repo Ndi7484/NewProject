@@ -30,7 +30,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
     // init avoid wrong payment that are deliver from the voucher
     List<TypePayment> tmp = [];
     if (provOrders.tmpOrdersCartHistory!.voucherCode != null) {
-      var exc = provOrders.tmpOrdersCartHistory!.voucherCode!.typeTrans
+      var exc = provOrders.tmpOrdersCartHistory!.voucherCode!.typeTrans!
           .split(',')
           .toList();
       for (var el in exc) {

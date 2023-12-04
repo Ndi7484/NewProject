@@ -143,7 +143,7 @@ class _OrderCardState extends State<OrderCard> {
                               : Container(),
                           const Spacer(),
                           Text(
-                            'date : ${widget.data.dateTime}',
+                            'date : ${widget.data.dateTime.replaceAll('.000', '')}',
                             style: TextStyle(
                               color: Colors.grey[600],
                               fontSize: 10,

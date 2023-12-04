@@ -44,7 +44,7 @@ class HistoryDetailsPage extends StatelessWidget {
                     children: [
                       const Text('Order date :'),
                       const Spacer(),
-                      Text(ordersCartHistory.dateTime)
+                      Text(ordersCartHistory.dateTime.replaceAll('.000', ''))
                     ],
                   ),
                 ),
@@ -178,47 +178,45 @@ class HistoryDetailsPage extends StatelessWidget {
                         continue; // Skip this iteration and move to the next one
                       }
 
-                      widgets.add(
-                        FutureBuilder(
-                          future: FirebaseFirestore.instance
-                              .collection('menu')
-                              .doc(keysList[i])
-                              .get(),
-                          builder: (context, snapshot) {
-                            if (snapshot.data != null) {
-                              return MenuCard(
-                                isMenu: false,
-                                qtyFood: ordersCartHistory.listOrder[keysList[i]],
-                                food: FoodMenu(
-                                    menuID: snapshot.data!['menu_id'],
-                                    menuCategory: snapshot.data!['type'],
-                                    menuName: snapshot.data!['name'],
-                                    menuShortDesc: snapshot.data!['short_desc'],
-                                    menuLongDesc: snapshot.data!['long_desc'],
-                                    menuImage: snapshot.data!['image'],
-                                    menuPrice: snapshot.data!['price'],
-                                    menuPriceString:
-                                        snapshot.data!['price'].toString()),
-                              );
-                            } else {
-                              return MenuCard(
-                                isMenu: false,
-                                qtyFood: ordersCartHistory.listOrder[keysList[i]],
-                                food: FoodMenu(
-                                    menuID: '',
-                                    menuCategory: '',
-                                    menuName: '',
-                                    menuShortDesc: '',
-                                    menuLongDesc: '',
-                                    menuImage:
-                                        'https://static.thenounproject.com/png/2616533-200.png',
-                                    menuPrice: 0,
-                                    menuPriceString: '0'),
-                              );
-                            }
-                          },
-                        )
-                      );
+                      widgets.add(FutureBuilder(
+                        future: FirebaseFirestore.instance
+                            .collection('menu')
+                            .doc(keysList[i])
+                            .get(),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            return MenuCard(
+                              isMenu: false,
+                              qtyFood: ordersCartHistory.listOrder[keysList[i]],
+                              food: FoodMenu(
+                                  menuID: snapshot.data!['menu_id'],
+                                  menuCategory: snapshot.data!['type'],
+                                  menuName: snapshot.data!['name'],
+                                  menuShortDesc: snapshot.data!['short_desc'],
+                                  menuLongDesc: snapshot.data!['long_desc'],
+                                  menuImage: snapshot.data!['image'],
+                                  menuPrice: snapshot.data!['price'],
+                                  menuPriceString:
+                                      snapshot.data!['price'].toString()),
+                            );
+                          } else {
+                            return MenuCard(
+                              isMenu: false,
+                              qtyFood: ordersCartHistory.listOrder[keysList[i]],
+                              food: FoodMenu(
+                                  menuID: '',
+                                  menuCategory: '',
+                                  menuName: '',
+                                  menuShortDesc: '',
+                                  menuLongDesc: '',
+                                  menuImage:
+                                      'https://static.thenounproject.com/png/2616533-200.png',
+                                  menuPrice: 0,
+                                  menuPriceString: '0'),
+                            );
+                          }
+                        },
+                      ));
                     }
                     if (widgets.isNotEmpty) {
                       return Column(
@@ -418,8 +416,12 @@ class HistoryDetailsPage extends StatelessWidget {
                     ),
                     child: ElevatedButton(
                       onPressed: () {
-                        provHistory.changeDoneStatus(
-                            ordersCartHistory, context);
+                        try {
+                          provHistory.changeDoneStatus(
+                              ordersCartHistory, context);
+                        } catch (e) {
+                          print(e);
+                        }
                       },
                       child: const Text(
                         'Complete Orders',

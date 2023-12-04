@@ -1,117 +1,181 @@
 // To parse this JSON data, do
 //
-//     final mapLatLongState = mapLatLongStateFromJson(jsonString);
+//     final mapLatLong = mapLatLongFromJson(jsonString);
 
 import 'dart:convert';
 
-MapLatLongState mapLatLongStateFromJson(String str) => MapLatLongState.fromJson(json.decode(str));
+MapLatLong mapLatLongFromJson(String str) => MapLatLong.fromJson(json.decode(str));
 
-String mapLatLongStateToJson(MapLatLongState data) => json.encode(data.toJson());
+String mapLatLongToJson(MapLatLong data) => json.encode(data.toJson());
 
-class MapLatLongState {
-    int placeId;
-    // String licence;
-    // String osmType;
-    // int osmId;
-    String lat;
-    String lon;
-    // String category;
-    // String type;
-    // int placeRank;
-    // double importance;
-    // String addresstype;
-    // String name;
-    String displayName;
-    Address address;
-    // List<String> boundingbox;
+class MapLatLong {
+    List<Datum> data;
 
-    MapLatLongState({
-        required this.placeId,
-        // required this.licence,
-        // required this.osmType,
-        // required this.osmId,
-        required this.lat,
-        required this.lon,
-        // required this.category,
-        // required this.type,
-        // required this.placeRank,
-        // required this.importance,
-        // required this.addresstype,
-        // required this.name,
-        required this.displayName,
-        required this.address,
-        // required this.boundingbox,
+    MapLatLong({
+        required this.data,
     });
 
-    factory MapLatLongState.fromJson(Map<String, dynamic> json) => MapLatLongState(
-        placeId: json["place_id"],
-        // licence: json["licence"],
-        // osmType: json["osm_type"],
-        // osmId: json["osm_id"],
-        lat: json["lat"],
-        lon: json["lon"],
-        // category: json["category"],
-        // type: json["type"],
-        // placeRank: json["place_rank"],
-        // importance: json["importance"]?.toDouble(),
-        // addresstype: json["addresstype"],
-        // name: json["name"],
-        displayName: json["display_name"],
-        address: Address.fromJson(json["address"]),
-        // boundingbox: List<String>.from(json["boundingbox"].map((x) => x)),
+    factory MapLatLong.fromJson(Map<String, dynamic> json) => MapLatLong(
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "place_id": placeId,
-        // "licence": licence,
-        // "osm_type": osmType,
-        // "osm_id": osmId,
-        "lat": lat,
-        "lon": lon,
-        // "category": category,
-        // "type": type,
-        // "place_rank": placeRank,
-        // "importance": importance,
-        // "addresstype": addresstype,
-        // "name": name,
-        "display_name": displayName,
-        "address": address.toJson(),
-        // "boundingbox": List<dynamic>.from(boundingbox.map((x) => x)),
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 
-class Address {
-    // String province;
-    // String state;
-    // String iso31662Lvl4;
-    String postcode;
-    String country;
-    String countryCode;
+class Datum {
+    double latitude;
+    double longitude;
+    Type type;
+    double distance;
+    String name;
+    dynamic number;
+    dynamic postalCode;
+    String? street;
+    double confidence;
+    Region region;
+    RegionCode regionCode;
+    County county;
+    County locality;
+    dynamic administrativeArea;
+    dynamic neighbourhood;
+    Country country;
+    CountryCode countryCode;
+    Continent continent;
+    String label;
 
-    Address({
-        // required this.province,
-        // required this.state,
-        // required this.iso31662Lvl4,
-        required this.postcode,
+    Datum({
+        required this.latitude,
+        required this.longitude,
+        required this.type,
+        required this.distance,
+        required this.name,
+        required this.number,
+        required this.postalCode,
+        required this.street,
+        required this.confidence,
+        required this.region,
+        required this.regionCode,
+        required this.county,
+        required this.locality,
+        required this.administrativeArea,
+        required this.neighbourhood,
         required this.country,
         required this.countryCode,
+        required this.continent,
+        required this.label,
     });
 
-    factory Address.fromJson(Map<String, dynamic> json) => Address(
-        // province: json["province"],
-        // state: json["state"],
-        // iso31662Lvl4: json["ISO3166-2-lvl4"],
-        postcode: json["postcode"],
-        country: json["country"],
-        countryCode: json["country_code"],
+    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        latitude: json["latitude"]?.toDouble(),
+        longitude: json["longitude"]?.toDouble(),
+        type: typeValues.map[json["type"]]!,
+        distance: json["distance"]?.toDouble(),
+        name: json["name"],
+        number: json["number"],
+        postalCode: json["postal_code"],
+        street: json["street"],
+        confidence: json["confidence"]?.toDouble(),
+        region: regionValues.map[json["region"]]!,
+        regionCode: regionCodeValues.map[json["region_code"]]!,
+        county: countyValues.map[json["county"]]!,
+        locality: countyValues.map[json["locality"]]!,
+        administrativeArea: json["administrative_area"],
+        neighbourhood: json["neighbourhood"],
+        country: countryValues.map[json["country"]]!,
+        countryCode: countryCodeValues.map[json["country_code"]]!,
+        continent: continentValues.map[json["continent"]]!,
+        label: json["label"],
     );
 
     Map<String, dynamic> toJson() => {
-        // "province": province,
-        // "state": state,
-        // "ISO3166-2-lvl4": iso31662Lvl4,
-        "postcode": postcode,
-        "country": country,
-        "country_code": countryCode,
+        "latitude": latitude,
+        "longitude": longitude,
+        "type": typeValues.reverse[type],
+        "distance": distance,
+        "name": name,
+        "number": number,
+        "postal_code": postalCode,
+        "street": street,
+        "confidence": confidence,
+        "region": regionValues.reverse[region],
+        "region_code": regionCodeValues.reverse[regionCode],
+        "county": countyValues.reverse[county],
+        "locality": countyValues.reverse[locality],
+        "administrative_area": administrativeArea,
+        "neighbourhood": neighbourhood,
+        "country": countryValues.reverse[country],
+        "country_code": countryCodeValues.reverse[countryCode],
+        "continent": continentValues.reverse[continent],
+        "label": label,
     };
+}
+
+enum Continent {
+    ASIA
+}
+
+final continentValues = EnumValues({
+    "Asia": Continent.ASIA
+});
+
+enum Country {
+    INDONESIA
+}
+
+final countryValues = EnumValues({
+    "Indonesia": Country.INDONESIA
+});
+
+enum CountryCode {
+    IDN
+}
+
+final countryCodeValues = EnumValues({
+    "IDN": CountryCode.IDN
+});
+
+enum County {
+    MEDAN
+}
+
+final countyValues = EnumValues({
+    "Medan": County.MEDAN
+});
+
+enum Region {
+    NORTH_SUMATRA
+}
+
+final regionValues = EnumValues({
+    "North Sumatra": Region.NORTH_SUMATRA
+});
+
+enum RegionCode {
+    SU
+}
+
+final regionCodeValues = EnumValues({
+    "SU": RegionCode.SU
+});
+
+enum Type {
+    VENUE
+}
+
+final typeValues = EnumValues({
+    "venue": Type.VENUE
+});
+
+class EnumValues<T> {
+    Map<String, T> map;
+    late Map<T, String> reverseMap;
+
+    EnumValues(this.map);
+
+    Map<T, String> get reverse {
+        reverseMap = map.map((k, v) => MapEntry(v, k));
+        return reverseMap;
+    }
 }

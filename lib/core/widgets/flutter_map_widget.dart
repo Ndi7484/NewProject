@@ -51,19 +51,6 @@ class _FlutterMapPageState extends State<FlutterMapPage> {
               initialZoom: 14,
               maxZoom: 18,
               minZoom: 6,
-              // onMapCreated: (mapController) async {
-              //   var response = await provAds.loadLatLong(
-              //       numLat ?? widget.center.latitude,
-              //       numLng ?? widget.center.longitude);
-              //   try {
-              //     print(response!.displayName);
-              //     setState(() {
-              //       _displayName = response.displayName;
-              //     });
-              //   } catch (e) {
-              //     print('response null');
-              //   }
-              // },
               onPositionChanged: (position, hasGesture) async {
                 if (!isProcess) {
                   isProcess = true;
@@ -75,9 +62,10 @@ class _FlutterMapPageState extends State<FlutterMapPage> {
                       var response =
                           await provAds.loadLatLong(numLat!, numLng!);
                       try {
-                        print(response!.displayName);
+                        print(response!['data'][0]['label']);
                         setState(() {
-                          _displayName = response.displayName;
+                          _displayName =
+                              "${response['data'][0]['name']}, ${response['data'][0]['label']}";
                         });
                       } catch (e) {
                         print('response null');
@@ -96,10 +84,11 @@ class _FlutterMapPageState extends State<FlutterMapPage> {
             //       subdomains: ['a', 'b', 'c']),
             // ],
             children: [
-              // TileLayerOptions(
-              //     urlTemplate:
-              //         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              //     subdomains: ['a', 'b', 'c']),
+              TileLayer(
+                urlTemplate:
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                userAgentPackageName: 'com.example.app',
+              ),
             ],
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
 import 'package:flutter_application_1/core/logic/history_provider.dart';
@@ -162,9 +163,15 @@ class EWalletPage extends StatelessWidget {
                             )));
 
                 // set history
-                provHistory
-                    .addListOrderHistory(provOrders.tmpOrdersCartHistory!);
+                final docHistory =
+                    FirebaseFirestore.instance.collection('history').doc();
+                final json = provOrders.tmpOrdersCartHistory!.toJson();
+                docHistory.set(json);
+                // provHistory
+                //     .addListOrderHistory(provOrders.tmpOrdersCartHistory!);
+
                 provAccount.pointsChange(
+                    provAccount.selectedAccount!,
                     provOrders.tmpOrdersCartHistory!.pointsMuch,
                     provOrders.tmpOrdersCartHistory!.pointsGet);
                 provPage.historyIndex =

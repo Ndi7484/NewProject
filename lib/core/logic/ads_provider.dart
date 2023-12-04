@@ -20,7 +20,7 @@ class AdsProvider extends ChangeNotifier {
     return adsStateFromJson(data);
   }
 
-  Future<MapLatLongState?> loadLatLong(double lat, double long) async{
+  Future<Map<String,dynamic>?> loadLatLong(double lat, double long) async{
     final data = await helper.getLatLong(lat, long);
     return data;
   }
