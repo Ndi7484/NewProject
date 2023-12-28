@@ -34,7 +34,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AddressProvider()..resetParam()),
         ChangeNotifierProvider(create: (_) => PromoProvider()..readPromo()),
         ChangeNotifierProvider(
-            create: (_) => CarouselProvider()gita ),
+            create: (_) => CarouselProvider()),
         ChangeNotifierProvider(create: (_) => WarningProvider()..readWarn()),
         ChangeNotifierProvider(
             create: (_) => MenuProvider()

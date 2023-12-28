@@ -173,7 +173,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                                             .typePay))
                                                     ? null
                                                     : Colors.grey,
-                                                onTap: () {
+                                                onTap: () async {
                                                   if (tmp.contains(provPayment
                                                       .listPayment[struct]
                                                       .children[index2]
@@ -196,6 +196,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                                         MaterialPageRoute(
                                                             builder: (_) =>
                                                                 CircularProgressPage()));
+                                                    
+                                                    // end navigation
                                                     Future.delayed(
                                                         const Duration(
                                                             seconds: 1), () {
@@ -287,6 +289,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                     MaterialPageRoute(
                                         builder: (_) =>
                                             CircularProgressPage()));
+                                // end navigation
                                 Future.delayed(const Duration(seconds: 1), () {
                                   // analytics
                                   fbAnalytics.addPayment(

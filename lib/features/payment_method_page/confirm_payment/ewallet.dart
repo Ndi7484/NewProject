@@ -9,8 +9,9 @@ import 'package:flutter_application_1/core/state/analytic_helper.dart';
 import 'package:flutter_application_1/core/widgets/circular_progress.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class EWalletPage extends StatelessWidget {
+class EWalletPage extends StatefulWidget {
   EWalletPage({
     super.key,
     required this.typePay,
@@ -21,8 +22,23 @@ class EWalletPage extends StatelessWidget {
   dynamic color;
   String image;
 
+  @override
+  State<EWalletPage> createState() => _EWalletPageState();
+}
+
+class _EWalletPageState extends State<EWalletPage> {
   NumberFormat formatter = NumberFormat("#,###", "en_US");
+
   AnalyticHelper fbAnalytics = AnalyticHelper();
+
+  late InterstitialAd _interstitialAd;
+  bool _isInterstitialReady = false;
+
+  @override
+  void initState() {
+    _loadInterstitialAd();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +119,8 @@ class EWalletPage extends StatelessWidget {
                             child: Text(
                               "Lihat Detail",
                               style: TextStyle(
-                                  color: color, fontWeight: FontWeight.bold),
+                                  color: widget.color,
+                                  fontWeight: FontWeight.bold),
                             )),
                       ],
                     ),
@@ -141,7 +158,7 @@ class EWalletPage extends StatelessWidget {
                   style: TextStyle(color: Colors.grey),
                 ),
                 Image.asset(
-                  image,
+                  widget.image,
                   width: 30,
                   height: 30,
                 ),
@@ -152,15 +169,19 @@ class EWalletPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
                 // analytics
                 fbAnalytics.purchase();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => CircularProgressPage(
-                              messageText: 'Please wait, confirming payment..',
-                            )));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (_) => CircularProgressPage(
+                //               messageText: 'Please wait, confirming payment..',
+                //             )));
+                await _loadInterstitialAd();
+                if (_isInterstitialReady) {
+                  _interstitialAd.show();
+                }
 
                 // set history
                 final docHistory =
@@ -193,9 +214,9 @@ class EWalletPage extends StatelessWidget {
               child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(
-                        color: color,
+                        color: widget.color,
                       ),
-                      color: color,
+                      color: widget.color,
                       borderRadius: BorderRadius.circular(100)),
                   child: const Padding(
                     padding: EdgeInsets.all(16.0),
@@ -215,6 +236,32 @@ class EWalletPage extends StatelessWidget {
             height: 24,
           ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _loadInterstitialAd() async {
+    InterstitialAd.load(
+      adUnitId: 'ca-app-pub-3940256099942544/4411468910',
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback =
+              FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+            print('Close Interstitial Ad');
+          });
+          setState(() {
+            _isInterstitialReady = true;
+            _interstitialAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load interstitial ad: $err');
+          setState(() {
+            _isInterstitialReady = false;
+            _interstitialAd.dispose();
+          });
+        },
       ),
     );
   }

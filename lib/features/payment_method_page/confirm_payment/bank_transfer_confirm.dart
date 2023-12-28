@@ -10,16 +10,34 @@ import 'package:flutter_application_1/core/state/analytic_helper.dart';
 import 'package:flutter_application_1/core/widgets/circular_progress.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class BankTransferConfirmPaymentPage extends StatelessWidget {
+class BankTransferConfirmPaymentPage extends StatefulWidget {
   BankTransferConfirmPaymentPage({
     super.key,
     required this.bankData,
   });
   Payment bankData;
 
+  @override
+  State<BankTransferConfirmPaymentPage> createState() =>
+      _BankTransferConfirmPaymentPageState();
+}
+
+class _BankTransferConfirmPaymentPageState
+    extends State<BankTransferConfirmPaymentPage> {
   NumberFormat formmater = NumberFormat("#,###", "en_US");
+
   AnalyticHelper fbAnalytics = AnalyticHelper();
+
+  late InterstitialAd _interstitialAd;
+  bool _isInterstitialReady = false;
+
+  @override
+  void initState() {
+    _loadInterstitialAd();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +66,8 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
           title: Center(
             child: Text(
               "m-Transfer",
-              style:
-                  TextStyle(color: bankData.color, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: widget.bankData.color, fontWeight: FontWeight.bold),
             ),
           ),
           actions: [
@@ -100,13 +118,13 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                         title: Text(
                           "Bank",
                           style: TextStyle(
-                              color: bankData.color,
+                              color: widget.bankData.color,
                               fontWeight: FontWeight.bold),
                         ),
                         subtitle: Padding(
                           padding: const EdgeInsets.only(top: 5.0),
                           child: Text(
-                            bankData.title,
+                            widget.bankData.title,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -125,7 +143,7 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                         title: Text(
                           "Ke Rekening Tujuan",
                           style: TextStyle(
-                              color: bankData.color,
+                              color: widget.bankData.color,
                               fontWeight: FontWeight.bold),
                         ),
                         subtitle: const Padding(
@@ -136,7 +154,7 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                           ),
                         ),
                         trailing: Icon(Icons.arrow_forward_ios_rounded,
-                            color: bankData.color),
+                            color: widget.bankData.color),
                       ),
                     ),
                     Container(
@@ -150,7 +168,7 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                         title: Text(
                           "Jumlah Uang",
                           style: TextStyle(
-                              color: bankData.color,
+                              color: widget.bankData.color,
                               fontWeight: FontWeight.bold),
                         ),
                         subtitle: Padding(
@@ -164,7 +182,7 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                           ),
                         ),
                         trailing: Icon(Icons.arrow_forward_ios_rounded,
-                            color: bankData.color),
+                            color: widget.bankData.color),
                       ),
                     ),
                     Container(
@@ -178,7 +196,7 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                         title: Text(
                           "Layanan Transfer",
                           style: TextStyle(
-                              color: bankData.color,
+                              color: widget.bankData.color,
                               fontWeight: FontWeight.bold),
                         ),
                         subtitle: const Padding(
@@ -189,14 +207,15 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
                           ),
                         ),
                         trailing: Icon(Icons.arrow_forward_ios_rounded,
-                            color: bankData.color),
+                            color: widget.bankData.color),
                       ),
                     ),
                     ListTile(
                       title: Text(
                         "Dari Rekening",
                         style: TextStyle(
-                            color: bankData.color, fontWeight: FontWeight.bold),
+                            color: widget.bankData.color,
+                            fontWeight: FontWeight.bold),
                       ),
                       subtitle: const Padding(
                         padding: EdgeInsets.only(top: 5.0),
@@ -212,21 +231,25 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
               const Spacer(),
               Container(
                 decoration: BoxDecoration(
-                  color: bankData.color,
+                  color: widget.bankData.color,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // analytics
                     fbAnalytics.purchase();
                     // Handle button press
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => CircularProgressPage(
-                                  messageText:
-                                      'Please wait, confirming payment..',
-                                )));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (_) => CircularProgressPage(
+                    //               messageText:
+                    //                   'Please wait, confirming payment..',
+                    //             )));
+                    await _loadInterstitialAd();
+                    if (_isInterstitialReady) {
+                      _interstitialAd.show();
+                    }
 
                     // set history
                     final docHistory =
@@ -272,5 +295,32 @@ class BankTransferConfirmPaymentPage extends StatelessWidget {
             ],
           ),
         ));
+  }
+
+  Future<void> _loadInterstitialAd() async {
+    InterstitialAd.load(
+      // adUnitId: 'ca-app-pub-9772301287720439/1604550076',
+      adUnitId: 'ca-app-pub-3940256099942544/4411468910',
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback =
+              FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+            print('Close Interstitial Ad');
+          });
+          setState(() {
+            _isInterstitialReady = true;
+            _interstitialAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load interstitial ad: $err');
+          setState(() {
+            _isInterstitialReady = false;
+            _interstitialAd.dispose();
+          });
+        },
+      ),
+    );
   }
 }
