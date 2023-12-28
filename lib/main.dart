@@ -34,7 +34,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AddressProvider()..resetParam()),
         ChangeNotifierProvider(create: (_) => PromoProvider()..readPromo()),
         ChangeNotifierProvider(
-            create: (_) => CarouselProvider()..readCarousel()),
+            create: (_) => CarouselProvider()gita ),
         ChangeNotifierProvider(create: (_) => WarningProvider()..readWarn()),
         ChangeNotifierProvider(
             create: (_) => MenuProvider()
@@ -46,7 +46,7 @@ void main() async {
             create: (_) => MerchantProvider()..readMerchant()),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
         ChangeNotifierProvider(create: (_) => HistoryProvider()),
-        ChangeNotifierProvider(create: (_) => CodeScanProvider()..resetparam()),
+        ChangeNotifierProvider(create: (_) => CodeScanProvider()),
         ChangeNotifierProvider(
             create: (_) => NotificationProvider()..readNotif()),
         ChangeNotifierProvider(create: (_) => AdsProvider()..loadApiAds()),

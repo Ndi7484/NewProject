@@ -70,7 +70,18 @@ class ProfilePageState extends State<ProfilePage> {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Text(
-                provAccount.selectedAccount!.email.toString(),
+                (provAccount.selectedAccount ??
+                        Account(
+                            firstName: '',
+                            lastName: '',
+                            email: '',
+                            password: '',
+                            phone: '',
+                            points: 0,
+                            pointsString: '',
+                            dateBirth: DateTime(1990)))
+                    .email
+                    .toString(),
                 style: const TextStyle(
                     color: Colors.grey,
                     letterSpacing: 0.5,
@@ -182,7 +193,7 @@ class ProfilePageState extends State<ProfilePage> {
                 } else {
                   // Handle data state
                   final listAlamat = snapshot.data ?? [];
-                  if(provAddress.listSelectedAlamat.isEmpty){
+                  if (provAddress.listSelectedAlamat.isEmpty) {
                     provAddress.listSelectedAlamat = <Alamat>[];
                   }
                   // List<Alamat> selectedAlamat = [];

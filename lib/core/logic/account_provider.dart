@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/state/analytic_helper.dart';
 import 'package:flutter_application_1/core/widgets/notif_banner.dart';
 import 'package:flutter_application_1/features/bottom_navigation/bottom_navigation.dart';
-// import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:flutter_application_1/features/newpass_page/newpass_page.dart';
 import 'package:flutter_application_1/features/verification_page/verification_page.dart';
 import 'package:intl/intl.dart';
@@ -496,22 +495,6 @@ class AccountProvider extends ChangeNotifier {
     // done and send
     await batch.commit();
     notifyListeners();
-    // _listAccount.listen((account) {
-    //   for (var el in account) {
-    //     if (el.email == paramEmail) {
-    //       el.points = el.points - pointsMuch;
-    //       if (el.points < 0) {
-    //         el.points = 0;
-    //       }
-    //       el.points = el.points + pointsGet;
-    //       el.pointsString =
-    //           formatter.format(el.points).toString().replaceAll(',', '.');
-    //       // re-select account newest
-    //       _selectedAccount == el;
-    //       break;
-    //     }
-    //   }
-    // });
   }
 
   // reset parameter to ''

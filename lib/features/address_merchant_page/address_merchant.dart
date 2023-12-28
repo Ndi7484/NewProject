@@ -18,10 +18,6 @@ class _AddressMerchantPageState extends State<AddressMerchantPage> {
   Widget build(BuildContext context) {
     final provMerchant = Provider.of<MerchantProvider>(context);
     final provOrder = Provider.of<OrdersProvider>(context);
-    // set address merchant
-    provMerchant.readMerchant();
-    
-    // provAddress.getAddress(provAccount.selectedAccount!.email);
 
     return Scaffold(
         appBar: AppBar(

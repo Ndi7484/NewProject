@@ -113,7 +113,7 @@ class OrdersCart {
         'list_order': listOrder,
         'sub_totals': subTotals,
         'totals': totals,
-        'delivery_val' : deliveryVal,
+        'delivery_val': deliveryVal,
         'voucher_code': (voucherCode != null) ? voucherCode!.toJson() : null,
         'points_use': pointsUse,
         'voucher_disc': voucherDisc,
@@ -286,8 +286,12 @@ class OrdersProvider extends ChangeNotifier {
             mercAlamat[i].alamatLang,
             mercAlamat[i].alamatLong));
       }
-      smallestDistance = listAlamatValue.reduce((currentMin, nextNumber) =>
-          currentMin < nextNumber ? currentMin : nextNumber);
+      try {
+        smallestDistance = listAlamatValue.reduce((currentMin, nextNumber) =>
+            currentMin < nextNumber ? currentMin : nextNumber);
+      } catch (e) {
+        smallestDistance = 1;
+      }
       calculateDeliveryNext();
     }
   }
@@ -296,8 +300,8 @@ class OrdersProvider extends ChangeNotifier {
   String freeDeliverValueStr = '';
   void calculateDeliveryNext() {
     // constanta of distance vs price; just random calculation
-    var tmp = (3.5 * smallestDistance * 1000).toInt() +
-        ((0.2 * smallestDistance < 3.5) ? 1.5 * smallestDistance * 1000 : 0)
+    var tmp = (3.5 * smallestDistance * 500).toInt() +
+        ((0.2 * smallestDistance < 3.5) ? 1.5 * smallestDistance * 100 : 0)
             .toInt();
     paramDeliveryVal = ((tmp / 1000).floor()) * 1000;
     // if there is promo for free delivery

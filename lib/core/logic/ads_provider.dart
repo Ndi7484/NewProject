@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/state/ads_state.dart';
 import 'package:flutter_application_1/core/state/http_helper.dart';
-import 'package:flutter_application_1/core/state/map_latlong_state.dart';
 import 'package:flutter_application_1/core/state/map_search_state.dart';
 
 class AdsProvider extends ChangeNotifier {
