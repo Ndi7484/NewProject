@@ -139,9 +139,9 @@ class _VerificationPageState extends State<VerificationPage> {
                                 }
                                 provAccount.resetValidation();
                               },
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Icon(
                                     Icons.clear_outlined,
                                     color: Colors.red,

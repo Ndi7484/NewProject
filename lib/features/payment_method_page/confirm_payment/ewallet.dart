@@ -6,7 +6,7 @@ import 'package:flutter_application_1/core/logic/orders_provider.dart';
 import 'package:flutter_application_1/core/logic/page_provider.dart';
 import 'package:flutter_application_1/core/logic/payment_provider.dart';
 import 'package:flutter_application_1/core/state/analytic_helper.dart';
-import 'package:flutter_application_1/core/widgets/circular_progress.dart';
+// import 'package:flutter_application_1/core/widgets/circular_progress.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
