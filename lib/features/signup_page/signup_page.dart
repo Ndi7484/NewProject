@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/logic/account_provider.dart';
+import 'package:flutter_application_1/core/state/auth_helper.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,13 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   bool _passwordInvisible = true;
   bool _passwordInvisible2 = true;
+  late AuthFirebase auth;
+
+  @override
+  void initState() {
+    auth = AuthFirebase();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,13 +133,15 @@ class _SignUpPageState extends State<SignUpPage> {
                                 Expanded(
                                     child: InputDatePickerFormField(
                                   fieldLabelText: 'Birth Date',
-                                  initialDate: provAccount.paramBirthDate ?? DateTime(2000,1,1),
+                                  initialDate: provAccount.paramBirthDate ??
+                                      DateTime(2000, 1, 1),
                                   firstDate: DateTime(1950),
                                   lastDate: DateTime.now(),
                                   onDateSubmitted: (date) {
                                     provAccount.paramBirthDate = date;
-                                    provAccount.paramBirthDate = DateTime(
-                                        date.year, date.month, date.day);
+                                    print(provAccount.paramBirthDate);
+                                    // provAccount.paramBirthDate = DateTime(
+                                    //     date.year, date.month, date.day);
                                   },
                                 )),
                                 IconButton(
@@ -148,6 +158,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       if (res != null) {
                                         provAccount.paramBirthDate = res;
                                         provAccount.notifyme();
+                                        print(provAccount.paramBirthDate);
                                       }
                                     },
                                     icon: const Icon(Icons.date_range)),
@@ -308,26 +319,30 @@ class _SignUpPageState extends State<SignUpPage> {
                           Container(
                             padding: const EdgeInsets.all(8.0),
                             child: ElevatedButton(
-                              onPressed: () {
-                                Provider.of<AccountProvider>(context,
-                                        listen: false)
-                                    .addAccount(context);
+                              onPressed: () async {
+                                bool as_type =
+                                    await Provider.of<AccountProvider>(context, listen: false)
+                                        .addAccount(context);
+                                if (as_type) {
+                                  auth.signUp(provAccount.paramEmail,
+                                      provAccount.paramPassword);
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(16.0),
                                 minimumSize: const Size(150, 25),
                               ),
-                              child:
-                                  (provAccount.isAuthenticated == Authion.initial)
-                                      ? const CircularProgressIndicator()
-                                      : const Text(
-                                          'Sign Up',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            wordSpacing: 5,
-                                            fontSize: 18,
-                                          ),
-                                        ),
+                              child: (provAccount.isAuthenticated ==
+                                      Authion.initial)
+                                  ? const CircularProgressIndicator()
+                                  : const Text(
+                                      'Sign Up',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        wordSpacing: 5,
+                                        fontSize: 18,
+                                      ),
+                                    ),
                             ),
                           ),
                           const SizedBox(
@@ -373,7 +388,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         provAccount.message = '';
                         provAccount.paramPassword = '';
                         provAccount.paramConfirmPass = '';
-                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
                       },
                       child: const Text(
                         "Login",

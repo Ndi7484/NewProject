@@ -7,6 +7,7 @@ import 'package:flutter_application_1/features/address_page/address_page.dart';
 import 'package:flutter_application_1/features/login_page/login_page.dart';
 import 'package:flutter_flushbar/flutter_flushbar.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_application_1/core/state/auth_helper.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,6 +17,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
+  late AuthFirebase auth;
+
+  @override
+  void initState() {
+    auth = AuthFirebase();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final provAccount = Provider.of<AccountProvider>(context);
@@ -249,6 +258,7 @@ class ProfilePageState extends State<ProfilePage> {
                 onTap: () {
                   provAccount.resetParam();
                   provAddress.softReset();
+                  auth.logout();
                   Navigator.of(context).popUntil((route) => route.isFirst);
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (_) => const LoginPage()));

@@ -27,14 +27,14 @@ class _LoginPageState extends State<LoginPage> {
       provAccount.paramEmail = value ?? '';
       provAccount.checkAccount(context);
       // pushing?
-      // MaterialPageRoute route;
-      // if (value != null) {
-      //   route = MaterialPageRoute(
-      //       builder: (context) => BottomNavigationPage(
-      //             selectNext: 0,
-      //           ));
-      //   Navigator.pushReplacement(context, route);
-      // }
+      MaterialPageRoute route;
+      if (value != null) {
+        route = MaterialPageRoute(
+            builder: (context) => BottomNavigationPage(
+                  selectNext: 0,
+                ));
+        Navigator.pushReplacement(context, route);
+      }
     }).catchError((err) => print(err));
     super.initState();
   }

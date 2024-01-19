@@ -252,7 +252,7 @@ class AccountProvider extends ChangeNotifier {
   }
 
   // add new Account in SignUp page
-  void addAccount(context) async {
+  Future<bool> addAccount(context) async {
     _isSignUp = IsSignUp.initial;
     notifyListeners();
     if (paramFirstName == '' ||
@@ -265,42 +265,44 @@ class AccountProvider extends ChangeNotifier {
       message = 'Please input valid data';
       _isSignUp = IsSignUp.fail;
       notifyListeners();
-      return;
+      return false;
     }
     if (paramFirstName.length < 3 || paramLastName.length < 3) {
       message = 'Name must at least 3 in length';
       _isSignUp = IsSignUp.fail;
       notifyListeners();
-      return;
+      return false;
     }
     if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
         .hasMatch(paramEmail)) {
       message = 'Invalid email, must like **@**.**';
       _isSignUp = IsSignUp.fail;
       notifyListeners();
-      return;
+      return false;
     }
     if (!RegExp(r'^[+]?[0-9]{9,13}$').hasMatch(paramPhone)) {
       message = 'Invalid phone, at least 9 in length with digits only';
       _isSignUp = IsSignUp.fail;
       notifyListeners();
-      return;
+      return false;
     }
     if (paramPassword.length < 8) {
       message = 'Password at least eight in length';
       _isSignUp = IsSignUp.fail;
       notifyListeners();
-      return;
+      return false;
     }
     if (paramPassword != paramConfirmPass) {
       message = "Password didn't match";
       _isSignUp = IsSignUp.fail;
       notifyListeners();
-      return;
+      return false;
     }
-    if (paramPassword == paramConfirmPass &&
-        await checkAdd(paramEmail, paramPhone)) {
-      var tmp = FirebaseFirestore.instance.collection('account').doc();
+    if (paramPassword == paramConfirmPass) {
+      print('code here do');
+      var tmp =
+          FirebaseFirestore.instance.collection('account').doc(paramEmail);
+      print(tmp);
       var json = {
         'birth': Timestamp.fromDate(paramBirthDate!),
         'email': paramEmail,
@@ -318,10 +320,12 @@ class AccountProvider extends ChangeNotifier {
       _isSignUp = IsSignUp.success;
       notifyListeners();
       Navigator.pop(context);
+      return true;
     } else {
       message = 'Fail SignUp, Email/Phone already used..';
       _isSignUp = IsSignUp.fail;
       notifyListeners();
+      return false;
     }
   }
 
